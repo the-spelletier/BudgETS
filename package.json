@@ -1,0 +1,44 @@
+{
+  "name": "BudgETS",
+  "version": "1.0.0",
+  "description": "Une application financière pour les clubs étudiants de l'ETS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": {
+    "name": "École de technologie supérieure"
+  },
+  "contributors": [
+    {
+      "name": "Bergeron, Véronique",
+      "email": "veronique.bergeron.1@ens.etsmtl.ca"
+    },
+    {
+      "name": "Brunet, Jacques",
+      "email": "jacques.brunet.1@ens.etsmtl.ca"
+    },
+    {
+      "name": "Cuerrier, Philippe",
+      "email": "philippe.cuerrier.1@ens.etsmtl.ca"
+    },
+    {
+      "name": "Dowse, Michael",
+      "email": "michael.dowse.1@ens.etsmtl.ca"
+    },
+    {
+      "name": "Pecho Sanchez, German Gabriel",
+      "email": "german-gabriel.pecho-sanchez.1@ens.etsmtl.ca"
+    },
+    {
+      "name": "Pelletier, Simon",
+      "email": "simon.pelletier.6@ens.etsmtl.ca"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
