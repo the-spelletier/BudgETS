@@ -1,5 +1,5 @@
 {
-  "name": "BudgETS",
+  "name": "BudgETS-backend",
   "version": "1.0.0",
   "description": "Une application financière pour les clubs étudiants de l'ETS.",
   "main": "index.js",
@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pcuerrier/BudgETS.git"
+  },
+  "homepage": "https://github.com/pcuerrier/BudgETS#readme",
   "author": {
     "name": "École de technologie supérieure"
   },
@@ -39,6 +43,7 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   }
 }

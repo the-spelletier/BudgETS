@@ -1,5 +1,7 @@
-const express = require("express");
+module.exports.set = app => {
+    // ENDPOINTS
 
-let router = express.Router();
-
-module.exports = router;
+    app.get('/', function (req, res) {
+        res.send('Welcome to BudgETS!')
+    });
+};
