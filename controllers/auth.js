@@ -1,7 +1,7 @@
 const authService = require('../services/auth');
 
-const Users = require('../models/user').User;
-const Tokens = require('../models/token').Token;
+const Users = require('../models').User;
+const Tokens = require('../models').Token;
 
 function login(req, res) {
     return authService

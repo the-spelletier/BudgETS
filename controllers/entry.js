@@ -1,6 +1,9 @@
 
 function get(req, res) {
-
+    res.status(500);
+    res.send({
+        message: "Not implemented"
+    });
 }
 
 function getAll(req, res) {

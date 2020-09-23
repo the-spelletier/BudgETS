@@ -1,5 +1,5 @@
 const sequelize = require('../db');
-const Users = require('../models/user');
+const Users = require('../models').User;
 const { Op } = require("sequelize");
 
 // Ajout d'un utilisateur
