@@ -20,9 +20,6 @@ const BudgetEntry = sequelize.define(
         date: {
             type: DataTypes.DATE,
         },
-        memberName: {
-            type: DataTypes.STRING
-        },
         description: {
             type: DataTypes.STRING
         },
