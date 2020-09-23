@@ -9,8 +9,12 @@ const Budget = sequelize.define(
             defaultValue: Sequelize.UUIDV4,
             primaryKey: true
         },
-        year: {
-            type: DataTypes.INTEGER,
+        startDate: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        endDate: {
+            type: DataTypes.DATE,
             allowNull: false
         },
         isActive : {
@@ -41,8 +45,6 @@ const Category = sequelize.define(
     {}
 );
 
-
-
 const Entry = sequelize.define(
     'Entry',
     {
@@ -64,7 +66,7 @@ const Entry = sequelize.define(
             type: DataTypes.STRING
         },
         type: {
-            type: DataTypes.ENUM('revenues', 'expenses'),
+            type: DataTypes.ENUM('revenue', 'expense'),
             allowNull: false
         }
     },
@@ -191,6 +193,10 @@ const User = sequelize.define(
             defaultValue: 0
         },
         isBlocked : {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        isAdmin : {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
