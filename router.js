@@ -7,7 +7,10 @@ const budgetLineController = require('./controllers/budgetLine');
 module.exports.set = app => {
     // ENDPOINTS
     app.get('/', function (req, res) {
-        res.send('Welcome to BudgETS!')
+        res.status(200);
+        res.send({
+            message: "Bienvenue dans BudgETS!"
+        });
     });
 
     // AUTHENTIFICATION ENDPOINTS
