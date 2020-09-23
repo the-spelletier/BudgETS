@@ -6,6 +6,8 @@ const budgetLineController = require('./controllers/budgetLine');
 
 module.exports.set = app => {
     // ENDPOINTS
+    
+    // RACINE
     app.get('/', function (req, res) {
         res.status(200);
         res.send({
@@ -16,7 +18,7 @@ module.exports.set = app => {
     // AUTHENTIFICATION ENDPOINTS
 
     // LOGIN : POST
-    // Params : username, password
+    // Params : { username, password }
     // Returns : Code 200 if authentification is valid
     app.post('/api/login', authController.login);
 
