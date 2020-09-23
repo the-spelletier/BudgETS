@@ -1,8 +1,8 @@
 const authController = require('./controllers/auth');
 const budgetController = require('./controllers/budget');
-const budgetCategoryController = require('./controllers/budgetCategory');
-const budgetEntryController = require('./controllers/budgetEntry');
-const budgetLineController = require('./controllers/budgetLine');
+const categoryController = require('./controllers/category');
+const entryController = require('./controllers/entry');
+const lineController = require('./controllers/line');
 
 module.exports.set = app => {
     // ENDPOINTS
@@ -25,165 +25,275 @@ module.exports.set = app => {
     // BUDGET ENDPOINTS
 
     // BUDGET : GET
-    // Get the budget from the specified year, or the last consulted if not specified
-    // Params : (optional) Année du budget
+    // Get last consulted budget
+    // Params : None
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/budget',
+        '/api/budget/current',
+        //authMiddleware.checkAuth,
+        budgetController.getCurrent
+    );
+
+    // BUDGET : GET
+    // Get one budget
+    // Params : { id }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:id',
         //authMiddleware.checkAuth,
         budgetController.get
     );
 
     // BUDGET : POST
     // Create a new budget
-    // Params : ?????
+    // Params : { year, name }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget',
         //authMiddleware.checkAuth,
         budgetController.create
+    )
+
+    // BUDGET : POST
+    // Clone a budget
+    // Params : { year, name }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/budget/clone/:id',
+        //authMiddleware.checkAuth,
+        budgetController.clone
+    );
+
+    // BUDGET : GET
+    // Get a summury and history of specified budget
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/budget/summary/:id',
+        //authMiddleware.checkAuth,
+        budgetController.getSummary
     );
 
     // BUDGET CATEGORY ENDPOINTS
 
-    // BUDGET_CATEGORY : GET
-    // Get the budget category from specigied ID, or all of them if not specified
-    // Params : (optional) Id
+    // CATEGORY : GET
+    // Get the budget category from specigied ID
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/budgetCategory',
+        '/api/category/:id',
         //authMiddleware.checkAuth,
-        budgetCategoryController.get
+        categoryController.get
+    )
+
+    // CATEGORY : GET
+    // Get all budget categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/category/all',
+        //authMiddleware.checkAuth,
+        categoryController.getAll
     );
 
 
-    // BUDGET_CATEGORY : POST
+    // CATEGORY : POST
     // Create a budget category
-    // Params : ????
+    // Params :
+    // {
+    //    budgetId,
+    //    category { name, type }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
-        '/api/budgetCategory',
+        '/api/category',
         //authMiddleware.checkAuth,
-        budgetCategoryController.create
+        categoryController.create
     );
 
-    // BUDGET_CATEGORY : PUT
+    // CATEGORY : PUT
     // Updates a budget category
-    // Params : ????
+    // Params :
+    // {
+    //    budgetId,
+    //    category { name, type }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/budgetCategory',
+        '/api/category/:id',
         //authMiddleware.checkAuth,
-        budgetCategoryController.update
+        categoryController.update
     );
 
-    // BUDGET_CATEGORY : DELETE
+    // CATEGORY : DELETE
     // Deletes a budget category
-    // Params : ????
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
-        '/api/budgetCategory',
+        '/api/category/:id',
         //authMiddleware.checkAuth,
-        budgetCategoryController.delete
+        categoryController.deleteOne
     );
 
     // BUDGET LINE ENDPOINTS
 
-    // BUDGET_LINE : GET
-    // Get the budget line from specigied ID, or all of them if not specified
-    // Params : (optional) Id
+    // LINE : GET
+    // Get the budget line from specigied ID
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/budgetLine',
+        '/api/line/:id',
         //authMiddleware.checkAuth,
-        budgetLineController.get
+        lineController.get
     );
 
-    // BUDGET_LINE : POST
+    // LINE : GET
+    // Get all the budget lines
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/line/all',
+        //authMiddleware.checkAuth,
+        lineController.getAll
+    );
+
+    // LINE : POST
     // Create a budget line
-    // Params : ????
+    // Params :
+    // {
+    //      budgetId,
+    //      line { name, description, estimate, categoryId }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
-        '/api/budgetLine',
+        '/api/line',
         //authMiddleware.checkAuth,
-        budgetLineController.create
+        lineController.create
     );
 
-    // BUDGET_LINE : PUT
+    // LINE : PUT
     // Updates a budget line
-    // Params : ????
+    // Params :
+    // {
+    //      budgetId,
+    //      line { name, description, estimate, categoryId }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/budgetLine',
+        '/api/line/:id',
         //authMiddleware.checkAuth,
-        budgetLineController.update
+        lineController.update
     );
 
-    // BUDGET_LINE : DELETE
+    // LINE : DELETE
     // Deletes a budget line
-    // Params : ????
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
-        '/api/budgetLine',
+        '/api/line/:id',
         //authMiddleware.checkAuth,
-        budgetLineController.delete
+        lineController.deleteOne
     );
 
     // BUDGET ENTRY ENDPOINTS
 
-    // BUDGET_ENTRY : GET
-    // Get the budget entry from specigied ID, or all of them if not specified
-    // Get all expenses if type is specified (Type=expenses), else
-    // Get all revenus if type is specified (Type=revenus), else all budget entries
-    // Params : (optional) Id, (optional) Type
+    // ENTRY : GET
+    // Get one entry from specified Id
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/budgetEntry',
+        '/api/entry/:id',
         //authMiddleware.checkAuth,
-        budgetEntryController.get
+        entryController.get
     );
 
-    // BUDGET_ENTRY : POST
+    // ENTRY : GET
+    // Get all entries
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/entry/all',
+        //authMiddleware.checkAuth,
+        entryController.getAll
+    );
+
+    // ENTRY : POST
     // Create a budget entry
-    // Params : ????
+    // Params :
+    // {
+    //      budgetId,
+    //      entry { type, categoryId, lineId, receiptId, member, description, date, status }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
-        '/api/budgetEntry',
+        '/api/entry',
         //authMiddleware.checkAuth,
-        budgetEntryController.create
+        entryController.create
     );
 
-    // BUDGET_ENTRY : PUT
+    // ENTRY : PUT
     // Updates a budget entry
-    // Params : ????
+    // Params :
+    // {
+    //      budgetId,
+    //      entry { type, categoryId, lineId, receiptId, member, description, date, status }
+    // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/budgetEntry',
+        '/api/entry/:id',
         //authMiddleware.checkAuth,
-        budgetEntryController.update
+        entryController.update
     );
 
-    // BUDGET_ENTRY : DELETE
+    // ENTRY : DELETE
     // Deletes a budget entry
-    // Params : ????
+    // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
-        '/api/budgetEntry',
+        '/api/entry/:id',
         //authMiddleware.checkAuth,
-        budgetEntryController.delete
+        entryController.deleteOne
+    );
+
+    // ENTRY : GET
+    // Get all revenus
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/entry/revenues',
+        //authMiddleware.checkAuth,
+        entryController.getRevenues
+    );
+
+    // ENTRY : GET
+    // Get all expenses
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/entry/expenses',
+        //authMiddleware.checkAuth,
+        entryController.getExpenses
     );
 };

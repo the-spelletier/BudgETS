@@ -1,8 +1,8 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const User = require('../models/user');
-const BudgetEntry = require('../models/budgetEntry');
+//const User = require('../models/user');
+//const Entry = require('./entry');
 
 const ClubMember = sequelize.define(
     'ClubMember',
@@ -29,7 +29,7 @@ const ClubMember = sequelize.define(
     {}
 );
 
-ClubMember.belongsTo(User);
-ClubMember.belongsToMany(BudgetEntry);
+//ClubMember.belongsTo(User);
+//ClubMember.belongsToMany(Entry);
 
 module.exports = ClubMember

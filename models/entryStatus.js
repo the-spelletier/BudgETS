@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const BudgetEntry = require('../models/budgetEntry');
+//const Entry = require('./entry');
 
 const EntryStatus = sequelize.define(
     'EntryStatus',
@@ -21,6 +21,6 @@ const EntryStatus = sequelize.define(
     {}
 );
 
-EntryStatus.belongsToMany(BudgetEntry);
+//EntryStatus.belongsToMany(Entry);
 
 module.exports = EntryStatus

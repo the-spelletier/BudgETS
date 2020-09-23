@@ -46,7 +46,7 @@ const User = sequelize.define(
 );
 
 User.hasOne(SessionLog);
-User.hasOne(Token);
+User.hasOne(Tokens);
 
 User.hasMany(ClubMember);
 User.hasMany(Budget);

@@ -44,7 +44,7 @@ const Budget = sequelize.define('budget', {
   endDate: DataTypes.DATE
 });
 
-const BudgetCategory = sequelize.define('category', {
+const Category = sequelize.define('category', {
   id: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
@@ -54,7 +54,7 @@ const BudgetCategory = sequelize.define('category', {
   isRevenue: DataTypes.BOOLEAN
 });
 
-const BudgetLine = sequelize.define('budgetLine', {
+const Line = sequelize.define('Line', {
   id: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
@@ -114,19 +114,19 @@ ClubMember.belongsToMany(Entry);
 
 //Budget
 Budget.belongsTo(Club);
-Budget.hasMany(BudgetCategory);
+Budget.hasMany(Category);
 Budget.hasMany(ReadAccess);
 
-//BudgetCategory
-BudgetCategory.belongsTo(Budget);
-BudgetCategory.hasMany(BudgetLine);
+//Category
+Category.belongsTo(Budget);
+Category.hasMany(Line);
 
-//BudgetLine
-BudgetLine.belongsTo(BudgetCategory);
-BudgetLine.hasMany(Entry);
+//Line
+Line.belongsTo(Category);
+Line.hasMany(Entry);
 
 //Entry
-Entry.belongsTo(BudgetLine);
+Entry.belongsTo(Line);
 Entry.hasOne(ClubMember);
 Entry.hasOne(Receipt);
 Entry.hasOne(Status);

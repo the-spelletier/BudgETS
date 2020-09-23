@@ -1,8 +1,8 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const User = require('../models/user');
-const Budget = require('../models/budget');
+//const User = require('../models/user');
+//const Budget = require('../models/budget');
 
 const ReadAccess = sequelize.define(
     'ReadAccess',
@@ -16,7 +16,7 @@ const ReadAccess = sequelize.define(
     {}
 );
 
-ReadAccess.belongsTo(User);
-ReadAccess.belongsTo(Budget);
+//ReadAccess.belongsTo(User);
+//ReadAccess.belongsTo(Budget);
 
 module.exports = ReadAccess

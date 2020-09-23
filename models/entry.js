@@ -1,13 +1,13 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const BudgetLine = require('../models/budgetLine');
-const ClubMember = require('../models/clubMember');
-const Receipt = require('../models/receipt');
-const EntryStatus = require('../models/entryStatus');
+//const Line = require('./line');
+const ClubMember = require('./clubMember');
+const Receipt = require('./receipt');
+const EntryStatus = require('./entryStatus');
 
-const BudgetEntry = sequelize.define(
-    'BudgetEntry',
+const Entry = sequelize.define(
+    'Entry',
     {
         id: {
             type: DataTypes.UUID,
@@ -31,9 +31,9 @@ const BudgetEntry = sequelize.define(
     {}
 );
 
-BudgetEntry.belongsTo(BudgetLine);
-BudgetEntry.hasOne(ClubMember);
-BudgetEntry.hasOne(Receipt);
-BudgetEntry.hasOne(EntryStatus);
+//Entry.belongsTo(Line);
+Entry.hasOne(ClubMember);
+Entry.hasOne(Receipt);
+Entry.hasOne(EntryStatus);
 
-module.exports = BudgetEntry
+module.exports = Entry

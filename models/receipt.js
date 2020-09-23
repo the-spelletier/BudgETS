@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const BudgetEntry = require('../models/budgetEntry');
+//const Entry = require('./entry');
 
 const Receipt = sequelize.define(
     'Receipt',
@@ -21,6 +21,6 @@ const Receipt = sequelize.define(
     {}
 );
 
-Receipt.belongsTo(BudgetEntry);
+//Receipt.belongsTo(Entry);
 
 module.exports = Receipt

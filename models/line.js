@@ -1,11 +1,11 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = require('../db');
 
-const BudgetCategory = require('../models/budgetCategory');
-const BudgetEntry = require('../models/budgetEntry');
+//const Category = require('./category');
+const Entry = require('./entry');
 
-const BudgetLine = sequelize.define(
-    'BudgetLine',
+const Line = sequelize.define(
+    'Line',
     {
         id: {
             type: DataTypes.UUID,
@@ -25,7 +25,7 @@ const BudgetLine = sequelize.define(
     {}
 );
 
-BudgetLine.belongsTo(BudgetCategory);
-BudgetLine.hasMany(BudgetEntry);
+//Line.belongsTo(Category);
+Line.hasMany(Entry);
 
-module.exports = BudgetLine
+module.exports = Line
