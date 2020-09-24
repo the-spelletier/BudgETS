@@ -55,6 +55,8 @@ const Entry = sequelize.define(
         },
         amount: {
             type: DataTypes.DECIMAL(10,2),
+            allowNull: false,
+            defaultValue: '0.00',
         },
         date: {
             type: DataTypes.DATE,
@@ -107,6 +109,8 @@ const Line = sequelize.define(
         },
         expenseEstimate: {
             type: DataTypes.DECIMAL(10,2),
+            allowNull: false,
+            defaultValue: '0.00',
         },
     },
     {}
@@ -212,9 +216,11 @@ Budget.hasMany(ReadAccess);
 //Category
 Category.belongsTo(Budget);
 Category.hasMany(Line);
+Category.hasMany(Category);
 
 //Entry
 Entry.belongsTo(Line);
+Entry.belongsTo(Category);
 Entry.hasOne(Receipt);
 Entry.hasOne(EntryStatus);
 
