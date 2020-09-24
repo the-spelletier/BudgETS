@@ -1,4 +1,4 @@
-const categoryService = require('../services/category');
+const userService = require('../services/user');
 
 function get(req, res) {
 
