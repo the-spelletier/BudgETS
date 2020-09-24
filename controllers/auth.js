@@ -1,4 +1,5 @@
 const authService = require('../services/auth');
+const config = require('../config');
 
 const Users = require('../models').User;
 const Tokens = require('../models').Token;
@@ -12,20 +13,16 @@ function login(req, res) {
         .then(token => {
 
             if (!token) {
-                res.status(401);
-                res.send({
+                res.status(401).send({
                     message: "Failed"
                 });
             } else {
 
                 // Trouve l'utilisateur et ajoute son Id au token
-                Users.findOne({
-                    where: {
-                        username: req.body.username
-                    },
-                    raw: true
+                userService.getUser({
+                    username: req.body.username
                 }).then(user => {
-                    var t = { value: token, ttl: 28800, UserId: user.id };
+                    var t = { value: token, ttl: config.ttl, UserId: user.id };
                     Tokens.create(t).then(token =>
                         res.send({
                             token
@@ -35,8 +32,7 @@ function login(req, res) {
             }
         })
         .catch(err => {
-            res.status(401);
-            res.send({
+            res.status(401).send({
                 message: err.message
             });
         });
