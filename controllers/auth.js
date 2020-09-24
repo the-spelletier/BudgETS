@@ -1,4 +1,5 @@
 const authService = require('../services/auth');
+const userService = require('../services/user');
 const config = require('../config');
 
 const Users = require('../models').User;
@@ -11,24 +12,14 @@ function login(req, res) {
 
         // Valide la création du jeton de session jwt
         .then(token => {
-
             if (!token) {
                 res.status(401).send({
-                    message: "Failed"
+                    message: "Authentication failed"
                 });
             } else {
-
-                // Trouve l'utilisateur et ajoute son Id au token
-                userService.getUser({
-                    username: req.body.username
-                }).then(user => {
-                    var t = { value: token, ttl: config.ttl, UserId: user.id };
-                    Tokens.create(t).then(token =>
-                        res.send({
-                            token
-                        })
-                    );
-                });
+                res.send({
+                    token
+                })
             }
         })
         .catch(err => {

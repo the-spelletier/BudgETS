@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../models').User;
+const Tokens = require('../models').Token;
 const SessionLogs = require('../models').SessionLog;
 
 const config = require('../config');
@@ -19,7 +20,7 @@ const authenticate = params => {
             // Journalisation de l'échec d'authentification (Utilisateur qui n'existe pas)
             var sesslog = {
                 loginSucceeded: false,
-                UserId: null
+                userId: null
             };
             SessionLogs.create(sesslog);
             throw new Error('Authentication failed. Wrong user or password.');
@@ -30,7 +31,7 @@ const authenticate = params => {
             // et mise à jour du nombre de tentatives échouées
             var sesslog = {
                 loginSucceeded: false,
-                UserId: user.id
+                userId: user.id
             };
             SessionLogs.create(sesslog);
             var userToUpdate = {
@@ -48,26 +49,62 @@ const authenticate = params => {
             }
             userService.updateUser(userToUpdate);
 
-            const payload = {
-                login: user.username,
-                id: user.id,
-                role: user.RoleId
-            };
-
-            var token = jwt.sign(payload, config.jwtSecret, {
-                algorithm: 'HS256',
-                expiresIn: config.tokenExpireTime
-            });
             var sesslog = {
                 loginSucceeded: true,
-                UserId: user.id
+                userId: user.id
             };
             // Journalisation de la réussite d'authentification
             SessionLogs.create(sesslog);
-            return token;
+
+            // Trouver/générer le token
+            return Tokens.findOne({
+                where: {
+                    userId: user.id
+                },
+                raw: true
+            }).then(t => {
+                if (!t || isExpired(t)) {
+                    t = generateToken(user);
+                }
+
+                delete user["id"];
+                delete user["createdAt"];
+                delete user["updatedAt"];
+                delete user["userId"];
+                return t;
+            });
         }
     }).catch(err => {throw err});;
 };
+
+const isExpired = token => {
+    let createdAt = Math.floor((new Date(token.createdAt)).getTime()/1000);
+    let now = Math.floor(Date.now()/1000);
+    return now > createdAt + token.ttl;
+}
+
+const generateToken = user => {
+    const payload = {
+        id: user.id,
+        username: user.username,
+        attemptFailed: user.attemptFailed,
+        isBlocked: user.isBlocked,
+        isAdmin: user.isAdmin
+    };
+
+    token = jwt.sign(payload, config.jwtSecret, {
+        algorithm: 'HS256',
+        expiresIn: config.ttl
+    });
+
+    return Tokens.create({ 
+        value: token, 
+        ttl: config.ttl, 
+        userId: user.id 
+    }).then(res => {
+        return res.get({plain:true})
+    });
+}
 
 module.exports = {
     authenticate
