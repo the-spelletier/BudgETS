@@ -1,10 +1,12 @@
 const path = require('path');
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = require('./router.js');
+const mysql = require('mysql')
 
-const app = express();
+
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
@@ -37,4 +39,25 @@ router.set(app);
 
 const server = app.listen(process.env.PORT || 3000, () => {
     console.log('Listening on port %s', server.address().port);
+});
+
+const connection = mysql.createConnection({
+	host: process.env.MYSQL_HOST || '192.168.99.100',
+	user: process.env.MYSQL_USER || 'root',
+	password: process.env.MYSQL_PASSWORD || 'password',
+});
+
+connection.connect((err) => {
+	if (err) {
+		console.error('error connecting mysql: ', err);
+	} else {
+		console.log('mysql connection successful');
+		app.listen(PORT, HOST, (err) => {
+			if (err) {
+				console.error('Error starting  server', err);
+			} else {
+				console.log('server listening at port ' + PORT);
+			}
+        });
+    }
 });
