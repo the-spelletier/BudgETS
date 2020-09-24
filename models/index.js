@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Budget = sequelize.define(
-    'Budget',
+    'budget',
     {
         id: {
             type: DataTypes.UUID,
@@ -26,7 +26,7 @@ const Budget = sequelize.define(
 );
 
 const Category = sequelize.define(
-    'Category',
+    'category',
     {
         id: {
             type: DataTypes.UUID,
@@ -46,7 +46,7 @@ const Category = sequelize.define(
 );
 
 const Entry = sequelize.define(
-    'Entry',
+    'entry',
     {
         id: {
             type: DataTypes.UUID,
@@ -76,7 +76,7 @@ const Entry = sequelize.define(
 );
 
 const EntryStatus = sequelize.define(
-    'EntryStatus',
+    'entryStatus',
     {
         id: {
             type: DataTypes.UUID,
@@ -94,7 +94,7 @@ const EntryStatus = sequelize.define(
 );
 
 const Line = sequelize.define(
-    'Line',
+    'line',
     {
         id: {
             type: DataTypes.UUID,
@@ -117,7 +117,7 @@ const Line = sequelize.define(
 );
 
 const ReadAccess = sequelize.define(
-    'ReadAccess',
+    'readAccess',
     {
         id: {
             type: DataTypes.UUID,
@@ -129,7 +129,7 @@ const ReadAccess = sequelize.define(
 );
 
 const Receipt = sequelize.define(
-    'Receipt',
+    'receipt',
     {
         id: {
             type: DataTypes.UUID,
@@ -147,7 +147,7 @@ const Receipt = sequelize.define(
 );
 
 const SessionLog = sequelize.define(
-    'SessionLog',
+    'sessionLog',
     {
         loginSucceeded: {
             type: DataTypes.BOOLEAN,
@@ -158,7 +158,7 @@ const SessionLog = sequelize.define(
 );
 
 const Token = sequelize.define(
-    'Token',
+    'token',
     {
         value: {
             type: DataTypes.STRING,
@@ -174,7 +174,7 @@ const Token = sequelize.define(
 );
 
 const User = sequelize.define(
-    'User',
+    'user',
     {
         id: {
             type: DataTypes.UUID,
@@ -183,14 +183,12 @@ const User = sequelize.define(
         },
         username: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        salt: {
-            type: DataTypes.STRING
         },
         attemptFailed : {
             type: DataTypes.INTEGER,
@@ -216,7 +214,7 @@ Budget.hasMany(ReadAccess);
 //Category
 Category.belongsTo(Budget);
 Category.hasMany(Line);
-Category.hasMany(Category);
+Category.hasMany(Entry);
 
 //Entry
 Entry.belongsTo(Line);
@@ -231,16 +229,42 @@ Line.hasMany(Entry);
 //Receipt
 Receipt.belongsTo(Entry);
 
+//EntryStatus
+EntryStatus.belongsTo(Entry);
+
 //ReadAccess
 ReadAccess.belongsTo(User);
 ReadAccess.belongsTo(Budget)
 
+//SessionLog
+SessionLog.belongsTo(User);
+
+//Token
+Token.belongsTo(User);
+
 //User
-User.hasOne(SessionLog);
-User.hasOne(Token);
+User.hasMany(SessionLog);
+User.hasMany(Token);
 
 User.hasMany(Budget);
 User.hasMany(ReadAccess);
+
+// Create tables if not exist
+User.sync().then(() => {
+    SessionLog.sync();
+    Token.sync();
+    Budget.sync().then(() => {
+        ReadAccess.sync();
+        Category.sync().then(() => {
+            Line.sync().then(() => {
+                Entry.sync().then(() => {
+                    Receipt.sync();
+                    EntryStatus.sync();
+                })
+            })
+        })
+    })
+});
 
 module.exports = {
     Budget,
