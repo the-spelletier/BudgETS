@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const userService = require('../services/user');
 
 const verifyAuth = (req, res, next) => {
 
@@ -17,9 +18,10 @@ const verifyAuth = (req, res, next) => {
             message: 'No authorization token sent.' 
         });
     }
+    console.log(authToken);
 
     // Vérifier le contenu du token 
-    jwt.verify(authToken, config.jwtSecret, (err, content) => {
+    jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, content) => {
         if (err) {
             return res.status(500).send({ 
                 auth: false, 
@@ -28,14 +30,23 @@ const verifyAuth = (req, res, next) => {
         }
 
         // Ajouter les infos de l'utilisateur à la requête
-        req.user = {
-            id: content.id,
-            username: content.username,
-            attemptFailed: content.attemptFailed,
-            isBlocked: content.isBlocked,
-            isAdmin: content.isAdmin
-        };
-        next();
+        userService.getUser({
+            id: content.id
+        }).then(user => {
+            req.user = {
+                id: user.id,
+                username: user.username,
+                attemptFailed: user.attemptFailed,
+                isBlocked: user.isBlocked,
+                isAdmin: user.isAdmin
+            };
+            next();
+        }).catch(err => {
+            return res.status(500).send({
+                auth: false,
+                message: 'An unexpected error occurred'
+            });
+        })
     });
 };
 
