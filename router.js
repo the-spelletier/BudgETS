@@ -3,6 +3,9 @@ const budgetController = require('./controllers/budget');
 const categoryController = require('./controllers/category');
 const entryController = require('./controllers/entry');
 const lineController = require('./controllers/line');
+const userController = require('./controllers/user');
+
+const authMiddleware = require('./middlewares/auth');
 
 module.exports.set = app => {
     // ENDPOINTS
@@ -295,5 +298,16 @@ module.exports.set = app => {
         '/api/entry/expenses',
         //authMiddleware.checkAuth,
         entryController.getExpenses
+    );
+
+    // USER ENDPOINTS
+
+    // LOGIN : POST
+    // Params : { username, password, isAdmin }
+    // Returns : Code 200 if user added successfully
+    app.post(
+        '/api/user',
+        [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
+        userController.create
     );
 };
