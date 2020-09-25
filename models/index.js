@@ -9,6 +9,11 @@ const Budget = sequelize.define(
             defaultValue: Sequelize.UUIDV4,
             primaryKey: true
         },
+        name: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+        },
         startDate: {
             type: DataTypes.DATE,
             allowNull: false
@@ -19,7 +24,7 @@ const Budget = sequelize.define(
         },
         isActive : {
             type: DataTypes.BOOLEAN,
-            defaultValue: true
+            defaultValue: false
         },
     },
     {}
@@ -252,7 +257,6 @@ User.hasMany(ReadAccess);
 // Create tables if not exist
 User.sync().then(() => {
     SessionLog.sync();
-    Token.sync();
     Budget.sync().then(() => {
         ReadAccess.sync();
         Category.sync().then(() => {
