@@ -19,7 +19,7 @@ function getAll(req, res) {
 }
 
 function create(req, res) {
-    if (req.body.name, req.body.type) { 
+    if (req.body.name, req.body.type, req.body.budgetId) { 
         categoryService.addCategory(req.body).then((result) => {
             console.log(result);
             res.status(200).send(categoryDTO(result));

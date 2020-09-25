@@ -40,15 +40,17 @@ const Category = sequelize.define(
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: 'compositeUnique'
         },
         type: {
             type: DataTypes.ENUM('revenue', 'expense'),
             allowNull: false,
+            unique: 'compositeUnique',
             validate: {
                 isIn: [['revenue', 'expense']]
             }
-        }
+        },
     },
     {}
 );
@@ -223,7 +225,11 @@ Budget.hasMany(Category);
 Budget.hasMany(ReadAccess);
 
 //Category
-Category.belongsTo(Budget);
+Category.belongsTo(Budget, {
+    foreignKey: {
+        unique: 'compositeUnique'
+    }
+});
 Category.hasMany(Line);
 Category.hasMany(Entry);
 
