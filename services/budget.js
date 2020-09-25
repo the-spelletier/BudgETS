@@ -7,6 +7,11 @@ const getBudget = budget => {
     });
 }
 
+// Retourne tous les budgets
+const getBudgets = () => {
+    return Budget.findAll();
+};
+
 // Ajout d'un budget
 const addBudget = budget => {
     return Budget.create(budget);
