@@ -37,6 +37,7 @@ const deleteBudget = budget => {
 
 module.exports = {
     getBudget,
+    getBudgets,
     addBudget,
     updateBudget,
     deleteBudget
