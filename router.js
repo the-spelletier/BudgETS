@@ -34,7 +34,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/current',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         budgetController.getCurrent
     );
 
@@ -45,7 +45,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         budgetController.get
     );
 
@@ -56,7 +56,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         budgetController.create
     )
 
@@ -67,7 +67,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget/clone/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         budgetController.clone
     );
 
@@ -78,20 +78,20 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget/summary/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         budgetController.getSummary
     );
 
     // BUDGET CATEGORY ENDPOINTS
 
     // CATEGORY : GET
-    // Get the budget category from specigied ID
+    // Get the budget category from specified ID
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/category/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         categoryController.get
     )
 
@@ -102,7 +102,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/category/all',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         categoryController.getAll
     );
 
@@ -118,7 +118,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/category',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         categoryController.create
     );
 
@@ -133,7 +133,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/category/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         categoryController.update
     );
 
@@ -144,7 +144,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/category/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         categoryController.deleteOne
     );
 
@@ -157,7 +157,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/line/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         lineController.get
     );
 
@@ -168,7 +168,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/line/all',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         lineController.getAll
     );
 
@@ -183,7 +183,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/line',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         lineController.create
     );
 
@@ -198,7 +198,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/line/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         lineController.update
     );
 
@@ -209,7 +209,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/line/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         lineController.deleteOne
     );
 
@@ -222,7 +222,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/entry/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.get
     );
 
@@ -233,7 +233,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/entry/all',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.getAll
     );
 
@@ -248,7 +248,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/entry',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.create
     );
 
@@ -263,7 +263,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/entry/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.update
     );
 
@@ -274,7 +274,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/entry/:id',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.deleteOne
     );
 
@@ -285,7 +285,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/entry/revenues',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.getRevenues
     );
 
@@ -296,7 +296,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/entry/expenses',
-        //authMiddleware.checkAuth,
+        authMiddleware.verifyAuth,
         entryController.getExpenses
     );
 
