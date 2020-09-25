@@ -23,6 +23,8 @@ function login(req, res) {
             }
         })
         .catch(err => {
+            console.log(err);
+            console.log('an error');
             res.status(401).send({
                 message: err.message
             });

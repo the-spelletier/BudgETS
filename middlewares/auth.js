@@ -18,11 +18,11 @@ const verifyAuth = (req, res, next) => {
             message: 'No authorization token sent.' 
         });
     }
-    console.log(authToken);
 
     // Vérifier le contenu du token 
-    jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, content) => {
+    jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, payload) => {
         if (err) {
+            console.log(err);
             return res.status(500).send({ 
                 auth: false, 
                 message: 'Token verification failed.' 
@@ -31,17 +31,12 @@ const verifyAuth = (req, res, next) => {
 
         // Ajouter les infos de l'utilisateur à la requête
         userService.getUser({
-            id: content.id
+            id: payload.id
         }).then(user => {
-            req.user = {
-                id: user.id,
-                username: user.username,
-                attemptFailed: user.attemptFailed,
-                isBlocked: user.isBlocked,
-                isAdmin: user.isAdmin
-            };
+            req.user = userService.getEntity(user);
             next();
         }).catch(err => {
+            console.log(err);
             return res.status(500).send({
                 auth: false,
                 message: 'An unexpected error occurred'
