@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../models').User;
-const Tokens = require('../models').Token;
 const SessionLogs = require('../models').SessionLog;
 
 const config = require('../config');
@@ -23,7 +22,7 @@ const authenticate = params => {
                 userId: null
             };
             SessionLogs.create(sesslog);
-            throw new Error('Authentication failed. Wrong user or password.');
+            throw new Error('Invalid credentials');
         }
         // Validation du mot de passe via l'encryption
         if (!bcrypt.compareSync(params.password || '', user.password)) {
@@ -39,7 +38,7 @@ const authenticate = params => {
                 attemptFailed: user.attemptFailed + 1
             }
             userService.updateUser(userToUpdate);
-            throw new Error('Authentication failed. Wrong user or password.');
+            throw new Error('Invalid credentials');
         } else {
             // Remise à zéro pour le nombre de tentatives et déblocage du compte
             var userToUpdate = {
@@ -56,55 +55,20 @@ const authenticate = params => {
             // Journalisation de la réussite d'authentification
             SessionLogs.create(sesslog);
 
-            // Trouver/générer le token
-            return Tokens.findOne({
-                where: {
-                    userId: user.id
-                },
-                raw: true
-            }).then(t => {
-                if (!t || isExpired(t)) {
-                    t = generateToken(user);
-                }
+            // Générer le token
+            const payload = {
+                id: user.id,
+                name: user.username,
+                admin: user.isAdmin
+            };
 
-                delete user["id"];
-                delete user["createdAt"];
-                delete user["updatedAt"];
-                delete user["userId"];
-                return t;
+            return jwt.sign(payload, config.jwtSecret, {
+                algorithm: config.jwtAlgo,
+                expiresIn: config.ttl
             });
         }
     }).catch(err => {throw err});;
 };
-
-const isExpired = token => {
-    let createdAt = Math.floor((new Date(token.createdAt)).getTime()/1000);
-    let now = Math.floor(Date.now()/1000);
-    return now > createdAt + token.ttl;
-}
-
-const generateToken = user => {
-    const payload = {
-        id: user.id,
-        username: user.username,
-        attemptFailed: user.attemptFailed,
-        isBlocked: user.isBlocked,
-        isAdmin: user.isAdmin
-    };
-
-    token = jwt.sign(payload, config.jwtSecret, {
-        algorithm: 'HS256',
-        expiresIn: config.ttl
-    });
-
-    return Tokens.create({ 
-        value: token, 
-        ttl: config.ttl, 
-        userId: user.id 
-    }).then(res => {
-        return res.get({plain:true})
-    });
-}
 
 module.exports = {
     authenticate
