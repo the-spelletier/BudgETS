@@ -43,8 +43,11 @@ const Category = sequelize.define(
             allowNull: false
         },
         type: {
-            type: DataTypes.ENUM('revenues', 'expenses'),
-            allowNull: false
+            type: DataTypes.ENUM('revenue', 'expense'),
+            allowNull: false,
+            validate: {
+                isIn: [['revenue', 'expense']]
+            }
         }
     },
     {}
@@ -74,7 +77,10 @@ const Entry = sequelize.define(
         },
         type: {
             type: DataTypes.ENUM('revenue', 'expense'),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isIn: [['revenue', 'expense']]
+            }
         }
     },
     {}
