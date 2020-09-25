@@ -16,15 +16,16 @@ const budgetDTO = budget => {
   };
 };
 
-const categoryDTO = user => {
+const categoryDTO = category => {
   return {
-    id: user.id,
-    username: user.username,
-    isAdmin: user.isAdmin
+    id: category.id,
+    name: category.name,
+    type: category.type
   };
 };
 
 module.exports = {
   userDTO,
-  budgetDTO
+  budgetDTO,
+  categoryDTO
 }
