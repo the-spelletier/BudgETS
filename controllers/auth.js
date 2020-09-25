@@ -1,9 +1,5 @@
-const authService = require('../services/auth');
-const userService = require('../services/user');
 const config = require('../config');
-
-const Users = require('../models').User;
-const Tokens = require('../models').Token;
+const authService = require('../services/auth');
 
 function login(req, res) {
     return authService
@@ -24,7 +20,6 @@ function login(req, res) {
         })
         .catch(err => {
             console.log(err);
-            console.log('an error');
             res.status(401).send({
                 message: err.message
             });

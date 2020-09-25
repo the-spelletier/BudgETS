@@ -2,10 +2,6 @@ const bcrypt = require('bcrypt');
 const config = require('../config');
 const Users = require('../models').User;
 
-const getEntity = user => {
-    return (new Users(user)).get({plain: true});
-}
-
 // Retourne un utilisateur (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getUser = user => {
     return Users.findOne({
@@ -23,9 +19,9 @@ const getUsers = () => {
 
 // Ajout d'un utilisateur
 const addUser = (user) => {
-    let u = getEntity(user);
-    u.password = bcrypt.hashSync(u.password, config.saltRounds);
-    return Users.create(u);
+    user = Users.build(user, {raw: true});
+    user.password = bcrypt.hashSync(user.password, config.saltRounds);
+    return user.save();
 }
 
 // Mise à jour d'un utilisateur selon l'identificateur envoyé en paramètre
@@ -48,7 +44,6 @@ const deleteUser = user => {
 }
 
 module.exports = {
-    getEntity,
     getUser,
     getUsers,
     addUser,

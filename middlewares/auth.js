@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const Users = require('../models').User;
 const userService = require('../services/user');
 
 const verifyAuth = (req, res, next) => {
@@ -33,7 +34,7 @@ const verifyAuth = (req, res, next) => {
         userService.getUser({
             id: payload.id
         }).then(user => {
-            req.user = userService.getEntity(user);
+            req.user = Users.build(user, {raw: true});
             next();
         }).catch(err => {
             console.log(err);
