@@ -14,7 +14,9 @@ const getBudgets = () => {
 
 // Ajout d'un budget
 const addBudget = budget => {
-    return Budget.create(budget);
+    budget = Budget.build(budget, {raw: true});
+    budget.isActive = false;
+    return budget.save();
 }
 
 // Mise à jour d'un budget selon l'identificateur envoyé en paramètre
@@ -35,10 +37,24 @@ const deleteBudget = budget => {
     });
 }
 
+const resetGetActiveBudget = budget => {
+    return getBudget(budget).then(b => {
+        if (b) {
+            return Budget.update({ 
+                isActive: false 
+            }, { where: {} }).then(() => {
+                b.isActive = true;
+                return b.save();
+            });
+        }
+    })
+}
+
 module.exports = {
     getBudget,
     getBudgets,
     addBudget,
     updateBudget,
-    deleteBudget
+    deleteBudget,
+    resetGetActiveBudget
 };

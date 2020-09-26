@@ -10,7 +10,7 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.getBudget({
+    budgetService.resetGetActiveBudget({
         id: req.params.id
     }).then(budget => {
         sendBudget(budget, res);
@@ -29,11 +29,10 @@ function getAll(req, res) {
 function create(req, res) {
     if (req.body.name && req.body.startDate && req.body.endDate) {
         req.body.userId = req.user.id;
-        req.body.isActive = req.body.isActive === true;
         budgetService.addBudget(req.body).then(budget => {
             sendBudget(budget, res);
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
