@@ -28,10 +28,25 @@ const updateCategory = category => {
 
 // Suppression d'une catégorie selon l'identificateur envoyé en paramètre
 const deleteCategory = category => {
-    return Category.destroy({ 
+    return Category.findOne({ 
         where: { 
             id: category.id 
         } 
+    }).then(cat => {
+      // La catégorie existe
+      if(!cat){
+        return ;
+      }
+      // La catégorie n'a aucune lignes
+      if(cat.lines.lenght!=0){
+        return ;
+      }
+      // Suppression
+      return Category.destroy({ 
+        where: { 
+            id: category.id 
+        } 
+      });
     });
 }
 
