@@ -24,8 +24,18 @@ const categoryDTO = category => {
   };
 };
 
+const lineDTO = line => {
+  return {
+    id: line.id,
+    name: line.name,
+    description: line.description,
+    estimate: line.expenseEstimate
+  };
+};
+
 module.exports = {
   userDTO,
   budgetDTO,
-  categoryDTO
+  categoryDTO,
+  lineDTO
 }

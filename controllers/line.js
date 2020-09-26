@@ -1,3 +1,5 @@
+const lineDTO = require('../dto').lineDTO;
+const lineService = require('../services/line');
 
 function get(req, res) {
 

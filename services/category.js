@@ -35,11 +35,11 @@ const deleteCategory = category => {
     }).then(cat => {
       // La catégorie existe
       if(!cat){
-        return ;
+        return ; // TODO : Add error? 
       }
       // La catégorie n'a aucune lignes
       if(cat.lines.lenght!=0){
-        return ;
+        return ; // TODO : Add error? 
       }
       // Suppression
       return Category.destroy({ 
