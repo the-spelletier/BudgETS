@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { Select } from "antd";
 import { BudgetClient } from "../clients/BudgetClient";
 import { notification } from 'antd';
+import UserContext from "../contexts/user/UserContext";
 
 import "./budgetContainer.scss";
 
@@ -9,6 +10,7 @@ const { Option } = Select;
 
 const BudgetContainer = ({children}) => {
     const budgetClient = new BudgetClient();
+    const {user} = useContext(UserContext);
 
     const [selectedBudgetId, setSelectedBudgetId] = useState(null);
     const [budgets, setBudgets] = useState(null);
@@ -19,7 +21,7 @@ const BudgetContainer = ({children}) => {
             const mockBudgets = [{id: 1, name: "Budget 2018"}, {id: 2, name: "Budget 2019"}, {id: 3, name: "Budget 2020"}];
             
             try {
-                var response = await budgetClient.list();
+                var response = await budgetClient.list(user.token);
                 //TODO: make sure it works with backend data
                 setBudgets(response.data);
             }
@@ -35,7 +37,9 @@ const BudgetContainer = ({children}) => {
             }
         }
 
-        listBudgets();
+        if(user.token){
+            listBudgets();
+        }
     }, [])
 
     useEffect(() => {

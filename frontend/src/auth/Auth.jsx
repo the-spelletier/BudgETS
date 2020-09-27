@@ -23,7 +23,7 @@ const Auth = () => {
             try {
                 var loggedUser = await authClient.login(username, password);
                 setCurrentUser({username: username, token: loggedUser.data.token});
-                return history.push("/summary");
+                return history.push("/budget/summary");
             }
             catch (e) { 
                 notification.open({
