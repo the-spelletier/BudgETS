@@ -16,20 +16,20 @@ const Sidebar = () => {
             {
                 user.token && 
                 <Fragment>
-                    <Menu.Item key="/budget-summary">
-                    <Link to="/budget-summary">Sommaire</Link>
+                    <Menu.Item key="/budget/summary">
+                    <Link to="/budget/summary">Sommaire</Link>
                     </Menu.Item>
-                    <Menu.Item key="/budget-details">
-                        <Link to="/budget-details">Détails</Link>
+                    <Menu.Item key="/budget/details">
+                        <Link to="/budget/details">Détails</Link>
                     </Menu.Item>
-                    <Menu.Item key="/revenues">
-                        <Link to="/revenues">Revenus</Link>
+                    <Menu.Item key="/budget/revenues">
+                        <Link to="/budget/revenues">Revenus</Link>
                     </Menu.Item>
-                    <Menu.Item key="/spending">
-                        <Link to="/spending">Dépenses</Link>
+                    <Menu.Item key="/budget/spending">
+                        <Link to="/budget/spending">Dépenses</Link>
                     </Menu.Item>
-                    <Menu.Item key="/budget-entries">
-                        <Link to="/budget-entries">Entrées budgétaires</Link>
+                    <Menu.Item key="/budget/entries">
+                        <Link to="/budget/entries">Entrées budgétaires</Link>
                     </Menu.Item>
                 </Fragment>
             }

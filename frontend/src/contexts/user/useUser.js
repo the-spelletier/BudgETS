@@ -4,7 +4,7 @@ const useUser = (initialUser) => {
     const [user, setUser] = useState(initialUser ? initialUser : 
         {
             username: null, 
-            token: null
+            token: "null"
         });
 
     const setCurrentUser = useCallback((currentUser) => setUser(currentUser));
