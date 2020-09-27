@@ -1,0 +1,59 @@
+@import "./styles/colors";
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar, .menu {
+    background-color: $neutral;
+
+    .ant-menu-item-selected{
+        background-color: $neutral-dark !important;
+
+        a {
+            color: $primary;
+        }
+    }
+
+    .ant-menu-item a:hover {
+        color: $primary-pale;
+    }
+
+    a {
+        color: $text-pale;
+    }
+
+    .bottom {
+        bottom: 0;
+        position: fixed;
+        width: 250px;
+        height: 55px;
+        margin-bottom: 0px;
+        padding-top: 0.5rem;
+    }
+}
+
+.logo {
+    font-size: 3rem;
+    color: $primary;
+    text-align: center;
+}
+
+.ant-layout-sider {
+    width: 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+}
+
+.ant-layout-content {
+    margin: auto !important;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+    border: none !important;
+}
+
+.content {
+    background-color: white;
+}
