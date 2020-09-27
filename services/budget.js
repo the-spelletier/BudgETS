@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Budget = require('../models').Budget;
 
 // Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
@@ -37,12 +38,19 @@ const deleteBudget = budget => {
     });
 }
 
+// Retourne le budget selon son id et set isActive à true
 const resetGetActiveBudget = budget => {
     return getBudget(budget).then(b => {
         if (b) {
             return Budget.update({ 
                 isActive: false 
-            }, { where: {} }).then(() => {
+            }, { 
+                where: {
+                    id : { 
+                        [Op.notIn]: [b.id] 
+                    } 
+                }
+            }).then(() => {
                 b.isActive = true;
                 return b.save();
             });
