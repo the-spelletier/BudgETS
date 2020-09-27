@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { ApiClient } from './clients/ApiClient';
+import React from 'react';
 import { Layout } from 'antd';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppRouter from "./AppRouter";
@@ -12,20 +11,6 @@ import './App.scss';
 const { Content, Sider } = Layout;
 
 const App = () => {
-    const [testString, setTestString] = useState("");
-    const [pathName, setPathName] = useState("");
-    const apiClient = new ApiClient();
-
-    useEffect(() => {
-        const testEndpoint = async() => {
-        var response = await apiClient.get();
-        setTestString(response.data.message);
-        }
-
-        testEndpoint();
-        setPathName(window.location.pathname);
-    }, []);
-
     return (
         <Layout className="app">                        
         <UserContextProvider>

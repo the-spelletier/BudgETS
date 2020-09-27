@@ -1,14 +1,17 @@
 import React, { Fragment, useContext } from "react";
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import UserContext from "./contexts/user/UserContext";
 
 const Sidebar = () => {
+    const history = useHistory();
     const {user, setCurrentUser} = useContext(UserContext);
 
     const logout = () => {
         //Call to logout
         setCurrentUser({username: null, token: null});
+        return history.push("/auth");
+
     };
 
     return (
@@ -38,7 +41,7 @@ const Sidebar = () => {
             </Menu.Item>
             <Menu.Item className="bottom login" key="/auth">
                 { !user.token && <Link to="/auth">Se connecter</Link> }
-                { user.token && <span onClick={logout}>Se déconnecter</span> }
+                { user.token && <span className="logout" onClick={logout}>Se déconnecter</span> }
             </Menu.Item>
         </Menu>
     )
