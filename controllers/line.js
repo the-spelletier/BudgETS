@@ -7,7 +7,6 @@ function get(req, res) {
   }).then(line => {
       sendLine(line, res);
   });
-
 }
 
 function getAll(req, res) {

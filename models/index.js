@@ -236,6 +236,7 @@ Category.hasMany(Entry);
 //Entry
 Entry.belongsTo(Line);
 Entry.belongsTo(Category);
+
 Entry.hasOne(Receipt);
 Entry.hasOne(EntryStatus);
 
@@ -248,6 +249,7 @@ Receipt.belongsTo(Entry);
 
 //EntryStatus
 EntryStatus.belongsTo(Entry);
+
 
 //ReadAccess
 ReadAccess.belongsTo(User);
