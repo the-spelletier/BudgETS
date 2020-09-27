@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ApiBaseClient from './ApiBaseClient';
 
 export class ApiClient {
