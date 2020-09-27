@@ -32,11 +32,19 @@ function create(req, res) {
 }
 
 function update(req, res) {
-
+  categoryService.updateCategory(req.body).then(result => {
+    res.status(200).send(categoryDTO(result));
+  }).catch(err => {
+    res.status(401).send({ message: err.message });
+  });
 }
 
 function deleteOne(req, res) {
-
+  categoryService.deleteCategory(req.body).then(result => {
+    res.status(200).send();
+  }).catch(err => {
+    res.status(401).send({ message: err.message });
+  });
 }
 
 function sendCategory(category, res) {
