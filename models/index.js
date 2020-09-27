@@ -2,27 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Budget = sequelize.define(
-    'Budget',
-    {
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-        },
-        year: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        isActive : {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
-        },
-    },
-    {}
-);
-
-const Category = sequelize.define(
-    'Category',
+    'budget',
     {
         id: {
             type: DataTypes.UUID,
@@ -31,20 +11,52 @@ const Category = sequelize.define(
         },
         name: {
             type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+        },
+        startDate: {
+            type: DataTypes.DATE,
             allowNull: false
         },
-        type: {
-            type: DataTypes.ENUM('revenues', 'expenses'),
+        endDate: {
+            type: DataTypes.DATE,
             allowNull: false
-        }
+        },
+        isActive : {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
     },
     {}
 );
 
-
+const Category = sequelize.define(
+    'category',
+    {
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: 'compositeUnique'
+        },
+        type: {
+            type: DataTypes.ENUM('revenue', 'expense'),
+            allowNull: false,
+            unique: 'compositeUnique',
+            validate: {
+                isIn: [['revenue', 'expense']]
+            }
+        },
+    },
+    {}
+);
 
 const Entry = sequelize.define(
-    'Entry',
+    'entry',
     {
         id: {
             type: DataTypes.UUID,
@@ -53,6 +65,8 @@ const Entry = sequelize.define(
         },
         amount: {
             type: DataTypes.DECIMAL(10,2),
+            allowNull: false,
+            defaultValue: '0.00',
         },
         date: {
             type: DataTypes.DATE,
@@ -64,15 +78,18 @@ const Entry = sequelize.define(
             type: DataTypes.STRING
         },
         type: {
-            type: DataTypes.ENUM('revenues', 'expenses'),
-            allowNull: false
+            type: DataTypes.ENUM('revenue', 'expense'),
+            allowNull: false,
+            validate: {
+                isIn: [['revenue', 'expense']]
+            }
         }
     },
     {}
 );
 
 const EntryStatus = sequelize.define(
-    'EntryStatus',
+    'entryStatus',
     {
         id: {
             type: DataTypes.UUID,
@@ -90,7 +107,7 @@ const EntryStatus = sequelize.define(
 );
 
 const Line = sequelize.define(
-    'Line',
+    'line',
     {
         id: {
             type: DataTypes.UUID,
@@ -105,13 +122,15 @@ const Line = sequelize.define(
         },
         expenseEstimate: {
             type: DataTypes.DECIMAL(10,2),
+            allowNull: false,
+            defaultValue: '0.00',
         },
     },
     {}
 );
 
 const ReadAccess = sequelize.define(
-    'ReadAccess',
+    'readAccess',
     {
         id: {
             type: DataTypes.UUID,
@@ -123,7 +142,7 @@ const ReadAccess = sequelize.define(
 );
 
 const Receipt = sequelize.define(
-    'Receipt',
+    'receipt',
     {
         id: {
             type: DataTypes.UUID,
@@ -141,7 +160,7 @@ const Receipt = sequelize.define(
 );
 
 const SessionLog = sequelize.define(
-    'SessionLog',
+    'sessionLog',
     {
         loginSucceeded: {
             type: DataTypes.BOOLEAN,
@@ -152,7 +171,7 @@ const SessionLog = sequelize.define(
 );
 
 const Token = sequelize.define(
-    'Token',
+    'token',
     {
         value: {
             type: DataTypes.STRING,
@@ -168,7 +187,7 @@ const Token = sequelize.define(
 );
 
 const User = sequelize.define(
-    'User',
+    'user',
     {
         id: {
             type: DataTypes.UUID,
@@ -177,20 +196,22 @@ const User = sequelize.define(
         },
         username: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        salt: {
-            type: DataTypes.STRING
         },
         attemptFailed : {
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
         isBlocked : {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        isAdmin : {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
@@ -204,11 +225,18 @@ Budget.hasMany(Category);
 Budget.hasMany(ReadAccess);
 
 //Category
-Category.belongsTo(Budget);
+Category.belongsTo(Budget, {
+    foreignKey: {
+        unique: 'compositeUnique'
+    }
+});
 Category.hasMany(Line);
+Category.hasMany(Entry);
 
 //Entry
 Entry.belongsTo(Line);
+Entry.belongsTo(Category);
+
 Entry.hasOne(Receipt);
 Entry.hasOne(EntryStatus);
 
@@ -219,16 +247,42 @@ Line.hasMany(Entry);
 //Receipt
 Receipt.belongsTo(Entry);
 
+//EntryStatus
+EntryStatus.belongsTo(Entry);
+
+
 //ReadAccess
 ReadAccess.belongsTo(User);
 ReadAccess.belongsTo(Budget)
 
+//SessionLog
+SessionLog.belongsTo(User);
+
+//Token
+Token.belongsTo(User);
+
 //User
-User.hasOne(SessionLog);
-User.hasOne(Token);
+User.hasMany(SessionLog);
+User.hasMany(Token);
 
 User.hasMany(Budget);
 User.hasMany(ReadAccess);
+
+// Create tables if not exist
+User.sync().then(() => {
+    SessionLog.sync();
+    Budget.sync().then(() => {
+        ReadAccess.sync();
+        Category.sync().then(() => {
+            Line.sync().then(() => {
+                Entry.sync().then(() => {
+                    Receipt.sync();
+                    EntryStatus.sync();
+                })
+            })
+        })
+    })
+});
 
 module.exports = {
     Budget,

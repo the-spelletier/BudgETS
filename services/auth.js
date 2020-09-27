@@ -19,10 +19,10 @@ const authenticate = params => {
             // Journalisation de l'échec d'authentification (Utilisateur qui n'existe pas)
             var sesslog = {
                 loginSucceeded: false,
-                UserId: null
+                userId: null
             };
             SessionLogs.create(sesslog);
-            throw new Error('Authentication failed. Wrong user or password.');
+            throw new Error('Invalid credentials');
         }
         // Validation du mot de passe via l'encryption
         if (!bcrypt.compareSync(params.password || '', user.password)) {
@@ -30,7 +30,7 @@ const authenticate = params => {
             // et mise à jour du nombre de tentatives échouées
             var sesslog = {
                 loginSucceeded: false,
-                UserId: user.id
+                userId: user.id
             };
             SessionLogs.create(sesslog);
             var userToUpdate = {
@@ -38,7 +38,7 @@ const authenticate = params => {
                 attemptFailed: user.attemptFailed + 1
             }
             userService.updateUser(userToUpdate);
-            throw new Error('Authentication failed. Wrong user or password.');
+            throw new Error('Invalid credentials');
         } else {
             // Remise à zéro pour le nombre de tentatives et déblocage du compte
             var userToUpdate = {
@@ -48,23 +48,24 @@ const authenticate = params => {
             }
             userService.updateUser(userToUpdate);
 
-            const payload = {
-                login: user.username,
-                id: user.id,
-                role: user.RoleId
-            };
-
-            var token = jwt.sign(payload, config.jwtSecret, {
-                algorithm: 'HS256',
-                expiresIn: config.tokenExpireTime
-            });
             var sesslog = {
                 loginSucceeded: true,
-                UserId: user.id
+                userId: user.id
             };
             // Journalisation de la réussite d'authentification
             SessionLogs.create(sesslog);
-            return token;
+
+            // Générer le token
+            const payload = {
+                id: user.id,
+                name: user.username,
+                admin: user.isAdmin
+            };
+
+            return jwt.sign(payload, config.jwtSecret, {
+                algorithm: config.jwtAlgo,
+                expiresIn: config.ttl
+            });
         }
     }).catch(err => {throw err});;
 };
