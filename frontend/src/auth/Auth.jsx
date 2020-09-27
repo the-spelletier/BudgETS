@@ -32,8 +32,6 @@ const Auth = () => {
             }
         };
 
-        console.log(password)
-        console.log(error)
         if (username && username !== null && username !== "" && password && password !== ""){
             login();
         }
