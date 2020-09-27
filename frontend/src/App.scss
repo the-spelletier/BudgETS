@@ -32,12 +32,20 @@
         margin-bottom: 0px;
         padding-top: 0.5rem;
     }
+
+    .login {
+        background-color: $neutral-dark !important;
+    }
 }
 
 .logo {
     font-size: 3rem;
     color: $primary;
     text-align: center;
+}
+
+.error input, .error .ant-input-affix-wrapper {
+    border-color: $primary;
 }
 
 .ant-layout-sider {
@@ -47,13 +55,27 @@
 }
 
 .ant-layout-content {
-    margin: auto !important;
+    margin-left: 250px !important;
 }
 
 .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
     border: none !important;
 }
 
+.site-layout-background {
+    margin: auto !important;
+    width: 60%;
+}
+
 .content {
     background-color: white;
+}
+
+h2 {
+    margin: 0.2rem;
+    color: $primary;
+}
+
+.ant-card-head {
+    background-color: $neutral;
 }
