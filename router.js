@@ -61,13 +61,24 @@ module.exports.set = app => {
 
     // BUDGET : POST
     // Create a new budget
-    // Params : { year, name }
+    // Params : { startDate, endDate, name }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget',
         authMiddleware.verifyAuth,
         budgetController.create
+    )
+
+    // BUDGET : PUT
+    // Create a new budget
+    // Params : { id, startDate, endDate, name }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.put(
+        '/api/budget',
+        authMiddleware.verifyAuth,
+        budgetController.update
     )
 
     // BUDGET : POST
@@ -82,15 +93,26 @@ module.exports.set = app => {
     );
 
     // BUDGET : GET
-    // Get a summury and history of specified budget
+    // Get a summary and history of specified budget
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
-    app.post(
+    app.get(
         '/api/budget/summary/:id',
         authMiddleware.verifyAuth,
         budgetController.getSummary
     );
+
+    // BUDGET : DELETE
+    // Delete a budget
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    // app.get(
+    //     '/api/budget/:id',
+    //     authMiddleware.verifyAuth,
+    //     budgetController.delete
+    // );
 
     // BUDGET CATEGORY ENDPOINTS
 
@@ -312,12 +334,23 @@ module.exports.set = app => {
 
     // USER ENDPOINTS
 
-    // LOGIN : POST
+    // USER : POST
+    // Create user
     // Params : { username, password, isAdmin }
     // Returns : Code 200 if user added successfully
     app.post(
         '/api/user',
         [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
         userController.create
+    );
+
+    // USER : PUT
+    // Update user
+    // Params : { id, password, isAdmin }
+    // Returns : Code 200 if user added successfully
+    app.put(
+        '/api/user',
+        [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
+        userController.update
     );
 };
