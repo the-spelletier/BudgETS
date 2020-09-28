@@ -24,7 +24,7 @@ function create(req, res) {
             console.log(result);
             res.status(200).send(categoryDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });

@@ -26,11 +26,17 @@ const addUser = (user) => {
 
 // Mise à jour d'un utilisateur selon l'identificateur envoyé en paramètre
 const updateUser = user => {
-    let u = new Users(user);
-    return Users.update(u, { 
-        where: { 
-            id: user.id 
-        } 
+    return Users.findOne({
+        where: {
+            id: user.id
+        }
+    }).then(u => {
+        console.log(u);
+        u.isAdmin = user.isAdmin;
+        if (user.password) {
+            u.password = bcrypt.hashSync(user.password, config.saltRounds);
+        }
+        return u.save();
     });
 }
 

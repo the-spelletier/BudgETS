@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Budget = require('../models').Budget;
 
 // Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
@@ -14,7 +15,9 @@ const getBudgets = () => {
 
 // Ajout d'un budget
 const addBudget = budget => {
-    return Budget.create(budget);
+    budget = Budget.build(budget, {raw: true});
+    budget.isActive = false;
+    return budget.save();
 }
 
 // Mise à jour d'un budget selon l'identificateur envoyé en paramètre
@@ -35,10 +38,31 @@ const deleteBudget = budget => {
     });
 }
 
+// Retourne le budget selon son id et set isActive à true
+const resetGetActiveBudget = budget => {
+    return getBudget(budget).then(b => {
+        if (b) {
+            return Budget.update({ 
+                isActive: false 
+            }, { 
+                where: {
+                    id : { 
+                        [Op.notIn]: [b.id] 
+                    } 
+                }
+            }).then(() => {
+                b.isActive = true;
+                return b.save();
+            });
+        }
+    })
+}
+
 module.exports = {
     getBudget,
     getBudgets,
     addBudget,
     updateBudget,
-    deleteBudget
+    deleteBudget,
+    resetGetActiveBudget
 };

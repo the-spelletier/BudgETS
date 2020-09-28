@@ -10,30 +10,38 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.getBudget({
-        id: req.params.id
-    }).then(budget => {
+    budgetService.resetGetActiveBudget(budgetDTO(req.params)).then(budget => {
         sendBudget(budget, res);
     });
 }
 
 function getAll(req, res) {
     budgetService.getBudgets().then(budgets => {
-        budgets.forEach((b, i, arr) => {
-            arr[i] = budgetDTO(b);
-        });
-        res.send(budgets);
+        sendBudget(budgets, res);
     });
 }
 
 function create(req, res) {
-    if (req.body.name && req.body.startDate && req.body.endDate) {
-        req.body.userId = req.user.id;
-        req.body.isActive = req.body.isActive === true;
-        budgetService.addBudget(req.body).then(budget => {
-            sendBudget(budget, res);
+    let budget = budgetDTO(req.body);
+    if (budget.name && budget.startDate && budget.endDate && !budget.isActive) {
+        budget.userId = req.user.id
+        budgetService.addBudget(budget).then(b => {
+            sendBudget(b, res);
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(403).send({ message: 'Invalid parameters' });
+    }
+}
+
+function update(req, res) {
+    let budget = budgetDTO(req.body);
+    if (budget.id) {
+        budgetService.updateBudget(budget).then(b => {
+            sendBudget(b, res);
+        }).catch(err => {
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -50,7 +58,18 @@ function getSummary(req, res) {
 
 function sendBudget(budget, res) {
     if (budget) {
-        res.send(budgetDTO(budget));
+        let budgetRes;
+        if (Array.isArray(budget)) {
+            budget.forEach((b, i, arr) => {
+                arr[i] = budgetDTO(b);
+                delete arr[i].startDate;
+                delete arr[i].endDate;
+            });
+            budgetRes = budget
+        } else {
+            budgetRes = budgetDTO(budget)
+        }
+        res.send(budgetRes);
     } else {
         res.status(404).send({ message: "Budget Not Found" });
     }
@@ -61,6 +80,7 @@ module.exports = {
     get,
     getAll,
     create,
+    update,
     clone,
     getSummary
 };

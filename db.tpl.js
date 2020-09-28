@@ -3,11 +3,11 @@ const Sequelize = require('sequelize');
 // Informations de connexions à la base de données
 
 const sequelize = new Sequelize(
-    'database',
-    'username',
-    'password',
+    'BudgETS',
+    'root',
+    'mysql',
     {
-        host: 'where',
+        host: 'localhost',
         dialect: 'mysql',
         dialectOptions: {
             ssl: {

@@ -7,13 +7,23 @@ const userDTO = user => {
 };
 
 const budgetDTO = budget => {
-  return {
-    id: budget.id,
-    name: budget.name,
-    startDate: budget.startDate,
-    endDate: budget.endDate,
-    isActive: budget.isActive
-  };
+  let b = {};
+  if (typeof budget.id != 'undefined') {
+    b.id = budget.id;
+  }
+  if (typeof budget.name != 'undefined') {
+    b.name = budget.name;
+  }
+  if (typeof budget.startDate != 'undefined') {
+    b.startDate = budget.startDate;
+  }
+  if (typeof budget.endDate != 'undefined') {
+    b.endDate = budget.endDate;
+  }
+  if (typeof budget.isActive != 'undefined') {
+    b.isActive = budget.isActive;
+  }
+  return b;
 };
 
 const categoryDTO = category => {
