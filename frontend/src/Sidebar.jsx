@@ -20,7 +20,7 @@ const Sidebar = () => {
                 user.token && 
                 <Fragment>
                     <Menu.Item key="/budget/summary">
-                    <Link to="/budget/summary">Sommaire</Link>
+                        <Link to="/budget/summary">Sommaire</Link>
                     </Menu.Item>
                     <Menu.Item key="/budget/details">
                         <Link to="/budget/details">Détails</Link>

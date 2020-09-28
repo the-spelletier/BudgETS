@@ -8,6 +8,10 @@ export class ApiClient {
     post = async (path, params, token) => {
         return await ApiBaseClient.post(path, params, {headers: {'Authorization': `Bearer ${token}`}});
     }
+    
+    put = async (path, params, token) => {
+        return await ApiBaseClient.put(path, params, {headers: {'Authorization': `Bearer ${token}`}});
+    }
 
     delete = async (path) => ApiBaseClient.delete(path);
 }
