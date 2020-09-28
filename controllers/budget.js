@@ -62,6 +62,8 @@ function sendBudget(budget, res) {
         if (Array.isArray(budget)) {
             budget.forEach((b, i, arr) => {
                 arr[i] = budgetDTO(b);
+                delete arr[i].startDate;
+                delete arr[i].endDate;
             });
             budgetRes = budget
         } else {

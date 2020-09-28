@@ -15,7 +15,7 @@ function create(req, res) {
         userService.addUser(userDTO(req.body)).then((result) => {
             res.status(200).send(userDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -25,12 +25,10 @@ function create(req, res) {
 function update(req, res) {
     if (req.body.id && !req.body.username) {
         req.body.isAdmin = req.body.isAdmin === true;
-        console.log(req.body);
         userService.updateUser(req.body).then((result) => {
-            console.log(result);
             res.status(200).send(userDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
