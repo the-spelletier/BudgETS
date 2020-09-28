@@ -79,3 +79,26 @@ h2 {
 .ant-card-head {
     background-color: $neutral;
 }
+
+.form-section {
+    padding: 0.5rem;
+
+    .form-input {
+        width: 80%;
+        margin: auto;
+    }
+}
+
+.submit {
+    text-align: center;
+
+    button, button:focus {
+        background-color: $success;
+        border-color: $success;
+    }
+
+    button:hover {
+        background-color: $success-pale;
+        border-color: $success-pale;
+    }
+}

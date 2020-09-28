@@ -1,7 +1,8 @@
 import React, {useEffect, useState, useContext} from "react";
-import { Select } from "antd";
+import { Link } from 'react-router-dom';
+import { Select, Button, notification } from "antd";
+import { PlusOutlined, CloseCircleTwoTone } from '@ant-design/icons';
 import { BudgetClient } from "../clients/BudgetClient";
-import { notification } from 'antd';
 import UserContext from "../contexts/user/UserContext";
 
 import "./budgetContainer.scss";
@@ -17,23 +18,17 @@ const BudgetContainer = ({children}) => {
     
     useEffect(() => {
         const listBudgets = async() => {
-            //TODO: remove after testing with db
-            const mockBudgets = [{id: 1, name: "Budget 2018"}, {id: 2, name: "Budget 2019"}, {id: 3, name: "Budget 2020"}];
-            
             try {
                 var response = await budgetClient.list(user.token);
-                //TODO: make sure it works with backend data
                 setBudgets(response.data);
             }
             catch (e) {
-                notification.open({
+                notification["error"].open({
                 message: "Erreur",
+                icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
                 description:
-                  "Une erreur est arrivée en allant chercher les budgets",
+                  "Une erreur est survenue en allant chercher les budgets",
                 });
-                
-                //TODO: remove this when backend works
-                setBudgets(mockBudgets);
             }
         }
 
@@ -53,12 +48,18 @@ const BudgetContainer = ({children}) => {
             <div className="header">
                 {
                     budgets &&
-                    <Select defaultValue={1} size="large" onChange={(value) => setSelectedBudgetId(value)}>
+                    <Select defaultValue={budgets.find((value) => value.isActive).id} size="large" onChange={(value) => setSelectedBudgetId(value)}>
                         {budgets.map((option) => 
-                            <Option value={option.id}><h2 className="budget-select-option">{option.name}</h2></Option>
+                            <Option key={option.id} value={option.id}><h2 className="budget-select-option">{option.name}</h2></Option>
                         )}
                     </Select>
                 }
+                <Button className="new-budget-button"
+                    size="large" 
+                    type="primary" 
+                    onClick={() => {return null}}>
+                        <Link to="/budget/create"><PlusOutlined /> Nouveau</Link>
+                </Button>
             </div>
             {children}
         </div>
