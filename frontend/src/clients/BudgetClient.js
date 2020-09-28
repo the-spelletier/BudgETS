@@ -2,8 +2,8 @@ import { ApiClient } from './ApiClient';
 
 export class BudgetClient {
 
-    list = async (username, password) => {
+    list = async (token) => {
         const apiClient = new ApiClient();
-        return await apiClient.get('/budget');
+        return await apiClient.get('/budget', token);
     }
 };

@@ -16,11 +16,11 @@
         }
     }
 
-    .ant-menu-item a:hover {
+    .ant-menu-item a:hover, .logout:hover {
         color: $primary-pale;
     }
 
-    a {
+    a, .logout {
         color: $text-pale;
     }
 
