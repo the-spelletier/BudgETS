@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { Card, Input, Button } from "antd";
+import { CloseCircleTwoTone } from '@ant-design/icons';
 import { AuthClient } from "../clients/AuthClient";
 import UserContext from "../contexts/user/UserContext";
 import { notification } from 'antd';
@@ -26,8 +27,9 @@ const Auth = () => {
                 return history.push("/budget/summary");
             }
             catch (e) { 
-                notification.open({
+                notification["error"].open({
                 message: "Erreur",
+                icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
                 description:
                   "Il est impossible de se connecter à l'application",
                 })

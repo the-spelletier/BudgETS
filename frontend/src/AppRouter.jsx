@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Auth from "./auth/Auth";
 import BudgetContainer from "./budget/BudgetContainer";
+import BudgetCreate from "./budget/create/BudgetCreate";
 import EmptyState from "./EmptyState";
 
 
@@ -10,6 +11,7 @@ const AppRouter = () => {
     return (
         <Switch>
             <Route exact path="/"><EmptyState /></Route>
+            <Route path="/budget/create"><BudgetCreate /></Route>
             <Route path="/budget">
                 <BudgetContainer>
                     <Route path="/budget/summary"><EmptyState /></Route>

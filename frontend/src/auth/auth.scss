@@ -20,5 +20,10 @@
             background-color: $success;
             border-color: $success;
         }
+
+        button:hover {
+            background-color: $success-pale;
+            border-color: $success-pale;
+        }
     }
 }
