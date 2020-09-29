@@ -1,43 +1,44 @@
-import React, { useContext, useState } from "react";
+import React, {Fragment, useContext, useEffect, useState} from "react";
+import moment from "moment";
 import { useHistory } from 'react-router-dom';
 import { Card, Input, DatePicker, Button, notification } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
-import { BudgetClient } from "../../clients/BudgetClient";
+
+import BudgetHeader from "../header/BudgetHeader";
+
+import BudgetContext from "../../contexts/budget/BudgetContext";
 import UserContext from "../../contexts/user/UserContext";
+
+import { BudgetClient } from "../../clients/BudgetClient";
+
+import "./budgetDetails.scss";
 
 const { RangePicker } = DatePicker;
 
-const BudgetCreate = () => {
+const BudgetDetails = () => {
     const history = useHistory();
-    const budgetClient = new BudgetClient();
 
-    const {user} = useContext(UserContext);
-    
-    //Form info
-    const [name, setName] = useState(null);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const {budget, setCurrentBudget} = useContext(BudgetContext);
+    const {user, setCurrentUser} = useContext(UserContext);
+
+    const budgetClient = new BudgetClient();
 
     //Validation
     const [error, setError] = useState({name: false})
 
-    const changeDates = (dates) => {
-        var [startCalendarDate, endCalendarDate] = dates;
-        setStartDate(startCalendarDate);
-        setEndDate(endCalendarDate);
-    }
-
     const submit = () => {
         const save = async() => {
             try {
-                await budgetClient.create(user.token, name, startDate, endDate, true);
+                await budgetClient.update(user.token, budget.id, budget.name, budget.startDate, budget.endDate);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le budget a été créé avec succès",
+                      "Le budget a été modifié avec succès",
                     });
+                setCurrentUser({...user, hasMadeChanges: true});
 
+                //force reload
                 return history.push("/budget/summary");
             }
             catch (e) {
@@ -45,12 +46,12 @@ const BudgetCreate = () => {
                     message: "Erreur",
                     icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
                     description:
-                      "Une erreur est survenue en créant le budget",
+                      "Une erreur est survenue en modifiant le budget",
                     });
             }
-        }
-        
-        if (!name || name === "")
+        };
+
+        if (!budget.name || budget.name === "")
         {
             setError({...error, name: true});
         }
@@ -60,32 +61,36 @@ const BudgetCreate = () => {
     }
 
     return (
-        <div>
-            <Card title={<h2>Créer un nouveau budget</h2>}>
+        <Fragment>
+            { 
+                // Basically, we want to know if changes were made to the parent that made the child dirty
+            }
+            <BudgetHeader />
+            <Card className="budget-details-card">
                 <div className={error.name === false ? "form-section" : "form-section error"}>
                     <Input className="form-input" 
                         size="large" 
+                        value={budget.name}
                         placeholder="Nom du budget"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)} />
+                        onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }/>  
                 </div>
                 <div className="form-section">
                     <RangePicker className="form-input" 
                         size="large" 
                         placeholder={["Date de début", "Date de fin"]}
-                        value={[startDate, endDate]}
-                        onChange={changeDates}/>
+                        value={[moment(budget.startDate), moment(budget.endDate)]}
+                        onChange={(dates) => setCurrentBudget({...budget, startDate: dates.startDate, endDate: dates.endDate})}/>
                 </div>
                 <div className="form-section submit">
                     <Button size="large"
                         type="primary"
                         onClick={submit}>
-                            Créer
+                            Modifier
                     </Button>
                 </div>
             </Card>
-        </div>
-    );
+        </Fragment>
+    )
 };
 
-export default BudgetCreate;
+export default BudgetDetails;
