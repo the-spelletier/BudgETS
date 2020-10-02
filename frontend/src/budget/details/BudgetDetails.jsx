@@ -79,7 +79,7 @@ const BudgetDetails = () => {
                         size="large" 
                         placeholder={["Date de début", "Date de fin"]}
                         value={[moment(budget.startDate), moment(budget.endDate)]}
-                        onChange={(dates) => setCurrentBudget({...budget, startDate: dates.startDate, endDate: dates.endDate})}/>
+                        onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}/>
                 </div>
                 <div className="form-section submit">
                     <Button size="large"
