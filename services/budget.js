@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const Budget = require('../models').Budget;
+const { Budget } = require('../models');
 
 // Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getBudget = budget => {

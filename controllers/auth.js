@@ -1,4 +1,3 @@
-const config = require('../config');
 const authService = require('../services/auth');
 
 function login(req, res) {

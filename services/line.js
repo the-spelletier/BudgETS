@@ -1,4 +1,4 @@
-const Line = require('../models').Line;
+const { Line } = require('../models');
 
 // Retourne une lingne (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getLine = line => {

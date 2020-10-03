@@ -1,10 +1,10 @@
 const bcrypt = require('bcrypt');
-const config = require('../config');
-const Users = require('../models').User;
+const config = require('../config/jsonConfig');
+const { User } = require('../models');
 
 // Retourne un utilisateur (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getUser = user => {
-    return Users.findOne({
+    return User.findOne({
         where: user,
         raw: true
     });
@@ -12,26 +12,25 @@ const getUser = user => {
 
 // Retourne tous les utilisateurs
 const getUsers = () => {
-    return Users.findAll({ 
-        attributes: ['id', 'username', 'attemptFailed', 'isBlocked', 'isAdmin']
+    return User.findAll({ 
+        attributes: ['id', 'username', /*'attemptFailed', 'isBlocked',*/ 'isAdmin']
     });
 };
 
 // Ajout d'un utilisateur
 const addUser = (user) => {
-    user = Users.build(user, {raw: true});
+    user = User.build(user, {raw: true});
     user.password = bcrypt.hashSync(user.password, config.saltRounds);
     return user.save();
 }
 
 // Mise à jour d'un utilisateur selon l'identificateur envoyé en paramètre
 const updateUser = user => {
-    return Users.findOne({
+    return User.findOne({
         where: {
             id: user.id
         }
     }).then(u => {
-        console.log(u);
         u.isAdmin = user.isAdmin;
         if (user.password) {
             u.password = bcrypt.hashSync(user.password, config.saltRounds);
@@ -42,7 +41,7 @@ const updateUser = user => {
 
 // Suppression d'un utilisateur selon l'identificateur envoyé en paramètre
 const deleteUser = user => {
-    return Users.destroy({ 
+    return User.destroy({ 
         where: { 
             id: user.id 
         } 

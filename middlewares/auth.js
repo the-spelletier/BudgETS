@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config');
-const Users = require('../models').User;
+const config = require('../config/jsonConfig');
+const { User } = require('../models');
 const userService = require('../services/user');
 
 const verifyAuth = (req, res, next) => {
-
     // Vérifier l'entête d'autorisation
     const authHeader = req.headers['authorization'];
     if (typeof authHeader === 'undefined') {
@@ -23,7 +22,7 @@ const verifyAuth = (req, res, next) => {
     // Vérifier le contenu du token 
     jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, payload) => {
         if (err) {
-            console.log(err);
+            //console.log(err);
             return res.status(500).send({ 
                 auth: false, 
                 message: 'Token verification failed.' 
@@ -34,7 +33,7 @@ const verifyAuth = (req, res, next) => {
         userService.getUser({
             id: payload.id
         }).then(user => {
-            req.user = Users.build(user, {raw: true});
+            req.user = User.build(user, {raw: true});
             next();
         }).catch(err => {
             console.log(err);

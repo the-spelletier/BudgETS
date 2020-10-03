@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const router = require('./router.js');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(
@@ -34,6 +33,4 @@ app.use(function(req, res, next) {
 
 router.set(app);
 
-const server = app.listen(process.env.PORT || 3000, () => {
-    console.log('Listening on port %s', server.address().port);
-});
+module.exports = app;

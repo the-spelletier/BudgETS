@@ -1,4 +1,4 @@
-const Category = require('../models').Category;
+const { Category } = require('../models');
 
 // Retourne une catégorie (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getCategory = category => {
