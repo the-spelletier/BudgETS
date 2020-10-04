@@ -40,7 +40,7 @@ function update(req, res) {
 }
 
 function deleteOne(req, res) {
-  categoryService.deleteCategory(req.body).then(result => {
+  categoryService.deleteCategory(categoryDTO(req.params)).then(result => {
     res.status(200).send();
   }).catch(err => {
     res.status(401).send({ message: err.message });

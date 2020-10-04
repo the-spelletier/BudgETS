@@ -1,15 +1,16 @@
-const { Category } = require('../models');
+const { Category, Line } = require('../models');
 
 // Retourne une catégorie (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getCategory = category => {
     return Category.findOne({
-        where: category
+        where: category,
+        include: Line
     });
 }
 
 // Retourne toutes les catégories
 const getCategories = () => {
-    return Category.findAll();
+    return Category.findAll({ include: Line });
 };
 
 // Ajout d'une catégorie
@@ -31,14 +32,15 @@ const deleteCategory = category => {
     return Category.findOne({ 
         where: { 
             id: category.id 
-        } 
+        }
     }).then(cat => {
+      console.log(cat);
       // La catégorie existe
       if(!cat){
         return ; // TODO : Add error? 
       }
       // La catégorie n'a aucune lignes
-      if(cat.lines.lenght!=0){
+      if(cat.Lines.length!=0){
         return ; // TODO : Add error? 
       }
       // Suppression

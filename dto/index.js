@@ -43,6 +43,9 @@ const categoryDTO = category => {
   if (typeof category.type != 'undefined') {
     c.type = category.type;
   }
+  if (typeof category.Lines != 'undefined') {
+    c.Lines = category.Lines;
+  }
   return c;
 };
 
