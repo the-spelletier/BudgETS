@@ -6,6 +6,7 @@ import { useContext } from "react";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import UserContext from "../../contexts/user/UserContext";
 import { CategoryClient } from "../../clients/CategoryClient";
+import { useEffect } from "react";
 
 const CreateCategory = ({visible, onCancel}) => {
     const categoryClient = new CategoryClient();
@@ -17,6 +18,12 @@ const CreateCategory = ({visible, onCancel}) => {
     const [category, setCategory] = useState({name: "", type: "expense"});
     //Validation
     const [error, setError] = useState({name: false})
+
+    useEffect(() => {
+        if (category && category.name && category.name !== ""){
+            setError({name: false});
+        }
+    }, [category.name])
 
     const addCategory = () => {
         const save = async () => {
@@ -63,7 +70,7 @@ const CreateCategory = ({visible, onCancel}) => {
             </div>
             <div className="form-section">
                 <div>Type de catégorie: </div>
-                <Radio.Group onChange={(event) => setCategory({...category, type: event.target.value})}>
+                <Radio.Group value={category.type} onChange={(event) => setCategory({...category, type: event.target.value})}>
                     <Radio value="expense">Dépense</Radio>
                     <Radio value="revenue">Revenu</Radio>
                 </Radio.Group>
