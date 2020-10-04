@@ -9,10 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Category.belongsTo(models.Budget, {
-                foreignKey: 'budgetId'
+                foreignKey: 'budgetId',
+                onDelete: 'RESTRICT'
             });
             Category.hasMany(models.Line, {
-                foreignKey: 'categoryId'
+                foreignKey: 'categoryId',
+                onDelete: 'RESTRICT'
             });
         }
     };

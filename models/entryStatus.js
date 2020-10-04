@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             EntryStatus.hasMany(models.Entry, {
-                foreignKey: 'entryStatusId'
+                foreignKey: 'entryStatusId',
+                onDelete: 'RESTRICT'
             });
         }
     };

@@ -10,10 +10,11 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Line.belongsTo(models.Category, {
                 foreignKey: 'categoryId',
-                onDelete: 'CASCADE'
+                onDelete: 'RESTRICT'
             });
             Line.hasMany(models.Entry, {
-                foreignKey: 'lineId'
+                foreignKey: 'lineId',
+                onDelete: 'RESTRICT'
             });
         }
     };

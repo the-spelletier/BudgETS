@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Receipt.hasOne(models.Entry, {
-                foreignKey: 'receiptId'
+                foreignKey: 'receiptId',
+                onDelete: 'RESTRICT'
             });
         }
     };
