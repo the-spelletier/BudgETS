@@ -2,26 +2,24 @@ const categoryDTO = require('../dto').categoryDTO;
 const categoryService = require('../services/category');
 
 function get(req, res) {
-    categoryService.getCategory({
-        id: req.params.id
-    }).then(category => {
+    categoryService.getCategory(categoryDTO(req.params)).then(category => {
         sendCategory(category, res);
     });
 }
 
 function getAll(req, res) {
     categoryService.getCategories().then(categories => {
-        categories.forEach((b, i, arr) => {
-            arr[i] = categoryDTO(b);
-        });
-        res.send(categories);
+        sendCategory(categories, res);
+    })
+    .catch(err => {
+        console.log(err);
     });
 }
 
 function create(req, res) {
-    if (req.body.name, req.body.type, req.body.budgetId) { 
-        categoryService.addCategory(req.body).then((result) => {
-            console.log(result);
+    let category = categoryDTO(req.body);
+    if (category.name, category.type, category.budgetId) { 
+        categoryService.addCategory(category).then((result) => {
             res.status(200).send(categoryDTO(result));
         }).catch(err => {
             res.status(401).send({ message: 'Validation error' });
@@ -32,24 +30,43 @@ function create(req, res) {
 }
 
 function update(req, res) {
-  categoryService.updateCategory(req.body).then(result => {
-    res.status(200).send(categoryDTO(result));
-  }).catch(err => {
-    res.status(401).send({ message: err.message });
-  });
+    let category = categoryDTO(req.body);
+    if (category.id) {
+        categoryService.updateCategory(category).then(c => {
+            sendCategory(c, res);
+        }).catch(err => {
+            res.status(401).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(403).send({ message: 'Invalid parameters' });
+    }
 }
 
 function deleteOne(req, res) {
-  categoryService.deleteCategory(categoryDTO(req.params)).then(result => {
-    res.status(200).send();
-  }).catch(err => {
-    res.status(401).send({ message: err.message });
-  });
+    let category = categoryDTO(req.params);
+    if (category.id) {
+        categoryService.deleteCategory(category).then(result => {
+            res.sendStatus(200);
+        }).catch(err => {
+            res.status(401).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(403).send({ message: 'Invalid parameters' });
+    }
 }
 
 function sendCategory(category, res) {
     if (category) {
-        res.send(categoryDTO(category));
+        let categoryRes;
+        if (Array.isArray(category)) {
+            category.forEach((b, i, arr) => {
+                arr[i] = categoryDTO(b);
+            });
+            categoryRes = category
+        } else {
+            categoryRes = categoryDTO(category)
+        }
+        res.send(categoryRes);
     } else {
         res.status(404).send({ message: "Category Not Found" });
     }

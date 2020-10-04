@@ -21,7 +21,7 @@ function getAll(req, res) {
     })
     .catch(err => {
         console.log(err);
-    });;
+    });
 }
 
 function create(req, res) {
