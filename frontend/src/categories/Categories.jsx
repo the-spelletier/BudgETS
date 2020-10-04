@@ -6,8 +6,20 @@ import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
 import "./categories.scss";
 import BudgetHeader from "../budget/header/BudgetHeader";
+import { useState } from "react";
+import CreateCategory from "./create/CreateCategorie";
 
 const Categories = () => {
+    const [createCategoryModalIsVisible, setCreateCategoryModalIsVisible] = useState(false);
+
+    const onCreateCategory = () => {
+        setCreateCategoryModalIsVisible(true);
+    }
+
+    const onCreateCategoryModalCancel = () => {
+        setCreateCategoryModalIsVisible(false);
+    }
+
     // TODO : get data from backend
     const sampleData = [
         {
@@ -59,7 +71,7 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu />,
+                title: <EditMenu onNewClick={onCreateCategory}/>,
                 render: () => ""
             },
             { 
@@ -127,6 +139,7 @@ const Categories = () => {
     return (
         <Fragment>
             <BudgetHeader />
+            <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
             <Card>
                 <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
                 {

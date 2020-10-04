@@ -102,3 +102,13 @@ h2 {
         border-color: $success-pale;
     }
 }
+
+.ant-btn-primary, .ant-btn-primary:focus {
+    background-color: $success;
+    border-color: $success;
+}
+
+.ant-btn-primary:hover {
+    background-color: $success-pale;
+    border-color: $success-pale;
+}
