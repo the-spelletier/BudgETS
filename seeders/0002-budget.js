@@ -12,6 +12,7 @@ module.exports = {
      * }], {});
     */
     return queryInterface.bulkInsert('Budgets', [{
+      id: 1,
       name: '2020-2021',
       userId: 1,
       startDate: new Date(2020, 0, 1), // Months are indexed at 0, Days are indexed at 1

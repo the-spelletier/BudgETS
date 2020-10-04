@@ -11,8 +11,9 @@ function getAll(req, res) {
 
 function create(req, res) {
     if (req.body.username && req.body.password) {
-        req.body.isAdmin = req.body.isAdmin === true;
-        userService.addUser(userDTO(req.body)).then((result) => {
+        let user = userDTO(req.body);
+        user.password = req.body.password;
+        userService.addUser(user).then((result) => {
             res.status(200).send(userDTO(result));
         }).catch(err => {
             res.status(401).send({ message: 'Validation error' });
