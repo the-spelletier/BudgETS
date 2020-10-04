@@ -1,6 +1,7 @@
 'use strict';
 const {
-  Model
+  Model,
+  Sequelize
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -18,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     Line.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING
         },
@@ -25,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         categoryId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false
         },
         expenseEstimate: {

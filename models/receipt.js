@@ -5,16 +5,16 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class EntryStatus extends Model {
+    class Receipt extends Model {
         static associate(models) {
             // define association here
-            EntryStatus.hasMany(models.Entry, {
-                foreignKey: 'entryStatusId'
+            Receipt.hasOne(models.Entry, {
+                foreignKey: 'receiptId'
             });
         }
     };
 
-    EntryStatus.init({
+    Receipt.init({
         id: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -23,12 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING
         },
-        position: {
-            type: DataTypes.INTEGER
-        }
+        description: {
+            type: DataTypes.STRING
+        },
     }, {
         sequelize,
-        modelName: 'EntryStatus',
+        modelName: 'Receipt',
     });
-    return EntryStatus;
+    return Receipt;
 };
