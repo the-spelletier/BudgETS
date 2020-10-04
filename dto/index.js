@@ -1,9 +1,15 @@
 const userDTO = user => {
-  return {
-    id: user.id,
-    username: user.username,
-    isAdmin: user.isAdmin
-  };
+  let u = {};
+  if (typeof user.id != 'undefined') {
+    u.id = user.id;
+  }
+  if (typeof user.username != 'undefined') {
+    u.username = user.username;
+  }
+  if (typeof user.isAdmin != 'undefined') {
+    u.isAdmin = user.isAdmin;
+  }
+  return u;
 };
 
 const budgetDTO = budget => {
@@ -27,20 +33,34 @@ const budgetDTO = budget => {
 };
 
 const categoryDTO = category => {
-  return {
-    id: category.id,
-    name: category.name,
-    type: category.type
-  };
+  let c = {};
+  if (typeof category.id != 'undefined') {
+    c.id = category.id;
+  }
+  if (typeof category.name != 'undefined') {
+    c.name = category.name;
+  }
+  if (typeof category.type != 'undefined') {
+    c.type = category.type;
+  }
+  return c;
 };
 
 const lineDTO = line => {
-  return {
-    id: line.id,
-    name: line.name,
-    description: line.description,
-    estimate: line.expenseEstimate
-  };
+  let l = {};
+  if (typeof line.id != 'undefined') {
+    l.id = line.id;
+  }
+  if (typeof line.name != 'undefined') {
+    l.name = line.name;
+  }
+  if (typeof line.description != 'undefined') {
+    l.description = line.description;
+  }
+  if (typeof line.expenseEstimate != 'undefined') {
+    l.expenseEstimate = line.expenseEstimate;
+  }
+  return l;
 };
 
 module.exports = {
