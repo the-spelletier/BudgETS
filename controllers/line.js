@@ -2,9 +2,7 @@ const lineDTO = require('../dto').lineDTO;
 const lineService = require('../services/line');
 
 function get(req, res) {
-    lineService.getLine({
-        id: req.params.id
-    }).then(line => {
+    lineService.getLine(lineDTO(req.params)).then(line => {
         sendLine(line, res);
     });
 }
@@ -19,12 +17,11 @@ function getAll(req, res) {
 }
 
 function create(req, res) {
-    if (req.body.name, req.body.description, req.body.categoryId) { 
+    if (req.body.name, req.body.description, req.body.expenseEstimate, req.body.categoryId) { 
         lineService.addLine(req.body).then((result) => {
-            console.log(result);
             res.status(200).send(lineDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            res.status(401).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
