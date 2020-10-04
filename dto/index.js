@@ -29,6 +29,9 @@ const budgetDTO = budget => {
   if (typeof budget.isActive != 'undefined') {
     b.isActive = budget.isActive;
   }
+  if (typeof budget.userId != 'undefined') {
+    b.userId = budget.userId;
+  }
   return b;
 };
 
@@ -42,6 +45,9 @@ const categoryDTO = category => {
   }
   if (typeof category.type != 'undefined') {
     c.type = category.type;
+  }
+  if (typeof category.budgetId != 'undefined') {
+    c.budgetId = category.budgetId;
   }
   if (typeof category.Lines != 'undefined') {
     c.Lines = category.Lines;
@@ -62,6 +68,9 @@ const lineDTO = line => {
   }
   if (typeof line.expenseEstimate != 'undefined') {
     l.expenseEstimate = line.expenseEstimate;
+  }
+  if (typeof line.categoryId != 'undefined') {
+    l.categoryId = line.categoryId;
   }
   return l;
 };
