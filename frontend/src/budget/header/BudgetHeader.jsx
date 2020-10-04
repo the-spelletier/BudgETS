@@ -8,6 +8,8 @@ import { BudgetClient } from "../../clients/BudgetClient";
 import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 
+import "./budget-header.scss";
+
 const { Option } = Select;
 
 const BudgetHeader = () => {

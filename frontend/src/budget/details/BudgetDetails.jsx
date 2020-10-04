@@ -62,9 +62,6 @@ const BudgetDetails = () => {
 
     return (
         <Fragment>
-            { 
-                // Basically, we want to know if changes were made to the parent that made the child dirty
-            }
             <BudgetHeader />
             <Card className="budget-details-card">
                 <div className={error.name === false ? "form-section" : "form-section error"}>

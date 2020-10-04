@@ -27,7 +27,7 @@ const Auth = () => {
                 return history.push("/budget/summary");
             }
             catch (e) { 
-                notification["error"].open({
+                notification.open({
                 message: "Erreur",
                 icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
                 description:
