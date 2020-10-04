@@ -229,7 +229,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/line/:id',
+        '/api/line',
         authMiddleware.verifyAuth,
         lineController.update
     );

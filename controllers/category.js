@@ -19,8 +19,8 @@ function getAll(req, res) {
 function create(req, res) {
     let category = categoryDTO(req.body);
     if (category.name, category.type, category.budgetId) { 
-        categoryService.addCategory(category).then((result) => {
-            res.status(200).send(categoryDTO(result));
+        categoryService.addCategory(category).then(c => {
+            sendCategory(c, res);
         }).catch(err => {
             res.status(401).send({ message: 'Validation error' });
         });

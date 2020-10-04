@@ -36,9 +36,9 @@ const deleteLine = line => {
 }
 
 module.exports = {
-  getLine, 
-  getLines,
-  addLine,
-  updateLine,
-  deleteLine
+	getLine, 
+	getLines,
+	addLine,
+	updateLine,
+	deleteLine
 };
