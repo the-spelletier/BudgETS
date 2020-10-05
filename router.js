@@ -349,7 +349,7 @@ module.exports.set = app => {
     // Params : { id, password, isAdmin }
     // Returns : Code 200 if user added successfully
     app.put(
-        '/api/user',
+        '/api/user/:id',
         [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
         userController.update
     );

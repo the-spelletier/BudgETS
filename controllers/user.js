@@ -24,9 +24,11 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    if (req.body.id && !req.body.username) {
+    let user = userDTO(req.body);
+    if (req.params.id && !req.body.username) {
+        user.id = req.params.id;
         req.body.isAdmin = req.body.isAdmin === true;
-        userService.updateUser(req.body).then((result) => {
+        userService.updateUser(user).then((result) => {
             res.status(200).send(userDTO(result));
         }).catch(err => {
             res.status(401).send({ message: 'Validation error' });
