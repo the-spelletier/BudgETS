@@ -7,7 +7,7 @@ const userDTO = user => {
     u.username = user.username;
   }
   if (typeof user.isAdmin != 'undefined') {
-    u.isAdmin = user.isAdmin;
+    u.isAdmin = user.isAdmin === true;
   }
   return u;
 };

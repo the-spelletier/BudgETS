@@ -10,8 +10,8 @@ function getAll(req, res) {
 }
 
 function create(req, res) {
-    if (req.body.username && req.body.password) {
-        let user = userDTO(req.body);
+    let user = userDTO(req.body);
+    if (user.username && req.body.password) {
         user.password = req.body.password;
         userService.addUser(user).then((result) => {
             res.status(200).send(userDTO(result));
@@ -25,9 +25,8 @@ function create(req, res) {
 
 function update(req, res) {
     let user = userDTO(req.body);
-    if (req.params.id && !req.body.username) {
+    if (req.params.id && !user.username) {
         user.id = req.params.id;
-        req.body.isAdmin = req.body.isAdmin === true;
         userService.updateUser(user).then((result) => {
             res.status(200).send(userDTO(result));
         }).catch(err => {
