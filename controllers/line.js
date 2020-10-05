@@ -26,7 +26,7 @@ function create(req, res) {
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
@@ -40,7 +40,7 @@ function update(req, res) {
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
@@ -48,12 +48,16 @@ function deleteOne(req, res) {
     let line = lineDTO(req.params);
     if (line.id) {
         lineService.deleteLine(line).then(result => {
-            res.sendStatus(204);
+            if (result) {
+                res.sendStatus(204);
+            } else {
+                res.status(404).send({ message: "Line Not Found" });
+            }
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 

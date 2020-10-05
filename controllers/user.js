@@ -19,7 +19,7 @@ function create(req, res) {
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
@@ -37,7 +37,7 @@ function update(req, res) {
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
