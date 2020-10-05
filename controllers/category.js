@@ -31,7 +31,8 @@ function create(req, res) {
 
 function update(req, res) {
     let category = categoryDTO(req.body);
-    if (category.id) {
+    if (req.params.id) {
+        category.id = req.params.id;
         categoryService.updateCategory(category).then(c => {
             sendCategory(c, res);
         }).catch(err => {

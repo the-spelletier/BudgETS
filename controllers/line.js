@@ -31,7 +31,8 @@ function create(req, res) {
 
 function update(req, res) {
     let line = lineDTO(req.body);
-    if (line.id) {
+    if (req.params.id) {
+        line.id = req.params.id;
         lineService.updateLine(line).then(l => {
             sendLine(l, res);
         }).catch(err => {
