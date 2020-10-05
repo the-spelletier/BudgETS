@@ -4,8 +4,11 @@
   "description": "Une application financière pour les clubs étudiants de l'ETS.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
+    "pretest": "cross-env NODE_ENV=test npm run db:reset",
+    "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
+    "start": "node server.js",
+    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -42,8 +45,30 @@
     }
   ],
   "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 10000,
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/frontend/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/frontend/"
+    ]
+  },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.3"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "jest": "^26.4.2",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^5.0.0"
   }
 }

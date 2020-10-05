@@ -1,0 +1,114 @@
+@import "./styles/colors";
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar, .menu {
+    background-color: $neutral;
+
+    .ant-menu-item-selected{
+        background-color: $neutral-dark !important;
+
+        a {
+            color: $primary;
+        }
+    }
+
+    .ant-menu-item a:hover, .logout:hover {
+        color: $primary-pale;
+    }
+
+    a, .logout {
+        color: $text-pale;
+    }
+
+    .bottom {
+        bottom: 0;
+        position: fixed;
+        width: 250px;
+        height: 55px;
+        margin-bottom: 0px;
+        padding-top: 0.5rem;
+    }
+
+    .login {
+        background-color: $neutral-dark !important;
+    }
+}
+
+.logo {
+    font-size: 3rem;
+    color: $primary;
+    text-align: center;
+}
+
+.error input, .error .ant-input-affix-wrapper {
+    border-color: $primary;
+}
+
+.ant-layout-sider {
+    width: 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+}
+
+.ant-layout-content {
+    margin-left: 250px !important;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+    border: none !important;
+}
+
+.site-layout-background {
+    margin: auto !important;
+    width: 60%;
+}
+
+.content {
+    background-color: white;
+}
+
+h2 {
+    margin: 0.2rem;
+    color: $primary;
+}
+
+.ant-card-head {
+    background-color: $neutral;
+}
+
+.form-section {
+    padding: 0.5rem;
+
+    .form-input {
+        width: 80%;
+        margin: auto;
+    }
+}
+
+.submit {
+    text-align: center;
+
+    button, button:focus {
+        background-color: $success;
+        border-color: $success;
+    }
+
+    button:hover {
+        background-color: $success-pale;
+        border-color: $success-pale;
+    }
+}
+
+.ant-btn-primary, .ant-btn-primary:focus {
+    background-color: $success;
+    border-color: $success;
+}
+
+.ant-btn-primary:hover {
+    background-color: $success-pale;
+    border-color: $success-pale;
+}

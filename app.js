@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -7,7 +6,6 @@ const router = require('./router.js');
 const mysql = require('mysql')
 
 
-const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(

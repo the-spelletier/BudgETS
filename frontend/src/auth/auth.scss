@@ -1,0 +1,29 @@
+@import "../styles/colors";
+
+.connexion-card {
+    width: 50%;
+    margin: 5rem auto 0rem auto !important;
+
+    div {
+        padding: 0.5rem;
+    }
+
+    .connexion-input {
+        width: 80%;
+        margin-left: 10%;
+    }
+
+    .connexion-button {
+        text-align: center;
+
+        button {
+            background-color: $success;
+            border-color: $success;
+        }
+
+        button:hover {
+            background-color: $success-pale;
+            border-color: $success-pale;
+        }
+    }
+}
