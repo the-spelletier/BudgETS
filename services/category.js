@@ -26,8 +26,11 @@ const updateCategory = category => {
             id: category.id 
         }
     }).then(c => {
-        categoryDTO(category, c);
-        return c.save();
+        if (c) {
+            categoryDTO(category, c);
+            return c.save();
+        }
+        return c;
     });
 }
 

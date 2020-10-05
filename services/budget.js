@@ -28,8 +28,11 @@ const updateBudget = budget => {
             id: budget.id 
         }
     }).then(b => {
-        budgetDTO(budget, b);
-        return b.save();
+        if (b) {
+            budgetDTO(budget, b);
+            return b.save();
+        }
+        return b;
     });
 }
 

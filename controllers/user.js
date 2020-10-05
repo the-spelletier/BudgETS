@@ -28,7 +28,11 @@ function update(req, res) {
     if (req.params.id && !user.username) {
         user.id = req.params.id;
         userService.updateUser(user).then((result) => {
-            res.send(userDTO(result));
+            if (user) {
+                res.send(userDTO(result));
+            } else {
+                res.status(404).send({ message: "User Not Found" });
+            }
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
         });
