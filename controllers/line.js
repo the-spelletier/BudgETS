@@ -1,4 +1,4 @@
-const lineDTO = require('../dto').lineDTO;
+const { lineDTO } = require('../dto');
 const lineService = require('../services/line');
 
 function get(req, res) {

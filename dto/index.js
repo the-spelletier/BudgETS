@@ -1,5 +1,4 @@
-const userDTO = user => {
-  let u = {};
+const userDTO = (user, u = {}) => {
   if (typeof user.id != 'undefined') {
     u.id = user.id;
   }
@@ -12,8 +11,7 @@ const userDTO = user => {
   return u;
 };
 
-const budgetDTO = budget => {
-  let b = {};
+const budgetDTO = (budget, b = {}) => {
   if (typeof budget.id != 'undefined') {
     b.id = budget.id;
   }
@@ -35,8 +33,7 @@ const budgetDTO = budget => {
   return b;
 };
 
-const categoryDTO = category => {
-  let c = {};
+const categoryDTO = (category, c = {}) => {
   if (typeof category.id != 'undefined') {
     c.id = category.id;
   }
@@ -55,8 +52,7 @@ const categoryDTO = category => {
   return c;
 };
 
-const lineDTO = line => {
-  let l = {};
+const lineDTO = (line, l = {}) => {
   if (typeof line.id != 'undefined') {
     l.id = line.id;
   }

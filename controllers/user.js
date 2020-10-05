@@ -1,4 +1,4 @@
-const userDTO = require('../dto').userDTO;
+const { userDTO } = require('../dto');
 const userService = require('../services/user');
 
 function get(req, res) {

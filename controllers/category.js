@@ -1,4 +1,4 @@
-const categoryDTO = require('../dto').categoryDTO;
+const { categoryDTO } = require('../dto');
 const categoryService = require('../services/category');
 
 function get(req, res) {

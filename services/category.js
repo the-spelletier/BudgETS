@@ -1,4 +1,5 @@
 const { Category, Line } = require('../models');
+const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getCategory = category => {
@@ -20,10 +21,13 @@ const addCategory = category => {
 
 // Mise à jour d'une catégorie selon l'identificateur envoyé en paramètre
 const updateCategory = category => {
-    return Category.update(category, { 
-        where: { 
+    return Category.findOne({
+        where: {
             id: category.id 
-        } 
+        }
+    }).then(c => {
+        categoryDTO(category, c);
+        return c.save();
     });
 }
 

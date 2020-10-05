@@ -1,4 +1,4 @@
-const budgetDTO = require('../dto').budgetDTO;
+const { budgetDTO } = require('../dto');
 const budgetService = require('../services/budget');
 
 function getCurrent(req, res) {
@@ -43,6 +43,7 @@ function update(req, res) {
     if (req.params.id) {
         budget.id = req.params.id;
         budgetService.updateBudget(budget).then(b => {
+            console.log(b);
             sendBudget(b, res);
         }).catch(err => {
             res.status(401).send({ message: 'Validation error' });

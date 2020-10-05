@@ -1,4 +1,5 @@
 const { Line } = require('../models');
+const { lineDTO } = require('../dto');
 
 // Retourne une lingne (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getLine = line => {
@@ -19,11 +20,14 @@ const addLine = line => {
 
 // Mise à jour d'une ligne selon l'identificateur envoyé en paramètre
 const updateLine = line => {
- 	return Line.update(line, { 
-      	where: { 
-        	id: line.id 
-      	} 
-  	});
+    return Line.findOne({
+        where: {
+            id: line.id 
+        }
+    }).then(l => {
+        lineDTO(category, l);
+        return l.save();
+    });
 }
 
 // Suppression d'une ligne selon l'identificateur envoyé en paramètre
