@@ -14,9 +14,9 @@ function create(req, res) {
     if (user.username && req.body.password) {
         user.password = req.body.password;
         userService.addUser(user).then((result) => {
-            res.status(200).send(userDTO(result));
+            res.status(201).send(userDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -28,9 +28,9 @@ function update(req, res) {
     if (req.params.id && !user.username) {
         user.id = req.params.id;
         userService.updateUser(user).then((result) => {
-            res.status(200).send(userDTO(result));
+            res.send(userDTO(result));
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });

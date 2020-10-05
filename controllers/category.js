@@ -20,9 +20,10 @@ function create(req, res) {
     let category = categoryDTO(req.body);
     if (category.name, category.type, category.budgetId) { 
         categoryService.addCategory(category).then(c => {
+            res.status(201);
             sendCategory(c, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -36,7 +37,7 @@ function update(req, res) {
         categoryService.updateCategory(category).then(c => {
             sendCategory(c, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -47,9 +48,9 @@ function deleteOne(req, res) {
     let category = categoryDTO(req.params);
     if (category.id) {
         categoryService.deleteCategory(category).then(result => {
-            res.sendStatus(200);
+            res.sendStatus(204);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });

@@ -25,7 +25,7 @@ const updateLine = line => {
             id: line.id 
         }
     }).then(l => {
-        lineDTO(category, l);
+        lineDTO(line, l);
         return l.save();
     });
 }

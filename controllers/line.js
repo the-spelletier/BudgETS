@@ -20,9 +20,10 @@ function create(req, res) {
     let line = lineDTO(req.body);
     if (line.name, line.description, line.expenseEstimate, line.categoryId) { 
         lineService.addLine(line).then(l => {
+            res.status(201);
             sendLine(l, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -36,7 +37,7 @@ function update(req, res) {
         lineService.updateLine(line).then(l => {
             sendLine(l, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
@@ -47,9 +48,9 @@ function deleteOne(req, res) {
     let line = lineDTO(req.params);
     if (line.id) {
         lineService.deleteLine(line).then(result => {
-            res.sendStatus(200);
+            res.sendStatus(204);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
         res.status(403).send({ message: 'Invalid parameters' });
