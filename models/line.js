@@ -9,12 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Line.belongsTo(models.Category, {
-                foreignKey: 'categoryId',
-                onDelete: 'RESTRICT'
+                foreignKey: 'categoryId'
             });
             Line.hasMany(models.Entry, {
-                foreignKey: 'lineId',
-                onDelete: 'RESTRICT'
+                foreignKey: 'lineId'
             });
         }
     };
