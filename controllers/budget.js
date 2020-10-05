@@ -6,21 +6,27 @@ function getCurrent(req, res) {
         isActive: true
     }).then(budget => {
         sendBudget(budget, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function get(req, res) {
     budgetService.resetGetActiveBudget(budgetDTO(req.params)).then(budget => {
         sendBudget(budget, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function getAll(req, res) {
     budgetService.getBudgets().then(budgets => {
         sendBudget(budgets, res);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 

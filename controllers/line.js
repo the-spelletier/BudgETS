@@ -4,15 +4,18 @@ const lineService = require('../services/line');
 function get(req, res) {
     lineService.getLine(lineDTO(req.params)).then(line => {
         sendLine(line, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function getAll(req, res) {
     lineService.getLines().then(lines => {
         sendLine(lines, res);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 

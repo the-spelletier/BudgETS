@@ -8,20 +8,14 @@ function login(req, res) {
         // Valide la création du jeton de session jwt
         .then(token => {
             if (!token) {
-                res.status(401).send({
-                    message: "Authentication failed"
-                });
+                res.status(401).send({ message: "Authentication failed" });
             } else {
-                res.send({
-                    token
-                })
+                res.send({ token });
             }
         })
         .catch(err => {
             console.log(err);
-            res.status(401).send({
-                message: "An unexpected error occurred"
-            });
+            res.status(401).send({ message: "Authentication failed" });
         });
 }
 

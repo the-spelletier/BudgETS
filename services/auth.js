@@ -1,20 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-//const Users = require('../models/test').User;
-const { User } = require('../models');
-const SessionLogs = 1;//require('../test').SessionLog;
+// const SessionLogs = require('../test').SessionLog;
 
 const config = require('../config/jsonConfig');
 const userService = require('../services/user');
 
 const authenticate = params => {
     // Retourne un utilisateur selon le nom d'utilisateur envoyé en paramètre
-    return User.findOne({
-        where: {
-            username: params.username
-        },
-        raw: true
+    return userService.getUser({ 
+        username: params.username 
     }).then(user => {
         if (!user) {
             // Journalisation de l'échec d'authentification (Utilisateur qui n'existe pas)
@@ -68,7 +63,9 @@ const authenticate = params => {
                 expiresIn: config.ttl
             });
         }
-    }).catch(err => {throw err});
+    }).catch(err => {
+        throw err;
+    });
 };
 
 module.exports = {

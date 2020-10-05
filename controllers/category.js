@@ -4,15 +4,18 @@ const categoryService = require('../services/category');
 function get(req, res) {
     categoryService.getCategory(categoryDTO(req.params)).then(category => {
         sendCategory(category, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function getAll(req, res) {
     categoryService.getCategories().then(categories => {
         sendCategory(categories, res);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
