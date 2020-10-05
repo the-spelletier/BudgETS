@@ -68,9 +68,9 @@ function sendBudget(budget, res) {
                 delete arr[i].startDate;
                 delete arr[i].endDate;
             });
-            budgetRes = budget
+            budgetRes = budget;
         } else {
-            budgetRes = budgetDTO(budget)
+            budgetRes = budgetDTO(budget);
         }
         res.send(budgetRes);
     } else {

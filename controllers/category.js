@@ -62,9 +62,9 @@ function sendCategory(category, res) {
             category.forEach((b, i, arr) => {
                 arr[i] = categoryDTO(b);
             });
-            categoryRes = category
+            categoryRes = category;
         } else {
-            categoryRes = categoryDTO(category)
+            categoryRes = categoryDTO(category);
         }
         res.send(categoryRes);
     } else {

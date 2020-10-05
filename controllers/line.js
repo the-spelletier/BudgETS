@@ -62,9 +62,9 @@ function sendLine(line, res) {
             line.forEach((b, i, arr) => {
                 arr[i] = lineDTO(b);
             });
-            lineRes = line
+            lineRes = line;
         } else {
-            lineRes = lineDTO(line)
+            lineRes = lineDTO(line);
         }
         res.send(lineRes);
     } else {
