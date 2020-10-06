@@ -6,4 +6,9 @@ export class CategoryClient {
         var params = {budgetId, name, type};
         return await apiClient.post('/category', params, token);
     }
+
+    getList = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/category?budgetId=${budgetId}`, token);
+    }
 }

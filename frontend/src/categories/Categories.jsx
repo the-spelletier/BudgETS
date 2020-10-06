@@ -1,26 +1,33 @@
-import React, { Fragment } from "react";
-import { Table, Button, Popover, Card} from "antd";
-import { SettingOutlined } from '@ant-design/icons';
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Table, Card} from "antd";
 
 import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
-import "./categories.scss";
 import BudgetHeader from "../budget/header/BudgetHeader";
-import { useState } from "react";
 import CreateCategory from "./create/CreateCategorie";
 import CreateLine from "./lines/create/CreateLine";
+import { CategoryClient } from "../clients/CategoryClient";
+import UserContext from "../contexts/user/UserContext";
+import BudgetContext from "../contexts/budget/BudgetContext";
+
+import "./categories.scss";
 
 const Categories = () => {
+    const categoryClient = new CategoryClient();
+
+    const {budget} = useContext(BudgetContext);
+    const {user} = useContext(UserContext)
+
     // Create category
     const [createCategoryModalIsVisible, setCreateCategoryModalIsVisible] = useState(false);
     
     const onCreateCategory = () => {
         setCreateCategoryModalIsVisible(true);
-    }
+    };
 
     const onCreateCategoryModalCancel = () => {
         setCreateCategoryModalIsVisible(false);
-    }
+    };
 
     // Create line
     const [createLineModalIsVisible, setCreateLineModalIsVisible] = useState(false);
@@ -29,63 +36,32 @@ const Categories = () => {
     const onCreateLine = (categoryId) => {
         setCreateLineAssociatedCategory(categoryId);
         setCreateLineModalIsVisible(true);
-    }
+    };
 
     const onCreateLineModalCancel = () => {
         setCreateLineAssociatedCategory(null);
         setCreateLineModalIsVisible(false);
-    }
+    };
 
 
+    // General usage
+    const [categories, setCategories] = useState(null);
+    const [headerData, setHeaderDate] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
-    // TODO : get data from backend
-    const sampleData = [
-        {
-            id: 1,
-            name: "Cat 1",
-            type: "R", 
-            lines: [
-                {
-                    id: 1,
-                    name: "line 1",
-                    description: "My cool first description",
-                    estimate: 100
-                },
-                {
-                    id: 2,
-                    name: "line 2",
-                    description: "My cool second description",
-                    estimate: 30
-                }
-            ]
-        },
-        {
-            id: 2,
-            name: "Cat 2",
-            type: "D", 
-            lines: [
-                {
-                    id: 1,
-                    name: "line 1",
-                    description: "My cool first description",
-                    estimate: 100
-                },
-                {
-                    id: 2,
-                    name: "line 2",
-                    description: "My cool second description",
-                    estimate: 30
-                }
-            ]
+    useEffect(() => {
+        const getCategories = async() => {
+            var response = await categoryClient.getList(user.token, budget.id);
+            setCategories(response.data);
+        };
+
+        if (user.token && budget.id) {
+            getCategories();
         }
-    ]
-
-    // TODO : get data from backend
-    const headerData = {total: "Total", estimateTotal: 0, realTotal: 0};
+    }, [user.token, budget.id]);
 
     const buildColumns = (category) => {
         var totalEstimate = 0;
-        category.lines.forEach((line) => totalEstimate += line.estimate);
+        category.Lines.forEach((line) => totalEstimate += line.estimate);
 
         return [
             {
@@ -114,7 +90,7 @@ const Categories = () => {
             },
             {
                 title: totalEstimate,
-                render: (line) => category.type === "R" ? line.estimate : "( " + line.estimate + " )"
+                render: (line) => category.type === "R" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
             },
             {
                 title: "0", 
@@ -157,14 +133,19 @@ const Categories = () => {
     return (
         <Fragment>
             <BudgetHeader />
-            <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
-            <CreateLine visible={createLineModalIsVisible} onCancel={onCreateLineModalCancel} categoryId={createLineAssociatedCategory} />
-            <Card>
-                <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
-                {
-                    sampleData.map((category) => <EditableTable columns={buildColumns(category)} values={category.lines}/>)
-                }    
-            </Card>
+            {
+                categories &&
+                <Fragment>
+                    <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
+                    <CreateLine visible={createLineModalIsVisible} onCancel={onCreateLineModalCancel} categoryId={createLineAssociatedCategory} />
+                    <Card>
+                        <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
+                        {
+                            categories.map((category) => category.Lines && <EditableTable columns={buildColumns(category)} values={category.Lines}/>)
+                        }    
+                    </Card>
+                </Fragment>
+            }
         </Fragment>
     );
 };
