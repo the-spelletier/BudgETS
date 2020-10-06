@@ -1,4 +1,4 @@
-const budgetDTO = require('../dto').budgetDTO;
+const { budgetDTO } = require('../dto');
 const budgetService = require('../services/budget');
 
 function getCurrent(req, res) {
@@ -6,22 +6,28 @@ function getCurrent(req, res) {
         isActive: true
     }).then(budget => {
         sendBudget(budget, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function get(req, res) {
     budgetService.resetGetActiveBudget(budgetDTO(req.params)).then(budget => {
         sendBudget(budget, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function getAll(req, res) {
     budgetService.getBudgets().then(budgets => {
         sendBudget(budgets, res);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err);
-    });;
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
 }
 
 function create(req, res) {
@@ -29,25 +35,27 @@ function create(req, res) {
     if (budget.name && budget.startDate && budget.endDate && !budget.isActive) {
         budget.userId = req.user.id
         budgetService.addBudget(budget).then(b => {
+            res.status(201);
             sendBudget(b, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
 function update(req, res) {
     let budget = budgetDTO(req.body);
-    if (budget.id) {
+    if (req.params.id) {
+        budget.id = req.params.id;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {
-            res.status(401).send({ message: 'Validation error' });
+            res.status(403).send({ message: 'Validation error' });
         });
     } else {
-        res.status(403).send({ message: 'Invalid parameters' });
+        res.status(400).send({ message: 'Invalid parameters' });
     }
 }
 
@@ -68,9 +76,9 @@ function sendBudget(budget, res) {
                 delete arr[i].startDate;
                 delete arr[i].endDate;
             });
-            budgetRes = budget
+            budgetRes = budget;
         } else {
-            budgetRes = budgetDTO(budget)
+            budgetRes = budgetDTO(budget);
         }
         res.send(budgetRes);
     } else {

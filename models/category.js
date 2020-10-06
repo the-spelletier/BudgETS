@@ -1,6 +1,7 @@
 'use strict';
 const {
-  Model
+  Model,
+  Sequelize
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -8,24 +9,30 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Category.belongsTo(models.Budget, {
-                foreignKey: 'budgetId',
-                onDelete: 'CASCADE'
+                foreignKey: 'budgetId'
             });
-            Category.hasMany(models.Entry, {
-                foreignKey: 'categoryId'
+            Category.hasMany(models.Line, {
+                foreignKey: 'categoryId',
+                onDelete: 'RESTRICT'
             });
         }
     };
 
     Category.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: 'compositeUnique'
         },
         budgetId: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.UUID,
+            allowNull: false,
+            unique: 'compositeUnique'
         },
         type: {
             type: DataTypes.ENUM('revenue', 'expense'),

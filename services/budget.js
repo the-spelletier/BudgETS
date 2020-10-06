@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const { Budget } = require('../models');
+const { budgetDTO } = require('../dto');
 
 // Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
@@ -22,10 +23,16 @@ const addBudget = budget => {
 
 // Mise à jour d'un budget selon l'identificateur envoyé en paramètre
 const updateBudget = budget => {
-    return Budget.update(budget, { 
-        where: { 
+    return Budget.findOne({
+        where: {
             id: budget.id 
-        } 
+        }
+    }).then(b => {
+        if (b) {
+            budgetDTO(budget, b);
+            return b.save();
+        }
+        return b;
     });
 }
 

@@ -31,11 +31,14 @@ const updateUser = user => {
             id: user.id
         }
     }).then(u => {
-        u.isAdmin = user.isAdmin;
-        if (user.password) {
-            u.password = bcrypt.hashSync(user.password, config.saltRounds);
+        if (u) {
+            u.isAdmin = user.isAdmin;
+            if (user.password) {
+                u.password = bcrypt.hashSync(user.password, config.saltRounds);
+            }
+            return u.save(); 
         }
-        return u.save();
+        return u;
     });
 }
 

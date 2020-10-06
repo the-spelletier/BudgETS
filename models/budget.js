@@ -1,6 +1,7 @@
 'use strict';
 const {
-  Model
+  Model,
+  Sequelize
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -9,22 +10,28 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Budget.belongsTo(models.User, {
                 foreignKey: 'userId',
-                onDelete: 'CASCADE'
+                onDelete: 'RESTRICT'
             });
             Budget.hasMany(models.Category, {
-                foreignKey: {unique: 'compositeUnique'}
+                foreignKey: 'budgetId',
+                onDelete: 'RESTRICT'
             });
         }
     };
 
     Budget.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
         },
         userId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false
         },
         startDate: {

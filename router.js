@@ -76,7 +76,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/budget',
+        '/api/budget/:id',
         authMiddleware.verifyAuth,
         budgetController.update
     )
@@ -199,7 +199,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/line/all',
+        '/api/line',
         authMiddleware.verifyAuth,
         lineController.getAll
     );
@@ -349,7 +349,7 @@ module.exports.set = app => {
     // Params : { id, password, isAdmin }
     // Returns : Code 200 if user added successfully
     app.put(
-        '/api/user',
+        '/api/user/:id',
         [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
         userController.update
     );

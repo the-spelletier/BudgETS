@@ -1,30 +1,40 @@
 'use strict';
 const {
-  Model
+  Model,
+  Sequelize
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Entry extends Model {
         static associate(models) {
             // define association here
-            Entry.belongsTo(models.EntryStatus, {
-                foreignKey: 'entryStatusId',
-                onDelete: 'CASCADE'
-            });
             Entry.belongsTo(models.Line, {
                 foreignKey: 'lineId',
-                onDelete: 'CASCADE'
+                onDelete: 'RESTRICT'
+            });
+            Entry.belongsTo(models.EntryStatus, {
+                foreignKey: 'entryStatusId',
+                onDelete: 'RESTRICT'
+            });
+            Entry.belongsTo(models.Receipt, {
+                foreignKey: 'receiptId',
+                onDelete: 'RESTRICT'
             });
         }
     };
 
     Entry.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
         lineId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false
         },
-        categentryStatusIdoryId: {
-            type: DataTypes.INTEGER,
+        entryStatusId: {
+            type: DataTypes.UUID,
             allowNull: false
         },
         amount: {
@@ -47,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 isIn: [['revenue', 'expense']]
             }
+        },
+        receiptId: {
+            type: DataTypes.UUID,
+            allowNull: false
         }
     }, {
         sequelize,
