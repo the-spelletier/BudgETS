@@ -34,6 +34,7 @@ function create(req, res) {
     let budget = budgetDTO(req.body);
     if (budget.name && budget.startDate && budget.endDate) {
         budget.userId = req.user.id
+        budget.isActive = false; 
         budgetService.addBudget(budget).then(b => {
             res.status(201);
             sendBudget(b, res);
