@@ -47,8 +47,7 @@ function create(req, res) {
 
 function update(req, res) {
     let budget = budgetDTO(req.body);
-    if (req.params.id) {
-        budget.id = req.params.id;
+    if (budget.id) {
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {

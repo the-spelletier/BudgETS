@@ -76,7 +76,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
-        '/api/budget/:id',
+        '/api/budget',
         authMiddleware.verifyAuth,
         budgetController.update
     )
