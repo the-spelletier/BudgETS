@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Table, Card, notification} from "antd";
+import { Table, Card, notification, Button} from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 import EditableTable from "../components/editable-table/EditableTable";
@@ -8,6 +8,7 @@ import BudgetHeader from "../budget/header/BudgetHeader";
 import CreateCategory from "./create/CreateCategorie";
 import CreateLine from "./lines/create/CreateLine";
 import { CategoryClient } from "../clients/CategoryClient";
+import { LineClient } from "../clients/LineClient";
 import UserContext from "../contexts/user/UserContext";
 import BudgetContext from "../contexts/budget/BudgetContext";
 
@@ -15,9 +16,18 @@ import "./categories.scss";
 
 const Categories = () => {
     const categoryClient = new CategoryClient();
+    const lineClient = new LineClient();
 
     const {budget} = useContext(BudgetContext);
     const {user} = useContext(UserContext)
+
+    const getCategories = async() => {
+        var response = await categoryClient.getList(user.token, budget.id);
+        setCategories(response.data);
+    };
+
+    // TODO : find a cleaner way 
+    const [refreshCategories, setRefreshCategories] = useState(false);
 
     // Create category
     const [createOrEditCategoryModalIsVisible, setOrEditCreateCategoryModalIsVisible] = useState(false);
@@ -78,17 +88,50 @@ const Categories = () => {
     }
 
     // Create line
-    const [createLineModalIsVisible, setCreateLineModalIsVisible] = useState(false);
-    const [createLineAssociatedCategory, setCreateLineAssociatedCategory] = useState(null);
+    const [createOrEditLineModalIsVisible, setCreateOrEditLineModalIsVisible] = useState(false);
+    const [createOrEditLineAssociatedCategory, setCreateLineAssociatedCategory] = useState(null);
+    const [currentLine, setCurrentLine] = useState(null);
+
+    const onEditLine = (categoryId, line) => {
+        setCurrentLine(line);
+        setCreateLineAssociatedCategory(categoryId);
+        setCreateOrEditLineModalIsVisible(true);
+    }
 
     const onCreateLine = (categoryId) => {
         setCreateLineAssociatedCategory(categoryId);
-        setCreateLineModalIsVisible(true);
+        setCreateOrEditLineModalIsVisible(true);
     };
 
-    const onCreateLineModalCancel = () => {
+    const onCreateOrEditLineModalCancel = () => {
         setCreateLineAssociatedCategory(null);
-        setCreateLineModalIsVisible(false);
+        setCreateOrEditLineModalIsVisible(false);
+        setCurrentLine(null);
+    };
+
+    const onDeleteLine = (line) => {
+        const deleteLine = async() => {
+            try {
+                await lineClient.delete(user.token, line.id);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "La ligne a été supprimée avec succès",
+                    });
+                setRefreshCategories(true);
+            }
+            catch (e) {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en supprimant la ligne",
+                    });
+            }
+        };
+
+        deleteLine();
     };
 
     // General usage
@@ -96,15 +139,11 @@ const Categories = () => {
     const [headerData, setHeaderDate] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
     useEffect(() => {
-        const getCategories = async() => {
-            var response = await categoryClient.getList(user.token, budget.id);
-            setCategories(response.data);
-        };
-
         if (user.token && budget.id) {
             getCategories();
+            setRefreshCategories(false);
         }
-    }, [user.token, budget.id, createOrEditCategoryModalIsVisible]);
+    }, [user.token, budget.id, createOrEditCategoryModalIsVisible, createOrEditLineModalIsVisible, refreshCategories]);
 
     const buildColumns = (category) => {
         var totalEstimate = 0;
@@ -117,7 +156,7 @@ const Categories = () => {
             },
             { 
                 title: category.id,
-                render: () => <EditMenu onNewClick={() => {onCreateLine(category.id)}}/> 
+                render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
             },
             {
                 title: category.name,
@@ -184,11 +223,21 @@ const Categories = () => {
                 categories &&
                 <Fragment>
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
-                    <CreateLine visible={createLineModalIsVisible} onCancel={onCreateLineModalCancel} categoryId={createLineAssociatedCategory} />
+                    <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
                     <Card>
                         <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
                         {
-                            categories.map((category) => category.Lines && <EditableTable columns={buildColumns(category)} values={category.Lines}/>)
+                            categories.map((category) => 
+                                <Fragment>
+                                    {  
+                                        category.Lines && <EditableTable columns={buildColumns(category)} values={category.Lines}/> 
+                                    }
+                                    { 
+                                        category.Lines && category.Lines.length === 0 && 
+                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                                    }
+                                </Fragment>
+                            )
                         }    
                     </Card>
                 </Fragment>
