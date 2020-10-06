@@ -11,4 +11,10 @@ export class CategoryClient {
         const apiClient = new ApiClient();
         return await apiClient.get(`/category?budgetId=${budgetId}`, token);
     }
+
+    update = async (token, budgetId, id, name, type) => {
+        const apiClient = new ApiClient();
+        var params = {budgetId, name, type};
+        return await apiClient.put(`/category/${id}`, params, token);
+    }
 }

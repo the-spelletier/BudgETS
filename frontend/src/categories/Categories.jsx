@@ -19,14 +19,22 @@ const Categories = () => {
     const {user} = useContext(UserContext)
 
     // Create category
-    const [createCategoryModalIsVisible, setCreateCategoryModalIsVisible] = useState(false);
+    const [createOrEditCategoryModalIsVisible, setOrEditCreateCategoryModalIsVisible] = useState(false);
     
+    // Edit category
+    const [currentCategory, setCurrentCategory] = useState(null);
+    const onEditCategory = (category) => {
+        setCurrentCategory(category);
+        setOrEditCreateCategoryModalIsVisible(true);
+    }
+
     const onCreateCategory = () => {
-        setCreateCategoryModalIsVisible(true);
+        setOrEditCreateCategoryModalIsVisible(true);
     };
 
-    const onCreateCategoryModalCancel = () => {
-        setCreateCategoryModalIsVisible(false);
+    const onCreateOrEditCategoryModalCancel = () => {
+        setCurrentCategory(null);
+        setOrEditCreateCategoryModalIsVisible(false);
     };
 
     // Create line
@@ -43,7 +51,6 @@ const Categories = () => {
         setCreateLineModalIsVisible(false);
     };
 
-
     // General usage
     const [categories, setCategories] = useState(null);
     const [headerData, setHeaderDate] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
@@ -57,7 +64,7 @@ const Categories = () => {
         if (user.token && budget.id) {
             getCategories();
         }
-    }, [user.token, budget.id]);
+    }, [user.token, budget.id, createOrEditCategoryModalIsVisible]);
 
     const buildColumns = (category) => {
         var totalEstimate = 0;
@@ -65,7 +72,7 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onNewClick={onCreateCategory}/>,
+                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}}/>,
                 render: () => ""
             },
             { 
@@ -90,7 +97,7 @@ const Categories = () => {
             },
             {
                 title: totalEstimate,
-                render: (line) => category.type === "R" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
+                render: (line) => category.type === "revenue" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
             },
             {
                 title: "0", 
@@ -136,7 +143,7 @@ const Categories = () => {
             {
                 categories &&
                 <Fragment>
-                    <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
+                    <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createLineModalIsVisible} onCancel={onCreateLineModalCancel} categoryId={createLineAssociatedCategory} />
                     <Card>
                         <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>

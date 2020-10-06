@@ -2,15 +2,9 @@ import React, { Fragment, useState } from "react";
 
 import { Popover, Button } from "antd";
 
-import { SettingOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons';
+import { SettingOutlined, DeleteOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 
-const EditMenu = ({onEditSaveClick, onEditParentClick, onDeleteClick, onNewClick}) => {
-    const [editMode, setEditMode] = useState(false);
-
-    const onEditClick = () => {
-        onEditParentClick();
-        setEditMode(!editMode);
-    };
+const EditMenu = ({onEditClick, onDeleteClick, onNewClick}) => {
 
     const popoverContent = (
         <Fragment>
@@ -23,8 +17,8 @@ const EditMenu = ({onEditSaveClick, onEditParentClick, onDeleteClick, onNewClick
     return (
         <Popover content={popoverContent} placement="left" trigger="click">
             <Button shape="circle" 
-                icon={editMode == true ? <CheckOutlined /> : <SettingOutlined />} 
-                onClick={editMode == true ? onEditSaveClick : () => ""} />
+                icon={<SettingOutlined />} 
+                onClick={() => ""} />
         </Popover>
     );
 };
