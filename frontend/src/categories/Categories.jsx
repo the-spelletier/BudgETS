@@ -8,10 +8,12 @@ import "./categories.scss";
 import BudgetHeader from "../budget/header/BudgetHeader";
 import { useState } from "react";
 import CreateCategory from "./create/CreateCategorie";
+import CreateLine from "./lines/create/CreateLine";
 
 const Categories = () => {
+    // Create category
     const [createCategoryModalIsVisible, setCreateCategoryModalIsVisible] = useState(false);
-
+    
     const onCreateCategory = () => {
         setCreateCategoryModalIsVisible(true);
     }
@@ -20,10 +22,26 @@ const Categories = () => {
         setCreateCategoryModalIsVisible(false);
     }
 
+    // Create line
+    const [createLineModalIsVisible, setCreateLineModalIsVisible] = useState(false);
+    const [createLineAssociatedCategory, setCreateLineAssociatedCategory] = useState(null);
+
+    const onCreateLine = (categoryId) => {
+        setCreateLineAssociatedCategory(categoryId);
+        setCreateLineModalIsVisible(true);
+    }
+
+    const onCreateLineModalCancel = () => {
+        setCreateLineAssociatedCategory(null);
+        setCreateLineModalIsVisible(false);
+    }
+
+
+
     // TODO : get data from backend
     const sampleData = [
         {
-            id: "1",
+            id: 1,
             name: "Cat 1",
             type: "R", 
             lines: [
@@ -42,7 +60,7 @@ const Categories = () => {
             ]
         },
         {
-            id: "2",
+            id: 2,
             name: "Cat 2",
             type: "D", 
             lines: [
@@ -76,7 +94,7 @@ const Categories = () => {
             },
             { 
                 title: category.id,
-                render: () => <EditMenu /> 
+                render: () => <EditMenu onNewClick={() => {onCreateLine(category.id)}}/> 
             },
             {
                 title: category.name,
@@ -140,6 +158,7 @@ const Categories = () => {
         <Fragment>
             <BudgetHeader />
             <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
+            <CreateLine visible={createLineModalIsVisible} onCancel={onCreateLineModalCancel} categoryId={createLineAssociatedCategory} />
             <Card>
                 <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
                 {
