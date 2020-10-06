@@ -11,7 +11,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    categoryService.getCategories().then(categories => {
+    categoryService.getCategories(categoryDTO(req.body)).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
         console.log(err);

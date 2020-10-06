@@ -9,8 +9,10 @@ const getLine = line => {
 }
 
 // Retourne toutes les lignes
-const getLines = () => {
-  	return Line.findAll();
+const getLines = line => {
+  	return Line.findAll({ 
+        where: line
+    });
 };
 
 // Ajout d'une ligne

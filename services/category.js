@@ -10,8 +10,11 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = () => {
-    return Category.findAll({ include: Line });
+const getCategories = category => {
+    return Category.findAll({ 
+        where: category,
+        include: Line 
+    });
 };
 
 // Ajout d'une catégorie

@@ -11,7 +11,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    lineService.getLines().then(lines => {
+    lineService.getLines(lineDTO(req.body)).then(lines => {
         sendLine(lines, res);
     }).catch(err => {
         console.log(err);

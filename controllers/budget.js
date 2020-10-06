@@ -22,7 +22,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets().then(budgets => {
+    budgetService.getBudgets(budgetDTO(req.body)).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);

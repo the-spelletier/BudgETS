@@ -10,8 +10,10 @@ const getBudget = budget => {
 }
 
 // Retourne tous les budgets
-const getBudgets = () => {
-    return Budget.findAll();
+const getBudgets = budget => {
+    return Budget.findAll({ 
+        where: budget
+    });
 };
 
 // Ajout d'un budget
