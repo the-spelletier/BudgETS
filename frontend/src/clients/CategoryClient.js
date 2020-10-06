@@ -17,4 +17,9 @@ export class CategoryClient {
         var params = {budgetId, name, type};
         return await apiClient.put(`/category/${id}`, params, token);
     }
+
+    delete = async (token, budgetId, id) => {
+        const apiClient = new ApiClient();
+        return await apiClient.delete(`/category/${id}?budgetId=${budgetId}`, token);
+    }
 }

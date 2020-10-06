@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Table, Card} from "antd";
+import { Table, Card, notification} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -37,6 +38,45 @@ const Categories = () => {
         setOrEditCreateCategoryModalIsVisible(false);
     };
 
+    // Delete category
+    const onDeleteCategory = (category) => {
+        const deleteCategory = async() => {
+            try {
+                await categoryClient.delete(user.token, budget.id, category.id);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "La catégorie a été supprimée avec succès",
+                    });
+            }
+            catch (e) {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en supprimant la catégorie",
+                    });
+            }
+        };
+
+        if (!category.Lines || category.Lines.length === 0) {
+            deleteCategory();
+
+            var newCategories = categories.filter((c) => c.id !== category.id);
+            setCategories(newCategories);
+
+        }
+        else {
+            notification.open({
+                message: "Erreur",
+                icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                description:
+                  "Impossible de supprimer la catégorie : des lignes lui sont associées!",
+                });
+        }
+    }
+
     // Create line
     const [createLineModalIsVisible, setCreateLineModalIsVisible] = useState(false);
     const [createLineAssociatedCategory, setCreateLineAssociatedCategory] = useState(null);
@@ -72,7 +112,7 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}}/>,
+                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
                 render: () => ""
             },
             { 
