@@ -1,9 +1,18 @@
 version: '3'
+
 services:
     web:
          build: .
+         depends_on: 
+           - mysql
          ports:
              - "5000:3000"
+         environment:
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=samplepassword
+          - MYSQL_DATABASE=test
+          - REACT_APP_SERVER_PORT=5000
+          - MYSQL_HOST_IP= mysql
     mysql:
         image: "mysql:latest"
         restart: always
@@ -11,10 +20,12 @@ services:
         container_name: mysql
         environment:
           - MYSQL_USER=root
+          - MYSQL_PASSWORD=samplepassword
           - MYSQL_ROOT_PASSWORD=password
           - MYSQL_DATABASE=test
+          - REACT_APP_SERVER_PORT=5000
         ports:
             - "3306:3306"
-       
+    
         
     
