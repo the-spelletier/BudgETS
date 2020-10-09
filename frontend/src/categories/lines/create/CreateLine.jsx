@@ -8,16 +8,26 @@ import { LineClient } from "../../../clients/LineClient";
 import UserContext from "../../../contexts/user/UserContext";
 import TextArea from "antd/lib/input/TextArea";
 
-const CreateLine = ({visible, onCancel, categoryId}) => {
+const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const lineClient = new LineClient();
 
-    const {budget} = useContext(BudgetContext);
     const {user} = useContext(UserContext);
 
     //Form info
-    const [line, setLine] = useState({name: "", description: "", estimate: 0});
+    const defaultLine = {name: "", description: "", expenseEstimate: 0};
+    const [line, setLine] = useState(defaultLine);
+
     //Validation
     const [error, setError] = useState({name: false});
+
+    useEffect(() => {
+        if(initialLine !== null){
+            setLine(initialLine);
+        }
+        else{
+            setLine(defaultLine);
+        }
+    }, [initialLine]);
 
     useEffect(() => {
         if(line && line.name && line.name !== ""){
@@ -28,7 +38,7 @@ const CreateLine = ({visible, onCancel, categoryId}) => {
     const addLine = () => {
         const save = async () => {
             try {
-                await lineClient.create(user.token, line.name, line.description, line.estimate, categoryId);
+                await lineClient.create(user.token, line.name, line.description, line.expenseEstimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -54,12 +64,42 @@ const CreateLine = ({visible, onCancel, categoryId}) => {
             save();
         }
     }
+    
+    const editLine = () => {
+        const save = async () => {
+            try {
+                await lineClient.update(user.token, line.id, line.name, line.description, line.expenseEstimate, categoryId);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "La ligne a été modifée avec succès",
+                    });
+                onCancel(); // Closes modal
+            }
+            catch {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en modifiant la ligne",
+                    });
+            }
+        };
+
+        if(!line.name || line.name === "") {
+            setError({...error, name: true});
+        }
+        else {
+            save();
+        }
+    }
 
     return (
         <Modal 
-            title="Ajouter une ligne"
+            title={line.id ? "Modifier une ligne" : "Ajouter une ligne"}
             visible={visible}
-            onOk={addLine}
+            onOk={line.id ? editLine : addLine}
             onCancel={onCancel}>
                 <Alert showIcon type="warning" message="Attention! L'estimé est toujours une valeur positive. La catégorie détermine s'il s'agit d'une entrée ou d'une sortie." />
                 <div className={error.name === false ? "form-section" : "form-section error"}>
@@ -80,8 +120,8 @@ const CreateLine = ({visible, onCancel, categoryId}) => {
                     <InputNumber size="large"
                         min={0}
                         placeholder="Estimé"
-                        value={line.estimate}
-                        onChange={(value) => setLine({...line, estimate: value})} />
+                        value={line.expenseEstimate}
+                        onChange={(value) => setLine({...line, expenseEstimate: value})} />
                 </div>
         </Modal>
     );
