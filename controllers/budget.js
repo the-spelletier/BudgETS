@@ -3,7 +3,8 @@ const budgetService = require('../services/budget');
 
 function getCurrent(req, res) {
     budgetService.getBudget({
-        isActive: true
+        isActive: true,
+        userId: req.user.id
     }).then(budget => {
         sendBudget(budget, res);
     }).catch(err => {
@@ -13,7 +14,9 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.resetGetActiveBudget(budgetDTO(req.params)).then(budget => {
+    let budget = budgetDTO(req.params);
+    budget.userId = req.user.id;
+    budgetService.resetGetActiveBudget(budget).then(budget => {
         sendBudget(budget, res);
     }).catch(err => {
         console.log(err);
@@ -22,7 +25,9 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets(budgetDTO(req.body)).then(budgets => {
+    let budget = budgetDTO(req.body);
+    budget.userId = req.user.id;
+    budgetService.getBudgets(budget).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);
