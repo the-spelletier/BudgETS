@@ -55,6 +55,15 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/frontend/"
+    ],
+    "reporters": [
+      "default",
+      [
+        "./node_modules/jest-html-reporter",
+        {
+          "pageTitle": "Test Report"
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -68,6 +77,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^26.4.2",
+    "jest-html-reporter": "^3.2.0",
     "sequelize-cli": "^6.2.0",
     "supertest": "^5.0.0"
   }

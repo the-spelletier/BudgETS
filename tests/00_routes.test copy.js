@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../app.js');
 
+// INFO: Dummy code for futur reference. Will be removed soon
+
 let token;
 
 beforeAll((done) => {
