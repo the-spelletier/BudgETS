@@ -57,7 +57,8 @@ const resetGetActiveBudget = budget => {
                 where: {
                     id : { 
                         [Op.notIn]: [b.id] 
-                    } 
+                    },
+                    userId: b.userId
                 }
             }).then(() => {
                 b.isActive = true;
