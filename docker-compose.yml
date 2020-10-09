@@ -6,12 +6,12 @@ services:
          depends_on: 
            - mysql
          ports:
-             - "5000:3000"
+             - "3000:3000"
          environment:
           - MYSQL_USER=root
           - MYSQL_PASSWORD=samplepassword
-          - MYSQL_DATABASE=test
-          - REACT_APP_SERVER_PORT=5000
+          - MYSQL_DATABASE=BudgetETS
+          - REACT_APP_SERVER_PORT=3000
           - MYSQL_HOST_IP= mysql
     mysql:
         image: "mysql:latest"
@@ -22,10 +22,26 @@ services:
           - MYSQL_USER=root
           - MYSQL_PASSWORD=samplepassword
           - MYSQL_ROOT_PASSWORD=password
-          - MYSQL_DATABASE=test
-          - REACT_APP_SERVER_PORT=5000
+          - MYSQL_DATABASE=BudgetETS
+          - REACT_APP_SERVER_PORT=3000
         ports:
             - "3306:3306"
+    client:
+        stdin_open: true
+        build: ./frontend
+        environment:
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=samplepassword
+            - MYSQL_DATABASE=BudgetETS
+            - REACT_APP_SERVER_PORT=3000
+            - NODE_PATH=src
+        expose:
+            - "5000"
+        ports:
+            - "5000:5000"
+        links:
+            - web
+        command: yarn start
     
         
     
