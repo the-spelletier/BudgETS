@@ -136,7 +136,7 @@ const Categories = () => {
 
     // General usage
     const [categories, setCategories] = useState(null);
-    const [headerData, setHeaderDate] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
+    const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
     useEffect(() => {
         if (user.token && budget.id) {
