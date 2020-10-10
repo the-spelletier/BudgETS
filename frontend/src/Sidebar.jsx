@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { Menu } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserContext from "./contexts/user/UserContext";
 
 const Sidebar = () => {
@@ -14,8 +14,11 @@ const Sidebar = () => {
 
     };
 
+    const location = useLocation();
+    const {pathname} = location;
+    
     return (
-        <Menu className="menu">
+        <Menu className="menu" selectedKeys={[pathname]}>
             {
                 user.token && 
                 <Fragment>
