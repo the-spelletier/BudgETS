@@ -36,7 +36,6 @@ const verifyAuth = (req, res, next) => {
             req.user = User.build(user, {raw: true});
             next();
         }).catch(err => {
-            console.log(err);
             return res.status(500).send({
                 auth: false,
                 message: 'An unexpected error occurred'
