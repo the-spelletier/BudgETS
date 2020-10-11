@@ -14,10 +14,8 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    let budget = budgetDTO(req.params);
-    budget.userId = req.user.id;
-    budgetService.resetGetActiveBudget(budget).then(budget => {
-        sendBudget(budget, res);
+    budgetService.resetGetActiveBudget(budgetDTO(req.params), req.user).then(b => {
+        sendBudget(b, res);
     }).catch(err => {
         console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
@@ -25,9 +23,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    let budget = budgetDTO(req.body);
-    budget.userId = req.user.id;
-    budgetService.getBudgets(budget).then(budgets => {
+    budgetService.getBudgets(budgetDTO(req.params)).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);

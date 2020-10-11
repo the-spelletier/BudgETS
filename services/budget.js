@@ -2,7 +2,7 @@ const { Op } = require('sequelize');
 const { Budget } = require('../models');
 const { budgetDTO } = require('../dto');
 
-// Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
+// Retourne un budget selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
     return Budget.findOne({
         where: budget
@@ -48,7 +48,7 @@ const deleteBudget = budget => {
 }
 
 // Retourne le budget selon son id et set isActive à true
-const resetGetActiveBudget = budget => {
+const resetGetActiveBudget = (budget, reqUser) => {
     return getBudget(budget).then(b => {
         if (b) {
             return Budget.update({ 
@@ -58,7 +58,7 @@ const resetGetActiveBudget = budget => {
                     id : { 
                         [Op.notIn]: [b.id] 
                     },
-                    userId: b.userId
+                    userId: reqUser.id
                 }
             }).then(() => {
                 b.isActive = true;
