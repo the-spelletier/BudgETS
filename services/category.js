@@ -1,7 +1,7 @@
 const { Category, Line } = require('../models');
 const { categoryDTO } = require('../dto');
 
-// Retourne une catégorie (tous les paramètres) selon l'identificateur envoyé en paramètre
+// Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
     return Category.findOne({
         where: category,
@@ -10,8 +10,11 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = () => {
-    return Category.findAll({ include: Line });
+const getCategories = category => {
+    return Category.findAll({ 
+        where: category,
+        include: Line 
+    });
 };
 
 // Ajout d'une catégorie

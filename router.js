@@ -71,7 +71,7 @@ module.exports.set = app => {
     )
 
     // BUDGET : PUT
-    // Create a new budget
+    // Update a budget
     // Params : { id, startDate, endDate, name }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
@@ -108,7 +108,7 @@ module.exports.set = app => {
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
-    // app.get(
+    // app.delete(
     //     '/api/budget/:id',
     //     authMiddleware.verifyAuth,
     //     budgetController.delete
@@ -133,7 +133,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/category',
+        '/api/budget/:budgetId/category',
         authMiddleware.verifyAuth,
         categoryController.getAll
     );
@@ -264,7 +264,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/entry/all',
+        '/api/budget/:budgetId/entry',
         authMiddleware.verifyAuth,
         entryController.getAll
     );
