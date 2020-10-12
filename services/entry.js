@@ -56,12 +56,12 @@ const updateEntry = entry => {
         where: {
             id: entry.id 
         }
-    }).then(c => {
-        if (c) {
-            entryDTO(entry, c);
-            return c.save();
+    }).then(e => {
+        if (e) {
+            entryDTO(entry, e);
+            return e.save();
         }
-        return c;
+        return e;
     });
 }
 
