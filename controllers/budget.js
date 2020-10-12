@@ -36,8 +36,8 @@ function create(req, res) {
     let sDate = new Date(budget.startDate);
     let eDate = new Date(budget.endDate);
     if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
-        budget.userId = req.user.id
-        budget.isActive = false; 
+        budget.isActive = false;
+        budget.userId = req.user.id;
         budgetService.addBudget(budget).then(b => {
             res.status(201);
             sendBudget(b, res);
@@ -53,6 +53,7 @@ function update(req, res) {
     let budget = budgetDTO(req.body);
     if (req.params.id) {
         budget.id = req.params.id;
+        budget.userId = req.user.id;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {

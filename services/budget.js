@@ -27,10 +27,16 @@ const addBudget = budget => {
 const updateBudget = budget => {
     return Budget.findOne({
         where: {
-            id: budget.id 
+            id: budget.id,
+            userId: budget.userId
         }
     }).then(b => {
+        let startDate = new Date(budget.startDate || b.startDate);
+        let endDate = new Date(budget.endDate || b.endDate);
         if (b) {
+            if (startDate.getTime() > endDate.getTime()) {
+                throw new Error('Invalid date');
+            }
             budgetDTO(budget, b);
             return b.save();
         }
