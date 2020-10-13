@@ -30,7 +30,7 @@ const BudgetCreate = () => {
     const submit = () => {
         const save = async() => {
             try {
-                await budgetClient.create(user.token, name, startDate, endDate, true);
+                await budgetClient.create(user.token, name, startDate, endDate, false);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,

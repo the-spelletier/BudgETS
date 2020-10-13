@@ -20,7 +20,7 @@ export class BudgetClient {
     update = async (token, id, name, startDate, endDate) => {
         const apiClient = new ApiClient();
         var params = {id, name, startDate, endDate};
-        return await apiClient.put(`/budget`, params, token);
+        return await apiClient.put(`/budget/${id}`, params, token);
     }
 
     create = async (token, name, startDate, endDate, isActive) => {

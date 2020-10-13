@@ -3,7 +3,8 @@ const budgetService = require('../services/budget');
 
 function getCurrent(req, res) {
     budgetService.getBudget({
-        isActive: true
+        isActive: true,
+        userId: req.user.id
     }).then(budget => {
         sendBudget(budget, res);
     }).catch(err => {
@@ -13,8 +14,8 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.resetGetActiveBudget(budgetDTO(req.params)).then(budget => {
-        sendBudget(budget, res);
+    budgetService.resetGetActiveBudget(budgetDTO(req.params), req.user).then(b => {
+        sendBudget(b, res);
     }).catch(err => {
         console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
@@ -22,7 +23,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets().then(budgets => {
+    budgetService.getBudgets(budgetDTO(req.params)).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);
@@ -32,8 +33,11 @@ function getAll(req, res) {
 
 function create(req, res) {
     let budget = budgetDTO(req.body);
-    if (budget.name && budget.startDate && budget.endDate && !budget.isActive) {
-        budget.userId = req.user.id
+    let sDate = new Date(budget.startDate);
+    let eDate = new Date(budget.endDate);
+    if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
+        budget.isActive = false;
+        budget.userId = req.user.id;
         budgetService.addBudget(budget).then(b => {
             res.status(201);
             sendBudget(b, res);
@@ -49,6 +53,7 @@ function update(req, res) {
     let budget = budgetDTO(req.body);
     if (req.params.id) {
         budget.id = req.params.id;
+        budget.userId = req.user.id;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {

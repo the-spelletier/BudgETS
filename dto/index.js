@@ -71,9 +71,41 @@ const lineDTO = (line, l = {}) => {
   return l;
 };
 
+const entryDTO = (entry, e = {}) => {
+  if (typeof entry.id != 'undefined') {
+    e.id = entry.id;
+  }
+  if (typeof entry.amount != 'undefined') {
+    e.amount = entry.amount;
+  }
+  if (typeof entry.date != 'undefined') {
+    e.date = entry.date;
+  }
+  if (typeof entry.member != 'undefined') {
+    e.member = entry.member;
+  }
+  if (typeof entry.description != 'undefined') {
+    e.description = entry.description;
+  }
+  if (typeof entry.type != 'undefined') {
+    e.type = entry.type;
+  }
+  if (typeof entry.lineId != 'undefined') {
+    e.lineId = entry.lineId;
+  }
+  if (typeof entry.Receipt != 'undefined') {
+    e.Receipt = entry.Receipt;
+  }
+  if (typeof entry.EntryStatus != 'undefined') {
+    e.EntryStatus = entry.EntryStatus;
+  }
+  return e;
+};
+
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
-  lineDTO
+  lineDTO,
+  entryDTO
 }
