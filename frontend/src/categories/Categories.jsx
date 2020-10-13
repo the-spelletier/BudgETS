@@ -152,22 +152,16 @@ const Categories = () => {
         return [
             {
                 title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                width: 30,
                 render: () => ""
             },
             { 
-                title: category.id,
+                title: "",
+                width: 30,
                 render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
             },
             {
                 title: category.name,
-                render: () => ""
-            },
-            {
-                title: "",
-                render: (line) => line.id
-            },
-            {
-                title: "",
                 render: (line) => line.name
             },
             {
@@ -177,10 +171,6 @@ const Categories = () => {
             {
                 title: totalEstimate,
                 render: (line) => category.type === "revenue" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
-            },
-            {
-                title: "0", 
-                render: () => 0
             }
         ]
     };
@@ -239,6 +229,10 @@ const Categories = () => {
                                 </Fragment>
                             )
                         }    
+                        {
+                            categories && categories.length === 0 && 
+                            <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
+                        }
                     </Card>
                 </Fragment>
             }
