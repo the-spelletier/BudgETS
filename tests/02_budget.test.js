@@ -154,8 +154,7 @@ describe('2.0 - Budget', () => {
                 .expect(400, done);
             
         });
-        /*
-        test("021006 - Présence d'un statut actif", (done) => { // N/A
+        test("021006 - Nom budget vide", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
@@ -172,14 +171,13 @@ describe('2.0 - Budget', () => {
             request(app)
                 .post('/api/budget')
                 .send({
-                    name: 'budgetTest_create6',
+                    name: '',
                     startDate: start,
                     endDate: end,
                     isActive: true
                 })
                 .expect(400, done);
         });
-        */
         test("021007 - Date début plus grand que fin", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
@@ -263,7 +261,6 @@ describe('2.0 - Budget', () => {
                 .get('/api/budget/')
                 .expect(200)
                 .then((response) => {
-                    console.log(response.body)
                     expect(response.body.length).toEqual(2);
                     expect(response.body[0]).toEqual(
                         expect.objectContaining({
@@ -427,7 +424,7 @@ describe('2.0 - Budget', () => {
                     endDate: start,
                     isActive: false
                 })
-                .expect(400, done);
+                .expect(403, done);
             
         });
         test("024003 - Mets à jour sans authentification", (done) => {
@@ -448,7 +445,7 @@ describe('2.0 - Budget', () => {
                 .expect(401, done);
             
         });
-        test("023004 - Mets à jour budget qui ne m'appartient pas", (done) => {
+        test("024004 - Mets à jour budget qui ne m'appartient pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
@@ -473,7 +470,7 @@ describe('2.0 - Budget', () => {
                 .expect(404, done);
             
         });
-        test("023005 - Mets à jour budget qui n'existe pas", (done) => {
+        test("024005 - Mets à jour budget qui n'existe pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
