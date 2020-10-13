@@ -1,60 +1,35 @@
-import React, { Fragment } from "react";
-import { Card, Table } from "antd";
-import BudgetHeader from "../budget/header/BudgetHeader";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Card, Table, Button } from "antd";
+import BudgetHeader from "../budget/header/BudgetHeader"; 
+import CreateEntry from "./create/CreateEntry";
+import EditMenu from "../components/edit-menu/EditMenu";
+import { EntryClient } from "../clients/EntryClient";
+import UserContext from "../contexts/user/UserContext";
+import BudgetContext from "../contexts/budget/BudgetContext";
 
 const Entries = () => {
-    const [entries, setEntries] = useState(null);
+    const entryClient = new EntryClient();
+    
+    const {user} = useContext(UserContext);
+    const {budget} = useContext(BudgetContext);
 
-    //On load, get entries for budget
+    const [entries, setEntries] = useState(null);
+    const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
+
     useEffect(() => {
         const getEntries = async() => {
-            //TODO : call client 
-            //Set entries
+            var response = await entryClient.getList(user.token, budget.id);
+            setEntries(response.data.length > 0 ? response.data : [{}]);
         }
 
-        // TODO : Remove
-        setEntries([
-            {
-                type : "revenue", 
-                categoryId : "001", 
-                lineId : "001", 
-                receiptId : "20201008R001001001", 
-                member : "Veronique Bergeron", 
-                description : "Une courte description", 
-                date : "2020-10-09", 
-                amount: 10,
-                status : "Not Sent"
-            },
-            {
-                type : "revenue", 
-                categoryId : "001", 
-                lineId : "001", 
-                receiptId : "20201008R001001002", 
-                member : "Veronique Bergeron", 
-                description : "Une courte description", 
-                date : "2020-10-09", 
-                amount: 30,
-                status : "Sent"
-            },
-            {
-                type : "depense", 
-                categoryId : "002", 
-                lineId : "001", 
-                receiptId : "20201008R002001001", 
-                member : "Veronique Bergeron", 
-                description : "Une courte description", 
-                date : "2020-10-09", 
-                amount: 60,
-                status : "Not Sent"
-            }
-        ]);
-
         getEntries();
-    }, []);
+    }, [createModalIsVisible]);
 
     const columns = [
+        {
+            title: "",
+            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} />
+        },
         {
             title: "# Facture",
             render: (entry) => entry.receiptId 
@@ -77,7 +52,7 @@ const Entries = () => {
         },
         {
             title: "Montant",
-            render: (entry) => entry.type === "revenue" ? entry.amount : "(" + entry.amount + ")" 
+            render: (entry) => entry.amount ? entry.type === "revenue" ? entry.amount : "(" + entry.amount + ")" : ""
         },
         {
             title: "Date",
@@ -92,6 +67,7 @@ const Entries = () => {
     return (
         <Fragment>
             <BudgetHeader />
+            <CreateEntry visible={createModalIsVisible} onCancel={() => setCreateModalIsVisible(false)} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
             </Card>
