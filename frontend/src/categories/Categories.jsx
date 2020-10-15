@@ -1,82 +1,162 @@
-import React, { Fragment } from "react";
-import { Table, Button, Popover, Card} from "antd";
-import { SettingOutlined } from '@ant-design/icons';
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Table, Card, notification, Button} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
-import "./categories.scss";
 import BudgetHeader from "../budget/header/BudgetHeader";
-import { useState } from "react";
 import CreateCategory from "./create/CreateCategorie";
+import CreateLine from "./lines/create/CreateLine";
+import { CategoryClient } from "../clients/CategoryClient";
+import { LineClient } from "../clients/LineClient";
+import UserContext from "../contexts/user/UserContext";
+import BudgetContext from "../contexts/budget/BudgetContext";
+
+import "./categories.scss";
 
 const Categories = () => {
-    const [createCategoryModalIsVisible, setCreateCategoryModalIsVisible] = useState(false);
+    const categoryClient = new CategoryClient();
+    const lineClient = new LineClient();
+
+    const {budget} = useContext(BudgetContext);
+    const {user} = useContext(UserContext)
+
+    const getCategories = async() => {
+        var response = await categoryClient.getList(user.token, budget.id);
+        setCategories(response.data);
+    };
+
+    // TODO : find a cleaner way 
+    const [refreshCategories, setRefreshCategories] = useState(false);
+
+    // Create category
+    const [createOrEditCategoryModalIsVisible, setOrEditCreateCategoryModalIsVisible] = useState(false);
+    
+    // Edit category
+    const [currentCategory, setCurrentCategory] = useState(null);
+    const onEditCategory = (category) => {
+        setCurrentCategory(category);
+        setOrEditCreateCategoryModalIsVisible(true);
+    }
 
     const onCreateCategory = () => {
-        setCreateCategoryModalIsVisible(true);
-    }
+        setOrEditCreateCategoryModalIsVisible(true);
+    };
 
-    const onCreateCategoryModalCancel = () => {
-        setCreateCategoryModalIsVisible(false);
-    }
+    const onCreateOrEditCategoryModalCancel = () => {
+        setCurrentCategory(null);
+        setOrEditCreateCategoryModalIsVisible(false);
+    };
 
-    // TODO : get data from backend
-    const sampleData = [
-        {
-            id: "1",
-            name: "Cat 1",
-            type: "R", 
-            lines: [
-                {
-                    id: 1,
-                    name: "line 1",
-                    description: "My cool first description",
-                    estimate: 100
-                },
-                {
-                    id: 2,
-                    name: "line 2",
-                    description: "My cool second description",
-                    estimate: 30
-                }
-            ]
-        },
-        {
-            id: "2",
-            name: "Cat 2",
-            type: "D", 
-            lines: [
-                {
-                    id: 1,
-                    name: "line 1",
-                    description: "My cool first description",
-                    estimate: 100
-                },
-                {
-                    id: 2,
-                    name: "line 2",
-                    description: "My cool second description",
-                    estimate: 30
-                }
-            ]
+    // Delete category
+    const onDeleteCategory = (category) => {
+        const deleteCategory = async() => {
+            try {
+                await categoryClient.delete(user.token, budget.id, category.id);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "La catégorie a été supprimée avec succès",
+                    });
+            }
+            catch (e) {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en supprimant la catégorie",
+                    });
+            }
+        };
+
+        if (!category.Lines || category.Lines.length === 0) {
+            deleteCategory();
+
+            var newCategories = categories.filter((c) => c.id !== category.id);
+            setCategories(newCategories);
+
         }
-    ]
+        else {
+            notification.open({
+                message: "Erreur",
+                icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                description:
+                  "Impossible de supprimer la catégorie : des lignes lui sont associées!",
+                });
+        }
+    }
 
-    // TODO : get data from backend
-    const headerData = {total: "Total", estimateTotal: 0, realTotal: 0};
+    // Create line
+    const [createOrEditLineModalIsVisible, setCreateOrEditLineModalIsVisible] = useState(false);
+    const [createOrEditLineAssociatedCategory, setCreateLineAssociatedCategory] = useState(null);
+    const [currentLine, setCurrentLine] = useState(null);
+
+    const onEditLine = (categoryId, line) => {
+        setCurrentLine(line);
+        setCreateLineAssociatedCategory(categoryId);
+        setCreateOrEditLineModalIsVisible(true);
+    }
+
+    const onCreateLine = (categoryId) => {
+        setCreateLineAssociatedCategory(categoryId);
+        setCreateOrEditLineModalIsVisible(true);
+    };
+
+    const onCreateOrEditLineModalCancel = () => {
+        setCreateLineAssociatedCategory(null);
+        setCreateOrEditLineModalIsVisible(false);
+        setCurrentLine(null);
+    };
+
+    const onDeleteLine = (line) => {
+        const deleteLine = async() => {
+            try {
+                await lineClient.delete(user.token, line.id);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "La ligne a été supprimée avec succès",
+                    });
+                setRefreshCategories(true);
+            }
+            catch (e) {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en supprimant la ligne",
+                    });
+            }
+        };
+
+        deleteLine();
+    };
+
+    // General usage
+    const [categories, setCategories] = useState(null);
+    const [headerData, setHeaderDate] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
+
+    useEffect(() => {
+        if (user.token && budget.id) {
+            getCategories();
+            setRefreshCategories(false);
+        }
+    }, [user.token, budget.id, createOrEditCategoryModalIsVisible, createOrEditLineModalIsVisible, refreshCategories]);
 
     const buildColumns = (category) => {
         var totalEstimate = 0;
-        category.lines.forEach((line) => totalEstimate += line.estimate);
+        category.Lines.forEach((line) => totalEstimate += line.estimate);
 
         return [
             {
-                title: <EditMenu onNewClick={onCreateCategory}/>,
+                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
                 render: () => ""
             },
             { 
                 title: category.id,
-                render: () => <EditMenu /> 
+                render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
             },
             {
                 title: category.name,
@@ -96,7 +176,7 @@ const Categories = () => {
             },
             {
                 title: totalEstimate,
-                render: (line) => category.type === "R" ? line.estimate : "( " + line.estimate + " )"
+                render: (line) => category.type === "revenue" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
             },
             {
                 title: "0", 
@@ -139,13 +219,29 @@ const Categories = () => {
     return (
         <Fragment>
             <BudgetHeader />
-            <CreateCategory visible={createCategoryModalIsVisible} onCancel={onCreateCategoryModalCancel} />
-            <Card>
-                <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
-                {
-                    sampleData.map((category) => <EditableTable columns={buildColumns(category)} values={category.lines}/>)
-                }    
-            </Card>
+            {
+                categories &&
+                <Fragment>
+                    <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
+                    <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
+                    <Card>
+                        <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
+                        {
+                            categories.map((category) => 
+                                <Fragment>
+                                    {  
+                                        category.Lines && <EditableTable columns={buildColumns(category)} values={category.Lines}/> 
+                                    }
+                                    { 
+                                        category.Lines && category.Lines.length === 0 && 
+                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                                    }
+                                </Fragment>
+                            )
+                        }    
+                    </Card>
+                </Fragment>
+            }
         </Fragment>
     );
 };

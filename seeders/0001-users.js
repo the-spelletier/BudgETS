@@ -14,6 +14,7 @@ module.exports = {
      * }], {});
     */
     return queryInterface.bulkInsert('Users', [{
+        id: 1,
         username: 'budgets_admin',
         password: bcrypt.hashSync("admin_2020", config.saltRounds),
         isAdmin: true

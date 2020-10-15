@@ -1,7 +1,8 @@
 const { Op } = require('sequelize');
 const { Budget } = require('../models');
+const { budgetDTO } = require('../dto');
 
-// Retourne un budget (tous les paramètres) selon l'identificateur envoyé en paramètre
+// Retourne un budget selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
     return Budget.findOne({
         where: budget
@@ -9,8 +10,10 @@ const getBudget = budget => {
 }
 
 // Retourne tous les budgets
-const getBudgets = () => {
-    return Budget.findAll();
+const getBudgets = budget => {
+    return Budget.findAll({ 
+        where: budget
+    });
 };
 
 // Ajout d'un budget
@@ -22,10 +25,22 @@ const addBudget = budget => {
 
 // Mise à jour d'un budget selon l'identificateur envoyé en paramètre
 const updateBudget = budget => {
-    return Budget.update(budget, { 
-        where: { 
-            id: budget.id 
-        } 
+    return Budget.findOne({
+        where: {
+            id: budget.id,
+            userId: budget.userId
+        }
+    }).then(b => {
+        let startDate = new Date(budget.startDate || b.startDate);
+        let endDate = new Date(budget.endDate || b.endDate);
+        if (b) {
+            if (startDate.getTime() > endDate.getTime()) {
+                throw new Error('Invalid date');
+            }
+            budgetDTO(budget, b);
+            return b.save();
+        }
+        return b;
     });
 }
 
@@ -39,7 +54,7 @@ const deleteBudget = budget => {
 }
 
 // Retourne le budget selon son id et set isActive à true
-const resetGetActiveBudget = budget => {
+const resetGetActiveBudget = (budget, reqUser) => {
     return getBudget(budget).then(b => {
         if (b) {
             return Budget.update({ 
@@ -48,7 +63,8 @@ const resetGetActiveBudget = budget => {
                 where: {
                     id : { 
                         [Op.notIn]: [b.id] 
-                    } 
+                    },
+                    userId: reqUser.id
                 }
             }).then(() => {
                 b.isActive = true;

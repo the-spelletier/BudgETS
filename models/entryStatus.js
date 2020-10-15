@@ -1,6 +1,7 @@
 'use strict';
 const {
-  Model
+  Model,
+  Sequelize
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -14,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     EntryStatus.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING
         },

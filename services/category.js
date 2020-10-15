@@ -1,15 +1,20 @@
-const { Category } = require('../models');
+const { Category, Line } = require('../models');
+const { categoryDTO } = require('../dto');
 
-// Retourne une catégorie (tous les paramètres) selon l'identificateur envoyé en paramètre
+// Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
     return Category.findOne({
-        where: category
+        where: category,
+        include: Line
     });
 }
 
 // Retourne toutes les catégories
-const getCategories = () => {
-    return Category.findAll();
+const getCategories = category => {
+    return Category.findAll({ 
+        where: category,
+        include: Line 
+    });
 };
 
 // Ajout d'une catégorie
@@ -19,35 +24,26 @@ const addCategory = category => {
 
 // Mise à jour d'une catégorie selon l'identificateur envoyé en paramètre
 const updateCategory = category => {
-    return Category.update(category, { 
-        where: { 
+    return Category.findOne({
+        where: {
             id: category.id 
-        } 
+        }
+    }).then(c => {
+        if (c) {
+            categoryDTO(category, c);
+            return c.save();
+        }
+        return c;
     });
 }
 
 // Suppression d'une catégorie selon l'identificateur envoyé en paramètre
 const deleteCategory = category => {
-    return Category.findOne({ 
-        where: { 
-            id: category.id 
-        } 
-    }).then(cat => {
-      // La catégorie existe
-      if(!cat){
-        return ; // TODO : Add error? 
-      }
-      // La catégorie n'a aucune lignes
-      if(cat.lines.lenght!=0){
-        return ; // TODO : Add error? 
-      }
-      // Suppression
-      return Category.destroy({ 
-        where: { 
-            id: category.id 
-        } 
-      });
-    });
+  return Category.destroy({ 
+    where: { 
+        id: category.id 
+    } 
+  });
 }
 
 module.exports = {

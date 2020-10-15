@@ -1,13 +1,17 @@
-const userDTO = user => {
-  return {
-    id: user.id,
-    username: user.username,
-    isAdmin: user.isAdmin
-  };
+const userDTO = (user, u = {}) => {
+  if (typeof user.id != 'undefined') {
+    u.id = user.id;
+  }
+  if (typeof user.username != 'undefined') {
+    u.username = user.username;
+  }
+  if (typeof user.isAdmin != 'undefined') {
+    u.isAdmin = user.isAdmin === true;
+  }
+  return u;
 };
 
-const budgetDTO = budget => {
-  let b = {};
+const budgetDTO = (budget, b = {}) => {
   if (typeof budget.id != 'undefined') {
     b.id = budget.id;
   }
@@ -23,29 +27,85 @@ const budgetDTO = budget => {
   if (typeof budget.isActive != 'undefined') {
     b.isActive = budget.isActive;
   }
+  if (typeof budget.userId != 'undefined') {
+    b.userId = budget.userId;
+  }
   return b;
 };
 
-const categoryDTO = category => {
-  return {
-    id: category.id,
-    name: category.name,
-    type: category.type
-  };
+const categoryDTO = (category, c = {}) => {
+  if (typeof category.id != 'undefined') {
+    c.id = category.id;
+  }
+  if (typeof category.name != 'undefined') {
+    c.name = category.name;
+  }
+  if (typeof category.type != 'undefined') {
+    c.type = category.type;
+  }
+  if (typeof category.budgetId != 'undefined') {
+    c.budgetId = category.budgetId;
+  }
+  if (typeof category.Lines != 'undefined') {
+    c.Lines = category.Lines;
+  }
+  return c;
 };
 
-const lineDTO = line => {
-  return {
-    id: line.id,
-    name: line.name,
-    description: line.description,
-    estimate: line.expenseEstimate
-  };
+const lineDTO = (line, l = {}) => {
+  if (typeof line.id != 'undefined') {
+    l.id = line.id;
+  }
+  if (typeof line.name != 'undefined') {
+    l.name = line.name;
+  }
+  if (typeof line.description != 'undefined') {
+    l.description = line.description;
+  }
+  if (typeof line.expenseEstimate != 'undefined') {
+    l.expenseEstimate = line.expenseEstimate;
+  }
+  if (typeof line.categoryId != 'undefined') {
+    l.categoryId = line.categoryId;
+  }
+  return l;
+};
+
+const entryDTO = (entry, e = {}) => {
+  if (typeof entry.id != 'undefined') {
+    e.id = entry.id;
+  }
+  if (typeof entry.amount != 'undefined') {
+    e.amount = entry.amount;
+  }
+  if (typeof entry.date != 'undefined') {
+    e.date = entry.date;
+  }
+  if (typeof entry.member != 'undefined') {
+    e.member = entry.member;
+  }
+  if (typeof entry.description != 'undefined') {
+    e.description = entry.description;
+  }
+  if (typeof entry.type != 'undefined') {
+    e.type = entry.type;
+  }
+  if (typeof entry.lineId != 'undefined') {
+    e.lineId = entry.lineId;
+  }
+  if (typeof entry.Receipt != 'undefined') {
+    e.Receipt = entry.Receipt;
+  }
+  if (typeof entry.EntryStatus != 'undefined') {
+    e.EntryStatus = entry.EntryStatus;
+  }
+  return e;
 };
 
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
-  lineDTO
+  lineDTO,
+  entryDTO
 }
