@@ -1,11 +1,26 @@
 const { Op } = require('sequelize');
-const { Budget } = require('../models');
+const { Budget, Category, Line } = require('../models');
 const { budgetDTO } = require('../dto');
 
 // Retourne un budget selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
     return Budget.findOne({
         where: budget
+    });
+}
+
+// Retourne un budget selon l'ID
+const getBudgetByID = id => {
+    return Budget.findOne({
+        where: {
+            id : id
+        },
+        include: [{
+            model: Category,
+            include: [{
+                model: Line,
+            }]
+        }]
     });
 }
 
@@ -80,5 +95,6 @@ module.exports = {
     addBudget,
     updateBudget,
     deleteBudget,
-    resetGetActiveBudget
+    resetGetActiveBudget,
+    getBudgetByID
 };

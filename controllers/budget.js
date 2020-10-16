@@ -1,5 +1,7 @@
-const { budgetDTO } = require('../dto');
+const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
 const budgetService = require('../services/budget');
+const categoryService = require('../services/category');
+const lineService = require('../services/line');
 
 function getCurrent(req, res) {
     budgetService.getBudget({
@@ -65,7 +67,56 @@ function update(req, res) {
 }
 
 function clone(req, res) {
+    let budget = budgetDTO(req.body);
+    if (req.params.id) {
 
+        // Dates for validation
+        let sDate = new Date(budget.startDate);
+        let eDate = new Date(budget.endDate);
+        if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
+
+            budget.isActive = false;
+            budget.userId = req.user.id;
+
+            // Get for all categories and lines
+            budgetService.getBudgetByID(req.params.id).then(oldB => {
+
+                // Create new budgets
+                budgetService.addBudget(budget).then(newB => {
+
+                    // Adding each category
+                    let categoryAdd;
+                    oldB.Categories.forEach(oldC => {
+                        categoryAdd = categoryDTO(oldC);
+                        delete categoryAdd.id;
+                        categoryAdd.budgetId = newB.id; // Assign cat to new budget
+                        categoryService.addCategory(categoryAdd).then(newC => {
+                            
+                            // Adding the lines
+                            let lineAdd;
+                            oldC.Lines.forEach(oldL => {
+                                lineAdd = lineDTO(oldL);
+
+                                delete lineAdd.id;
+                                lineAdd.categoryId = newC.id;
+                                lineService.addLine(lineAdd);
+                            });
+                            
+                        }).catch(err => {
+                            res.status(403).send({ message: 'Error saving category' });
+                        });
+                    });
+                    
+                    sendBudget(newB, res);
+
+                }).catch(err => {
+                    res.status(403).send({ message: 'Error saving budget' });
+                });
+            }).catch(err => {
+                res.status(403).send({ message: 'Error fetching budget' });
+            });
+        }
+    }
 }
 
 function getSummary(req, res) {
