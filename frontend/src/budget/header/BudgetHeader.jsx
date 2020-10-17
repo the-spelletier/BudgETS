@@ -77,6 +77,12 @@ const BudgetHeader = () => {
                 size="large" 
                 type="primary" 
                 onClick={() => {return null}}>
+                    <Link to="/budget/clone"><PlusOutlined /> Clôner</Link>
+            </Button>
+            <Button className="new-budget-button"
+                size="large" 
+                type="primary" 
+                onClick={() => {return null}}>
                     <Link to="/budget/create"><PlusOutlined /> Nouveau</Link>
             </Button>
         </div>

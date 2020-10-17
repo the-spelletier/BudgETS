@@ -28,4 +28,13 @@ export class BudgetClient {
         var params = {name, startDate, endDate, isActive};
         return await apiClient.post('/budget', params, token);
     }
+
+    create = async (token, name, startDate, endDate, isActive, clone, budgetId) => {
+        const apiClient = new ApiClient();
+        var params = {name, startDate, endDate, isActive};
+        if (clone)
+            return await apiClient.post(`/budget/clone/${budgetId}`, params, token);
+        else
+            return await apiClient.post('/budget', params, token);
+    }
 };
