@@ -1,4 +1,4 @@
-const { Line } = require('../models');
+const { Line, Category } = require('../models');
 const { lineDTO } = require('../dto');
 
 // Retourne une lingne (tous les paramètres) selon l'identificateur envoyé en paramètre
@@ -9,9 +9,15 @@ const getLine = line => {
 }
 
 // Retourne toutes les lignes
-const getLines = line => {
-  	return Line.findAll({ 
-        where: line
+const getLines = budgetId => {
+    return Line.findAll({ 
+      include: {
+        model: Category,
+        required: true,
+        where: {
+          budgetId: budgetId
+        }
+      }
     });
 };
 

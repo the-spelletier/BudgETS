@@ -93,8 +93,8 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
   }
-  if (typeof entry.Receipt != 'undefined') {
-    e.Receipt = entry.Receipt;
+  if (typeof entry.receiptCode != 'undefined') {
+    e.receiptCode = entry.receiptCode;
   }
   if (typeof entry.EntryStatus != 'undefined') {
     e.EntryStatus = entry.EntryStatus;
