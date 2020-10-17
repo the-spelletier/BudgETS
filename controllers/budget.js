@@ -86,6 +86,7 @@ function clone(req, res) {
 
                     // Adding each category
                     let categoryAdd;
+                    let message = '';
                     oldB.Categories.forEach(oldC => {
                         categoryAdd = categoryDTO(oldC);
                         delete categoryAdd.id;
@@ -99,21 +100,27 @@ function clone(req, res) {
 
                                 delete lineAdd.id;
                                 lineAdd.categoryId = newC.id;
-                                lineService.addLine(lineAdd);
+                                lineService.addLine(lineAdd).catch(err => {
+                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + '\n';
+                                });
+                                
+                                return;
                             });
+
+                            return ;
                             
                         }).catch(err => {
-                            res.status(403).send({ message: 'Error saving category' });
+                            message = message + 'Impossible d\'ajouter la catégorie ' + categoryAdd.name + '\n';
                         });
                     });
                     
                     sendBudget(newB, res);
 
                 }).catch(err => {
-                    res.status(403).send({ message: 'Error saving budget' });
+                    res.status(403).send({ message: 'Impossible d\'ajouter le budget' });
                 });
             }).catch(err => {
-                res.status(403).send({ message: 'Error fetching budget' });
+                res.status(403).send({ message: 'Impossible de trouver le budget de référence' });
             });
         }
     }
