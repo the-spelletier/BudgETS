@@ -43,7 +43,7 @@ const Sidebar = () => {
                 </Fragment>
             }
             <Menu.Item key="6">
-                <a href="">Aide</a>
+                <Link to="/help">Aide</Link>
             </Menu.Item>
             <Menu.Item className="bottom login" key="/auth">
                 { !user.token && <Link to="/auth">Se connecter</Link> }
