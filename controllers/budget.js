@@ -14,7 +14,9 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.resetGetActiveBudget(budgetDTO(req.params), req.user).then(b => {
+    let budget = budgetDTO(req.params);
+    budget.userId = req.user.id;
+    budgetService.resetGetActiveBudget(budget, req.user).then(b => {
         sendBudget(b, res);
     }).catch(err => {
         console.log(err);
@@ -23,7 +25,9 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets(budgetDTO(req.params)).then(budgets => {
+    let budget = budgetDTO(req.params);
+    budget.userId = req.user.id;
+    budgetService.getBudgets(budget).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);
