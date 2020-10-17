@@ -9,7 +9,7 @@ export class CategoryClient {
 
     getList = async (token, budgetId) => {
         const apiClient = new ApiClient();
-        return await apiClient.get(`/category?budgetId=${budgetId}`, token);
+        return await apiClient.get(`/budget/${budgetId}/category`, token);
     }
 
     update = async (token, budgetId, id, name, type) => {
