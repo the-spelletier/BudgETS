@@ -9,7 +9,7 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = (budgetId, light) => {
+const getCategories = (budgetId, light, type) => {
     let options = { 
         where: {
             budgetId: budgetId
@@ -17,6 +17,9 @@ const getCategories = (budgetId, light) => {
     };
     if (!light) {
         options.include = Line;
+    }
+    if (type) {
+        options.where.type = type;
     }
     return Category.findAll(options);
 };

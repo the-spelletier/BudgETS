@@ -12,7 +12,8 @@ function get(req, res) {
 
 function getAll(req, res) {
     let light = typeof req.query.light !== 'undefined';
-    categoryService.getCategories(req.params.budgetId, light).then(categories => {
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    categoryService.getCategories(req.params.budgetId, light, type).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
         console.log(err);
