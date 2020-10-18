@@ -222,8 +222,8 @@ describe('2.0 - Budget', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: '3',
-                            name: 'budgetTest0201',
+                            id: '6',
+                            name: 'budgetTest00201',
                             startDate: new Date(2020, 0, 1).toJSON(),
                             endDate: new Date(2020, 11, 31).toJSON(),
                             isActive: true,
@@ -261,23 +261,16 @@ describe('2.0 - Budget', () => {
                 .get('/api/budget/')
                 .expect(200)
                 .then((response) => {
-                    expect(response.body.length).toEqual(2);
-                    expect(response.body[0]).toEqual(
-                        expect.objectContaining({
-                            id: '3',
-                            name: 'budgetTest0201',
-                            isActive: true,
-                            userId: '2'
-                        })
-                    );
-                    expect(response.body[1]).toEqual(
-                        expect.objectContaining({
-                            id: '4',
-                            name: 'budgetTest0202',
-                            isActive: false,
-                            userId: '2'
-                        })
-                    );
+                    expect(response.body.length).toEqual(5);
+                    for (let i = 0; i < response.body.length; ++i) {
+                        const active = (i == 0);
+                        expect(response.body).toContainEqual({
+                                id: (6 + i).toString(),
+                                name: 'budgetTest002' + ("0" + (i + 1)).slice(-2),
+                                isActive: active,
+                                userId: '2'
+                        });
+                    }
                     done();
                 });
             
@@ -309,7 +302,7 @@ describe('2.0 - Budget', () => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
                             id: '2',
-                            name: 'budgetTest0102',
+                            name: 'budgetTest00102',
                             startDate: new Date(2019, 0, 1).toJSON(),
                             endDate: new Date(2019, 11, 31).toJSON(),
                             isActive: true,
@@ -332,7 +325,7 @@ describe('2.0 - Budget', () => {
             });
 
             request(app)
-                .get('/api/budget/3')
+                .get('/api/budget/6')
                 .expect(404, done);
             
         });
@@ -379,7 +372,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/6')
+                .put('/api/budget/11')
                 .send({
                     name: 'budgetTest_updated1',
                     startDate: start,
@@ -390,7 +383,7 @@ describe('2.0 - Budget', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: '6',
+                            id: '11',
                             name: 'budgetTest_updated1',
                             startDate: start,
                             endDate: end,
@@ -417,7 +410,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/5')
+                .put('/api/budget/12')
                 .send({
                     name: 'budgetTest_updated2',
                     startDate: end,
@@ -460,7 +453,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/5')
+                .put('/api/budget/11')
                 .send({
                     name: 'budgetTest_updated4',
                     startDate: start,
