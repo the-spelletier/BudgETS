@@ -10,9 +10,11 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = category => {
+const getCategories = budgetId => {
     return Category.findAll({ 
-        where: category,
+        where: {
+            budgetId: budgetId
+        },
         include: Line 
     });
 };

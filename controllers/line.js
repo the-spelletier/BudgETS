@@ -11,7 +11,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    lineService.getLines(lineDTO(req.params)).then(lines => {
+    lineService.getLines(req.params.budgetId).then(lines => {
         sendLine(lines, res);
     }).catch(err => {
         console.log(err);
