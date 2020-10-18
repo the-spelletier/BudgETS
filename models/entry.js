@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'entryStatusId',
                 onDelete: 'RESTRICT'
             });
-            Entry.belongsTo(models.Receipt, {
-                foreignKey: 'receiptId',
-                onDelete: 'RESTRICT'
-            });
         }
     };
 
@@ -58,9 +54,8 @@ module.exports = (sequelize, DataTypes) => {
                 isIn: [['revenue', 'expense']]
             }
         },
-        receiptId: {
-            type: DataTypes.UUID,
-            allowNull: false
+        receiptCode: {
+            type: DataTypes.STRING
         }
     }, {
         sequelize,

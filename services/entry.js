@@ -1,4 +1,4 @@
-const { Entry, EntryStatus, Receipt, Line, Category } = require('../models');
+const { Entry, EntryStatus, Line, Category } = require('../models');
 const { entryDTO } = require('../dto');
 
 /**
@@ -9,7 +9,7 @@ const { entryDTO } = require('../dto');
 const getEntry = entry => {
     return Entry.findOne({
         where: entry,
-        include: [EntryStatus, Receipt]
+        include: [EntryStatus]
     });
 }
 
@@ -21,8 +21,7 @@ const getEntry = entry => {
 const getEntries = budgetId => {
     return Entry.findAll({ 
         include: [
-            EntryStatus, 
-            Receipt, {
+            EntryStatus, {
                 model: Line,
                 required: true,
                 include: {
