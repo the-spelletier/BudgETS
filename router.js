@@ -138,7 +138,6 @@ module.exports.set = app => {
         categoryController.getAll
     );
 
-
     // CATEGORY : POST
     // Create a budget category
     // Params :
@@ -183,7 +182,7 @@ module.exports.set = app => {
     // BUDGET LINE ENDPOINTS
 
     // LINE : GET
-    // Get the budget line from specigied ID
+    // Get the budget line from specified ID
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
@@ -193,13 +192,14 @@ module.exports.set = app => {
         lineController.get
     );
 
+
     // LINE : GET
-    // Get all the budget lines
-    // Params : { budgetId }
+    // Get all the budget category lines
+    // Params : { categoryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/budget/:budgetId/line',
+        '/api/category/:categoryId/line',
         authMiddleware.verifyAuth,
         lineController.getAll
     );
@@ -249,7 +249,7 @@ module.exports.set = app => {
 
     // ENTRY : GET
     // Get one entry from specified Id
-    // Params : { budgetId }
+    // Params : { entryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
@@ -259,7 +259,7 @@ module.exports.set = app => {
     );
 
     // ENTRY : GET
-    // Get all entries
+    // Get all budget entries
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
@@ -274,7 +274,7 @@ module.exports.set = app => {
     // Params :
     // {
     //      budgetId,
-    //      entry { type, categoryId, lineId, receiptId, member, description, date, status }
+    //      entry { type, categoryId, lineId, receiptCode, member, description, date, status }
     // }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified

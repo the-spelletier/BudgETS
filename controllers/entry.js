@@ -76,8 +76,8 @@ function sendEntry(entry, res) {
     if (entry) {
         let entryRes;
         if (Array.isArray(entry)) {
-            entry.forEach((b, i, arr) => {
-                arr[i] = entryDTO(b);
+            entry.forEach((e, i, arr) => {
+                arr[i] = entryDTO(e);
             });
             entryRes = entry;
         } else {

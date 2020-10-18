@@ -9,15 +9,11 @@ const getLine = line => {
 }
 
 // Retourne toutes les lignes
-const getLines = budgetId => {
+const getLines = categoryId => {
     return Line.findAll({ 
-      include: {
-        model: Category,
-        required: true,
         where: {
-          budgetId: budgetId
+            categoryId: categoryId
         }
-      }
     });
 };
 
@@ -42,11 +38,11 @@ const updateLine = line => {
 
 // Suppression d'une ligne selon l'identificateur envoyé en paramètre
 const deleteLine = line => {
-  return Line.destroy({ 
-    where: { 
-        id: line.id 
-    } 
-  });
+    return Line.destroy({
+        where: {
+            id: line.id
+        }
+    });
 }
 
 module.exports = {

@@ -134,6 +134,14 @@ function getSummary(req, res) {
 
 }
 
+function getExpense(req, res) {
+
+}
+
+function getRevenue(req, res) {
+
+}
+
 function sendBudget(budget, res) {
     if (budget) {
         let budgetRes;

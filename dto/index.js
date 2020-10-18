@@ -47,7 +47,7 @@ const categoryDTO = (category, c = {}) => {
     c.budgetId = category.budgetId;
   }
   if (typeof category.Lines != 'undefined') {
-    c.Lines = category.Lines;
+    c.lines = category.Lines;
   }
   return c;
 };
@@ -90,14 +90,17 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.type != 'undefined') {
     e.type = entry.type;
   }
-  if (typeof entry.lineId != 'undefined') {
-    e.lineId = entry.lineId;
+  if (typeof entry.Line != 'undefined') {
+    e.lineName = entry.Line.get('lineName');
+    if (typeof entry.Line.Category != 'undefined') {
+      e.categoryName = entry.Line.Category.get('categoryName');
+    }
   }
   if (typeof entry.receiptCode != 'undefined') {
     e.receiptCode = entry.receiptCode;
   }
   if (typeof entry.EntryStatus != 'undefined') {
-    e.EntryStatus = entry.EntryStatus;
+    e.entryStatus = entry.EntryStatus;
   }
   return e;
 };

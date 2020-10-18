@@ -2,7 +2,7 @@ const { categoryDTO } = require('../dto');
 const categoryService = require('../services/category');
 
 function get(req, res) {
-    categoryService.getCategory(categoryDTO(req.params)).then(category => {
+    categoryService.getCategory(req.params.id).then(category => {
         sendCategory(category, res);
     }).catch(err => {
         console.log(err);
@@ -11,7 +11,8 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    categoryService.getCategories(req.params.budgetId).then(categories => {
+    let light = typeof req.query.light !== 'undefined';
+    categoryService.getCategories(req.params.budgetId, light).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
         console.log(err);

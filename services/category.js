@@ -4,19 +4,21 @@ const { categoryDTO } = require('../dto');
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
     return Category.findOne({
-        where: category,
-        include: Line
+        where: category
     });
 }
 
 // Retourne toutes les catégories
-const getCategories = budgetId => {
-    return Category.findAll({ 
+const getCategories = (budgetId, light) => {
+    let options = { 
         where: {
             budgetId: budgetId
-        },
-        include: Line 
-    });
+        }
+    };
+    if (!light) {
+        options.include = Line;
+    }
+    return Category.findAll(options);
 };
 
 // Ajout d'une catégorie
