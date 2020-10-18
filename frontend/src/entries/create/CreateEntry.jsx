@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import {Modal, Input, DatePicker, InputNumber, Select} from "antd";
+import {Modal, notification, Input, DatePicker, InputNumber, Select} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import { CategoryClient } from "../../clients/CategoryClient";
@@ -50,19 +51,70 @@ const CreateEntry = ({visible, onCancel}) => {
     }, [entry.categoryId]);
 
     const validateAndCreate = () => {
-        const save = async() => {
-            await entryClient.create(user.token, "revenue", entry.categoryId, entry.lineId, entry.receiptId, entry.member, entry.description, entry.date, entry.status, entry.amount);
-        }
+        const save = async () => {
+            try {
+                await entryClient.create(user.token, 'revenue', entry.categoryId, entry.lineId, entry.receiptId, entry.member, entry.description, entry.amount, entry.date, entry.status);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "L'entrée a été créée avec succès",
+                    });
+                onCancel(); // Closes modal
+            }
+            catch (error){
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en créant l'entrée",
+                    });
+            }
+        };
 
-        //TODO: add validation
-        save();
+        if(!entry.member || entry.member === "") {
+            setError({...error, name: true});
+        }
+        else {
+            save();
+        }
+    }
+
+    const editEntry = () => {
+        const save = async () => {
+            try {
+                await entryClient.update(user.token, 'revenue', entry.categoryId, entry.lineId, entry.receiptId, entry.member, entry.description, entry.amount, entry.date, entry.status);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "L'entrée a été modifiée avec succès",
+                    });
+                onCancel(); // Closes modal
+            }
+            catch (error){
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en modifiant l'entrée",
+                    });
+            }
+        };
+
+        if(!entry.member || entry.member === "") {
+            setError({...error, name: true});
+        }
+        else {
+            save();
+        }
     }
 
     return (
         <Modal
-            title="Ajouter une entrée"
+            title={entry.id? "Modifier une entrée" : "Ajouter une entrée"}
             visible={visible}
-            onOk={validateAndCreate}
+            onOk={entry.id? editEntry : validateAndCreate}
             onCancel={onCancel}>
             {
                 categories && categories.length > 0 && lines &&
