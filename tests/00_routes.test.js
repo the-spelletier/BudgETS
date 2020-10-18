@@ -33,7 +33,7 @@ describe('0.0 - Routes', () => {
         // Stub the verifyAuth
         auth.verifyAuth.callsFake((req, res, next) => {
             userService.getUser({
-                id: 1
+                username:'budgets_test001'
             }).then(user => {
                 req.user = User.build(user, {raw: true});
                 next();
@@ -46,7 +46,7 @@ describe('0.0 - Routes', () => {
         // Stub the verifyAuth
         auth.verifyAuth.callsFake((req, res, next) => {
             userService.getUser({
-                id: 1
+                username:'budgets_test001'
             }).then(user => {
                 req.user = User.build(user, {raw: true});
                 next();
@@ -59,7 +59,7 @@ describe('0.0 - Routes', () => {
         // Stub the verifyAuth
         auth.verifyAuth.callsFake((req, res, next) => {
             userService.getUser({
-                id: 1
+                username:'budgets_test001'
             }).then(user => {
                 req.user = User.build(user, {raw: true});
                 next();
@@ -72,12 +72,29 @@ describe('0.0 - Routes', () => {
         // Stub the verifyAuth
         auth.verifyAuth.callsFake((req, res, next) => {
             userService.getUser({
-                id: 1
+                username:'budgets_test001'
             }).then(user => {
                 req.user = User.build(user, {raw: true});
                 next();
             })
         });
         request(app).get('/api/line/').expect(404, done);
+    });
+
+    test("000008 - Supprimer un budget", (done) => {
+        // Stub the verifyAuth
+        auth.verifyAuth.callsFake((req, res, next) => {
+            userService.getUser({
+                username:'budgets_test004'
+            }).then(user => {
+                req.user = User.build(user, {raw: true});
+                next();
+            })
+        });
+
+        request(app)
+            .post('/api/budget/13')
+            .expect(404, done);
+        
     });
 });
