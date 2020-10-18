@@ -10,13 +10,14 @@ module.exports = {
         // Add test categories per budget
         for (let i = 1; i <= settings.NB_TEST_USERS; ++i) {
             for (let j = 1; j <= settings.NB_TEST_BUDGET_WITH_CHILD_PER_USER; ++j) {
+                const budgetId = (i - 1) * settings.NB_TEST_BUDGET_PER_USER + j;
                 for (let k = 1; k <= settings.NB_TEST_CATEGORY_PER_BUDGET; ++k) {
                     nbCategories++;
                     const typeStr = (k % 2) == 0 ? 'revenue' : 'expense';
                     categories.push({
                         id: nbCategories,
                         name: 'categoryTest' + ("0" + j).slice(-2) + ("0" + k).slice(-2),
-                        budgetId: (i - 1) * settings.NB_TEST_BUDGET_PER_USER + j,
+                        budgetId: budgetId,
                         type: typeStr
                     });
 
