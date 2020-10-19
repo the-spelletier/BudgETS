@@ -116,7 +116,7 @@ const entryDTO = (entry, e = {}) => {
 
   //EntryStatus entity or entryStatusId
   if (typeof entry.EntryStatus != 'undefined') {
-    e.entryStatus = entry.EntryStatus;
+    e.entryStatusName = entry.EntryStatus.get('name');
   } else if (typeof entry.entryStatusId != 'undefined') {
     e.entryStatusId = entry.entryStatusId;
   }
