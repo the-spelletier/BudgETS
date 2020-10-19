@@ -96,6 +96,11 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.type != 'undefined') {
     e.type = entry.type;
   }
+  if (typeof entry.receiptCode != 'undefined') {
+    e.receiptCode = entry.receiptCode;
+  }
+
+  //Line entity or lineId
   if (typeof entry.Line != 'undefined') {
     e.lineName = entry.Line.get('lineName');
     if (typeof entry.Line.Category != 'undefined') {
@@ -104,11 +109,12 @@ const entryDTO = (entry, e = {}) => {
   } else if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
   }
-  if (typeof entry.receiptCode != 'undefined') {
-    e.receiptCode = entry.receiptCode;
-  }
+
+  //EntryStatus entity or entryStatusId
   if (typeof entry.EntryStatus != 'undefined') {
     e.entryStatus = entry.EntryStatus;
+  } else if (typeof entry.entryStatusId != 'undefined') {
+    e.entryStatusId = entry.entryStatusId;
   }
   return e;
 };
