@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
+import moment from "moment";
 import {Modal, notification, Input, DatePicker, InputNumber, Select} from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
@@ -47,13 +48,15 @@ const CreateEntry = ({visible, onCancel}) => {
             }
         }
     
-        fetchLines();
+        if(entry.categoryId){
+            fetchLines();
+        }
     }, [entry.categoryId]);
 
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await entryClient.create(user.token, 'revenue', entry.categoryId, entry.lineId, entry.receiptId, entry.member, entry.description, entry.amount, entry.date, entry.status);
+                await entryClient.create(user.token, 'revenue', entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -83,7 +86,7 @@ const CreateEntry = ({visible, onCancel}) => {
     const editEntry = () => {
         const save = async () => {
             try {
-                await entryClient.update(user.token, 'revenue', entry.categoryId, entry.lineId, entry.receiptId, entry.member, entry.description, entry.amount, entry.date, entry.status);
+                await entryClient.update(user.token, 'revenue', entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -136,12 +139,6 @@ const CreateEntry = ({visible, onCancel}) => {
                             }                            
                         </Select>    
                     </div>
-                    <div className={error.name === false ? "form-section" : "form-section error"}>
-                        <Input size="large"
-                            placeholder="# de la facture"
-                            value={entry.receiptId}
-                            onChange={(event) => setEntry({...entry, receiptId: event.target.value})} />
-                    </div>
                     <div className={"form-section"}>
                         <Input size="large"
                             placeholder="Nom du membre"
@@ -167,12 +164,6 @@ const CreateEntry = ({visible, onCancel}) => {
                         <DatePicker 
                             value={entry.date}
                             onChange={(value) => setEntry({...entry, date: value})} />
-                    </div>
-                    <div className={"form-section"}>
-                        <Input size="large"
-                            placeholder="Statut"
-                            value={entry.status}
-                            onChange={(event) => setEntry({...entry, status: event.target.value})} />
                     </div>
                     </Fragment>
             }
