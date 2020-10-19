@@ -21,7 +21,7 @@ const getCategories = (budgetId, light, type) => {
             model: Line,
             attributes: {
                 include: [
-                  [sequelize.fn('SUM', sequelize.col('amount')), 'real']
+                  [sequelize.fn('IFNULL', sequelize.fn('SUM', sequelize.col('amount')), 0), 'real']
                 ]
             },
             include: {
