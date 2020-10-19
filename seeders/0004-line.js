@@ -21,19 +21,28 @@ module.exports = {
                             name: 'lineTest' + ("0" + k).slice(-2) + ("0" + l).slice(-2),
                             description: 'descTest' + nbLines,
                             categoryId: categoryId,
-                            expenseEstimate: sign * i * j * k * l
+                            estimate: sign * i * j * k * l
                         });   
                     }
                 }
             }
         }
+    } else if (process.env.NODE_ENV == 'development') {
+        // Add real lines
+        lines.push({
+            id: nbLines + 1,
+            name: 'lineDevTest',
+            description: 'descTest',
+            categoryId: 1,
+            estimate: 10
+        });
     }
 
-    // Add real lines
-    //...
+    if (lines.length > 0) {
+        return queryInterface.bulkInsert('Lines', lines, {});
+    }
 
-
-    return queryInterface.bulkInsert('Lines', lines, {});
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {
