@@ -7,6 +7,7 @@ import BudgetCreate from "./budget/create/BudgetCreate";
 import BudgetDetails from "./budget/details/BudgetDetails";
 import Categories from "./categories/Categories";
 import Entries from "./entries/Entries";
+import Help from "./help/Help";
 import EmptyState from "./EmptyState";
 
 
@@ -14,9 +15,10 @@ const AppRouter = () => {
     return (
         <Switch>
             <Route exact path="/"><EmptyState /></Route>
-            <Route path="/budget/create"><BudgetCreate /></Route>
+            <Route path="/budget/create"><BudgetCreate clone={ false } /></Route>
             <Route path="/budget">
                 <BudgetContainer>
+                    <Route path="/budget/clone"><BudgetCreate clone={ true }  /></Route>
                     <Route path="/budget/summary"><EmptyState /></Route>
                     <Route path="/budget/details"><BudgetDetails /></Route>
                     <Route path="/budget/cat-and-lines"><Categories /></Route>
@@ -26,6 +28,7 @@ const AppRouter = () => {
                 </BudgetContainer>
             </Route>
             <Route path="/auth"><Auth /></Route>
+            <Route path="/help"><Help /></Route>
         </Switch>
     );
 };

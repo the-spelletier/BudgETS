@@ -4,14 +4,16 @@ import { Card, Input, DatePicker, Button, notification } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import { BudgetClient } from "../../clients/BudgetClient";
 import UserContext from "../../contexts/user/UserContext";
+import BudgetContext from "../../contexts/budget/BudgetContext";
 
 const { RangePicker } = DatePicker;
 
-const BudgetCreate = () => {
+const BudgetCreate = ({ clone }) => {
     const history = useHistory();
     const budgetClient = new BudgetClient();
 
     const {user} = useContext(UserContext);
+    const {budget} = useContext(BudgetContext);
     
     //Form info
     const [name, setName] = useState(null);
@@ -30,7 +32,7 @@ const BudgetCreate = () => {
     const submit = () => {
         const save = async() => {
             try {
-                await budgetClient.create(user.token, name, startDate, endDate, false);
+                await budgetClient.create(user.token, name, startDate, endDate, false, clone, budget.id);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,

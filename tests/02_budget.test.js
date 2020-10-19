@@ -11,32 +11,12 @@ const stubAuth = sinon.stub(auth, 'verifyAuth');
 const app = require('../app.js');
 
 describe('2.0 - Budget', () => {
-    describe('2.0 - Autres', () => {
-        test("020001 - Supprimer un budget", (done) => {
-            // Stub the verifyAuth
-            auth.verifyAuth.callsFake((req, res, next) => {
-                userService.getUser({
-                    id: 4
-                }).then(user => {
-                    req.user = User.build(user, {raw: true});
-                    next();
-                })
-            });
-
-            request(app)
-                .post('/api/budget/7')
-                .expect(404, done);
-            
-        });
-        
-    });
-
     describe('2.1 - Créer un nouveau budget', () => {
         test("021001 - Création d'un nouveau budget", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -69,6 +49,7 @@ describe('2.0 - Budget', () => {
                 });
             
         });
+        
         test("021002 - Création sans authentification", (done) => {
             // Original authentification service
             auth.verifyAuth.callsFake(originalAuth);
@@ -86,12 +67,12 @@ describe('2.0 - Budget', () => {
                 .expect(401, done);
             
         });
+        
         test("021003 - Manque le nom du budget", (done) => {
-            // Stub the verifyAuth
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -110,11 +91,12 @@ describe('2.0 - Budget', () => {
                 .expect(400, done);
             
         });
+        
         test("021004 - Manque la date de début", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -132,11 +114,12 @@ describe('2.0 - Budget', () => {
                 .expect(400, done);
             
         });
+        
         test("021005 - Manque la date de fin", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -154,11 +137,12 @@ describe('2.0 - Budget', () => {
                 .expect(400, done);
             
         });
+        
         test("021006 - Nom budget vide", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -178,11 +162,12 @@ describe('2.0 - Budget', () => {
                 })
                 .expect(400, done);
         });
+        
         test("021007 - Date début plus grand que fin", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -209,7 +194,7 @@ describe('2.0 - Budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 2
+                    username: 'budgets_test002'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -222,8 +207,8 @@ describe('2.0 - Budget', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: '3',
-                            name: 'budgetTest0201',
+                            id: '5',
+                            name: 'budgetTest00201',
                             startDate: new Date(2020, 0, 1).toJSON(),
                             endDate: new Date(2020, 11, 31).toJSON(),
                             isActive: true,
@@ -234,6 +219,7 @@ describe('2.0 - Budget', () => {
                 });
             
         });
+        
         test("022002 - Dernier budget sans authentification", (done) => {
             // Original authentification service
             auth.verifyAuth.callsFake(originalAuth);
@@ -250,7 +236,7 @@ describe('2.0 - Budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 2
+                    username: 'budgets_test002'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -261,27 +247,21 @@ describe('2.0 - Budget', () => {
                 .get('/api/budget/')
                 .expect(200)
                 .then((response) => {
-                    expect(response.body.length).toEqual(2);
-                    expect(response.body[0]).toEqual(
-                        expect.objectContaining({
-                            id: '3',
-                            name: 'budgetTest0201',
-                            isActive: true,
-                            userId: '2'
-                        })
-                    );
-                    expect(response.body[1]).toEqual(
-                        expect.objectContaining({
-                            id: '4',
-                            name: 'budgetTest0202',
-                            isActive: false,
-                            userId: '2'
-                        })
-                    );
+                    expect(response.body.length).toEqual(4);
+                    for (let i = 0; i < response.body.length; ++i) {
+                        const active = (i == 0);
+                        expect(response.body).toContainEqual({
+                                id: (5 + i).toString(),
+                                name: 'budgetTest002' + ("0" + (i + 1)).slice(-2),
+                                isActive: active,
+                                userId: '2'
+                        });
+                    }
                     done();
                 });
             
         });
+        
         test("023002 - Tous les budgets sans authentification", (done) => {
             // Original authentification service
             auth.verifyAuth.callsFake(originalAuth);
@@ -291,11 +271,12 @@ describe('2.0 - Budget', () => {
                 .expect(401, done);
             
         });
+        
         test("023003 - Obtenir un budget en particulier", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -309,7 +290,7 @@ describe('2.0 - Budget', () => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
                             id: '2',
-                            name: 'budgetTest0102',
+                            name: 'budgetTest00102',
                             startDate: new Date(2019, 0, 1).toJSON(),
                             endDate: new Date(2019, 11, 31).toJSON(),
                             isActive: true,
@@ -320,11 +301,12 @@ describe('2.0 - Budget', () => {
                 });
             
         });
+        
         test("023004 - Obtenir un budget qui ne m'appartient pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -332,10 +314,11 @@ describe('2.0 - Budget', () => {
             });
 
             request(app)
-                .get('/api/budget/3')
+                .get('/api/budget/6')
                 .expect(404, done);
             
         });
+        
         test("023005 - Obtenir un budget sans authentification", (done) => {
             // Original authentification service
             auth.verifyAuth.callsFake(originalAuth);
@@ -345,11 +328,12 @@ describe('2.0 - Budget', () => {
                 .expect(401, done);
             
         });
+        
         test("023006 - Obtenir un budget qui n'existe pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -364,11 +348,12 @@ describe('2.0 - Budget', () => {
     });
 
     describe('2.4 - Modifier un budget', () => {
+        
         test("024001 - Mets à jour les champs d'un budget", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 3
+                    username: 'budgets_test003'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -379,7 +364,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/6')
+                .put('/api/budget/11')
                 .send({
                     name: 'budgetTest_updated1',
                     startDate: start,
@@ -390,7 +375,7 @@ describe('2.0 - Budget', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: '6',
+                            id: '11',
                             name: 'budgetTest_updated1',
                             startDate: start,
                             endDate: end,
@@ -402,11 +387,12 @@ describe('2.0 - Budget', () => {
                 });
             
         });
+        
         test("024002 - Date début plus grand que fin", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 3
+                    username: 'budgets_test003'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -417,7 +403,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/5')
+                .put('/api/budget/12')
                 .send({
                     name: 'budgetTest_updated2',
                     startDate: end,
@@ -427,6 +413,7 @@ describe('2.0 - Budget', () => {
                 .expect(403, done);
             
         });
+        
         test("024003 - Mets à jour sans authentification", (done) => {
             // Original authentification service
             auth.verifyAuth.callsFake(originalAuth);
@@ -445,11 +432,12 @@ describe('2.0 - Budget', () => {
                 .expect(401, done);
             
         });
+        
         test("024004 - Mets à jour budget qui ne m'appartient pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 1
+                    username: 'budgets_test001'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -460,7 +448,7 @@ describe('2.0 - Budget', () => {
             const end = new Date(2020, 11, 30).toJSON();
 
             request(app)
-                .put('/api/budget/5')
+                .put('/api/budget/11')
                 .send({
                     name: 'budgetTest_updated4',
                     startDate: start,
@@ -470,11 +458,12 @@ describe('2.0 - Budget', () => {
                 .expect(404, done);
             
         });
+        
         test("024005 - Mets à jour budget qui n'existe pas", (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    id: 2
+                    username: 'budgets_test002'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
