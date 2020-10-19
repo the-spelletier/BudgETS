@@ -102,9 +102,13 @@ const entryDTO = (entry, e = {}) => {
 
   //Line entity or lineId
   if (typeof entry.Line != 'undefined') {
-    e.lineName = entry.Line.get('lineName');
-    if (typeof entry.Line.Category != 'undefined') {
-      e.categoryName = entry.Line.Category.get('categoryName');
+    if (typeof entry.Line.get('lineName') != 'undefined') {
+      e.lineName = entry.Line.get('lineName');
+      if (typeof entry.Line.Category != 'undefined') {
+        e.categoryName = entry.Line.Category.get('categoryName');
+      }
+    } else {
+      e.categoryId = entry.Line.get('categoryId');
     }
   } else if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
