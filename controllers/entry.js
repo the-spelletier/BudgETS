@@ -19,14 +19,6 @@ function getAll(req, res) {
     });
 }
 
-function getRevenues(req, res) {
-
-}
-
-function getExpenses(req, res) {
-
-}
-
 function create(req, res) {
     let entry = entryDTO(req.body);
     if (entry.lineId, entry.amount, entry.date, entry.member, entry.description, entry.type) { 

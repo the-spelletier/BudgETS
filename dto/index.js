@@ -101,6 +101,8 @@ const entryDTO = (entry, e = {}) => {
     if (typeof entry.Line.Category != 'undefined') {
       e.categoryName = entry.Line.Category.get('categoryName');
     }
+  } else if (typeof entry.lineId != 'undefined') {
+    e.lineId = entry.lineId;
   }
   if (typeof entry.receiptCode != 'undefined') {
     e.receiptCode = entry.receiptCode;

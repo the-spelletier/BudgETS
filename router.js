@@ -310,28 +310,6 @@ module.exports.set = app => {
         entryController.deleteOne
     );
 
-    // ENTRY : GET
-    // Get all revenus
-    // Params : { budgetId }
-    // Requires user to be authentified
-    // Returns : Code 200 if user is authentified
-    app.get(
-        '/api/entry/revenues',
-        authMiddleware.verifyAuth,
-        entryController.getRevenues
-    );
-
-    // ENTRY : GET
-    // Get all expenses
-    // Params : { budgetId }
-    // Requires user to be authentified
-    // Returns : Code 200 if user is authentified
-    app.get(
-        '/api/entry/expenses',
-        authMiddleware.verifyAuth,
-        entryController.getExpenses
-    );
-
     // USER ENDPOINTS
 
     // USER : POST
