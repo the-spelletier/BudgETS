@@ -108,6 +108,7 @@ const entryDTO = (entry, e = {}) => {
         e.categoryName = entry.Line.Category.get('categoryName');
       }
     } else {
+      e.lineId = entry.lineId;
       e.categoryId = entry.Line.get('categoryId');
     }
   } else if (typeof entry.lineId != 'undefined') {
