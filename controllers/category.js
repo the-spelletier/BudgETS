@@ -2,7 +2,7 @@ const { categoryDTO } = require('../dto');
 const categoryService = require('../services/category');
 
 function get(req, res) {
-    categoryService.getCategory(req.params.id).then(category => {
+    categoryService.getCategory({ id: req.params.id }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
         console.log(err);

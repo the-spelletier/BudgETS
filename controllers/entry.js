@@ -2,7 +2,7 @@ const { entryDTO } = require('../dto');
 const entryService = require('../services/entry');
 
 function get(req, res) {
-    entryService.getEntry(entryDTO(req.params)).then(entry => {
+    entryService.getEntry({ id: req.params.id }).then(entry => {
         sendEntry(entry, res);
     }).catch(err => {
         console.log(err);

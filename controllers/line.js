@@ -2,7 +2,7 @@ const { lineDTO } = require('../dto');
 const lineService = require('../services/line');
 
 function get(req, res) {
-    lineService.getLine(lineDTO(req.params)).then(line => {
+    lineService.getLine({ id: req.params.id }).then(line => {
         sendLine(line, res);
     }).catch(err => {
         console.log(err);

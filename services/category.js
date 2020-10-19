@@ -28,11 +28,11 @@ const getCategories = (budgetId, light, type) => {
                 model: Entry,
                 attributes: []
             },
-            group: ['Lines.id']
         };
-        options.having = sequelize.where(sequelize.fn('COUNT', sequelize.col('*')), {
-            [Op.gt]: 0,
-        });
+        options.group = [
+            'Lines.id',
+            'Category.id'
+        ];
     }
     if (type) {
         options.where.type = type;
