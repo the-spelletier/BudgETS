@@ -84,8 +84,6 @@ function sendEntry(entry, res) {
 module.exports = {
     get,
     getAll,
-    getRevenues,
-    getExpenses,
     create,
     update,
     deleteOne
