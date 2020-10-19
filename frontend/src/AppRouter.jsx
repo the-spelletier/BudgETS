@@ -14,9 +14,10 @@ const AppRouter = () => {
     return (
         <Switch>
             <Route exact path="/"><EmptyState /></Route>
-            <Route path="/budget/create"><BudgetCreate /></Route>
+            <Route path="/budget/create"><BudgetCreate clone={ false } /></Route>
             <Route path="/budget">
                 <BudgetContainer>
+                    <Route path="/budget/clone"><BudgetCreate clone={ true }  /></Route>
                     <Route path="/budget/summary"><EmptyState /></Route>
                     <Route path="/budget/details"><BudgetDetails /></Route>
                     <Route path="/budget/cat-and-lines"><Categories /></Route>

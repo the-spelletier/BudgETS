@@ -83,7 +83,7 @@ module.exports.set = app => {
 
     // BUDGET : POST
     // Clone a budget
-    // Params : { year, name }
+    // Params : { startdate, enddate, name }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
