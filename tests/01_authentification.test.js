@@ -7,7 +7,7 @@ describe('1.0 - Authentification', () => {
             request(app)
                 .post('/api/login')
                 .send({
-                    username: 'budgets_test01',
+                    username: 'budgets_test001',
                     password: 'test123'
                 })
                 .expect('Content-Type', /json/)
@@ -51,7 +51,7 @@ describe('1.0 - Authentification', () => {
             request(app)
                 .post('/api/login')
                 .send({
-                    username: 'budgets_test01',
+                    username: 'budgets_test001',
                     password: 'test1234'
                 })
                 .expect('Content-Type', /json/)
@@ -66,7 +66,7 @@ describe('1.0 - Authentification', () => {
             request(app)
                 .post('/api/login')
                 .send({
-                    username: 'budgets_test01'
+                    username: 'budgets_test001'
                 })
                 .expect('Content-Type', /json/)
                 .expect(401)

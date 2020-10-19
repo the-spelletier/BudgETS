@@ -46,12 +46,14 @@
   ],
   "license": "ISC",
   "jest": {
+    "collectCoverage": true,
     "testEnvironment": "node",
     "testTimeout": 5000,
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/frontend/"
     ],
+    "coverageDirectory": "./tests/reports/coverage/",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/frontend/"

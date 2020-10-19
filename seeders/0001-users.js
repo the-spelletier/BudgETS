@@ -1,69 +1,35 @@
 'use strict';
 const bcrypt = require('bcrypt');
 const config = require('../config/jsonConfig');
+const settings = require('../config/testsConfig');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
-    return queryInterface.bulkInsert('Users', [{
-        id: 1,
-        username: 'budgets_test01',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: true
-      },{
-        id: 2,
-        username: 'budgets_test02',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 3,
-        username: 'budgets_test03',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 4,
-        username: 'budgets_test04',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 5,
-        username: 'budgets_test05',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 6,
-        username: 'budgets_test06',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 7,
-        username: 'budgets_test07',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 8,
-        username: 'budgets_test08',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 9,
-        username: 'budgets_test09',
-        password: bcrypt.hashSync("test123", config.saltRounds),
-        isAdmin: false
-      },{
-        id: 10,
+    let users = []
+    let nbUsers = 0;
+
+    // Add test users
+    if (process.env.NODE_ENV == 'test') {
+        for (let i = 1; i <= settings.NB_TEST_USERS; ++i) {
+            nbUsers++;
+            users.push({
+                id: nbUsers,
+                username: 'budgets_test' + ("00" + i).slice(-3),
+                password: bcrypt.hashSync("test123", config.saltRounds),
+                isAdmin: false
+            });
+        }
+    }
+
+    // Add real users
+    users.push({
+        id: nbUsers + 1,
         username: 'budgets_admin',
         password: bcrypt.hashSync("admin_2020", config.saltRounds),
         isAdmin: true
-      }], {});
+    });
+
+    return queryInterface.bulkInsert('Users', users, {});
   },
 
   down: async (queryInterface, Sequelize) => {
