@@ -1,4 +1,5 @@
-const { Category, Line } = require('../models');
+const { Op } = require('sequelize');
+const { Category, Line, Entry, sequelize } = require('../models');
 const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
@@ -16,7 +17,22 @@ const getCategories = (budgetId, light, type) => {
         }
     };
     if (!light) {
-        options.include = Line;
+        options.include = {
+            model: Line,
+            attributes: {
+                include: [
+                  [sequelize.fn('SUM', sequelize.col('amount')), 'real']
+                ]
+            },
+            include: {
+                model: Entry,
+                attributes: []
+            },
+            group: ['Lines.id']
+        };
+        options.having = sequelize.where(sequelize.fn('COUNT', sequelize.col('*')), {
+            [Op.gt]: 0,
+        });
     }
     if (type) {
         options.where.type = type;
