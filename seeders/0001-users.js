@@ -19,17 +19,21 @@ module.exports = {
                 isAdmin: false
             });
         }
+    } else if (process.env.NODE_ENV == 'development') {
+      // Add real users
+      users.push({
+          id: nbUsers + 1,
+          username: 'budgets_admin',
+          password: bcrypt.hashSync("admin_2020", config.saltRounds),
+          isAdmin: true
+      });
     }
 
-    // Add real users
-    users.push({
-        id: nbUsers + 1,
-        username: 'budgets_admin',
-        password: bcrypt.hashSync("admin_2020", config.saltRounds),
-        isAdmin: true
-    });
+    if (users.length > 0) {
+        return queryInterface.bulkInsert('Users', users, {});
+    }
 
-    return queryInterface.bulkInsert('Users', users, {});
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {

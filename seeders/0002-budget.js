@@ -22,27 +22,31 @@ module.exports = {
                 });
             }
         }
+    } else if (process.env.NODE_ENV == 'development') {
+        // Add real budgets
+        budgets.push({
+            id: nbBudget + 1,
+            name: '2019-2020',
+            userId: 1,
+            startDate: new Date(2019, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2019, 11, 31),
+            isActive: false
+        });
+        budgets.push({
+            id: nbBudget + 2,
+            name: '2020-2021',
+            userId: 1,
+            startDate: new Date(2020, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2020, 11, 31),
+            isActive: true
+        });
     }
 
-    // Add real budgets
-    budgets.push({
-        id: nbBudget + 1,
-        name: '2019-2020',
-        userId: 10,
-        startDate: new Date(2019, 0, 1), // Months are indexed at 0, Days are indexed at 1
-        endDate: new Date(2019, 11, 31),
-        isActive: false
-    });
-    budgets.push({
-        id: nbBudget + 2,
-        name: '2020-2021',
-        userId: 10,
-        startDate: new Date(2020, 0, 1), // Months are indexed at 0, Days are indexed at 1
-        endDate: new Date(2020, 11, 31),
-        isActive: true
-    });
+    if (budgets.length > 0) {
+        return queryInterface.bulkInsert('Budgets', budgets, {});
+    }
 
-    return queryInterface.bulkInsert('Budgets', budgets, {});
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {

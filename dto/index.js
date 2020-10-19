@@ -47,7 +47,10 @@ const categoryDTO = (category, c = {}) => {
     c.budgetId = category.budgetId;
   }
   if (typeof category.Lines != 'undefined') {
-    c.Lines = category.Lines;
+    c.lines = [];
+    category.Lines.forEach(l => {
+      c.lines.push(lineDTO(l));
+    });
   }
   return c;
 };
@@ -62,8 +65,11 @@ const lineDTO = (line, l = {}) => {
   if (typeof line.description != 'undefined') {
     l.description = line.description;
   }
-  if (typeof line.expenseEstimate != 'undefined') {
-    l.expenseEstimate = line.expenseEstimate;
+  if (typeof line.estimate != 'undefined') {
+    l.estimate = line.estimate;
+  }
+  if (typeof line.get('real') != 'undefined') {
+    l.real = line.get('real');
   }
   if (typeof line.categoryId != 'undefined') {
     l.categoryId = line.categoryId;
@@ -90,14 +96,30 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.type != 'undefined') {
     e.type = entry.type;
   }
-  if (typeof entry.lineId != 'undefined') {
-    e.lineId = entry.lineId;
-  }
   if (typeof entry.receiptCode != 'undefined') {
     e.receiptCode = entry.receiptCode;
   }
+
+  //Line entity or lineId
+  if (typeof entry.Line != 'undefined') {
+    if (typeof entry.Line.get('lineName') != 'undefined') {
+      e.lineName = entry.Line.get('lineName');
+      if (typeof entry.Line.Category != 'undefined') {
+        e.categoryName = entry.Line.Category.get('categoryName');
+      }
+    } else {
+      e.lineId = entry.lineId;
+      e.categoryId = entry.Line.get('categoryId');
+    }
+  } else if (typeof entry.lineId != 'undefined') {
+    e.lineId = entry.lineId;
+  }
+
+  //EntryStatus entity or entryStatusId
   if (typeof entry.EntryStatus != 'undefined') {
-    e.EntryStatus = entry.EntryStatus;
+    e.entryStatusName = entry.EntryStatus.get('name');
+  } else if (typeof entry.entryStatusId != 'undefined') {
+    e.entryStatusId = entry.entryStatusId;
   }
   return e;
 };

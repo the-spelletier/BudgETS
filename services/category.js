@@ -1,22 +1,43 @@
-const { Category, Line } = require('../models');
+const { Op } = require('sequelize');
+const { Category, Line, Entry, sequelize } = require('../models');
 const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
     return Category.findOne({
-        where: category,
-        include: Line
+        where: category
     });
 }
 
 // Retourne toutes les catégories
-const getCategories = budgetId => {
-    return Category.findAll({ 
+const getCategories = (budgetId, light, type) => {
+    let options = { 
         where: {
             budgetId: budgetId
-        },
-        include: Line 
-    });
+        }
+    };
+    if (!light) {
+        options.include = {
+            model: Line,
+            attributes: {
+                include: [
+                  [sequelize.fn('IFNULL', sequelize.fn('SUM', sequelize.col('amount')), 0), 'real']
+                ]
+            },
+            include: {
+                model: Entry,
+                attributes: []
+            },
+        };
+        options.group = [
+            'Lines.id',
+            'Category.id'
+        ];
+    }
+    if (type) {
+        options.where.type = type;
+    }
+    return Category.findAll(options);
 };
 
 // Ajout d'une catégorie
