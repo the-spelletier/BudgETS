@@ -47,7 +47,10 @@ const categoryDTO = (category, c = {}) => {
     c.budgetId = category.budgetId;
   }
   if (typeof category.Lines != 'undefined') {
-    c.lines = category.Lines;
+    c.lines = [];
+    category.Lines.forEach(l => {
+      c.lines.push(lineDTO(l));
+    });
   }
   return c;
 };
@@ -62,8 +65,11 @@ const lineDTO = (line, l = {}) => {
   if (typeof line.description != 'undefined') {
     l.description = line.description;
   }
-  if (typeof line.expenseEstimate != 'undefined') {
-    l.expenseEstimate = line.expenseEstimate;
+  if (typeof line.estimate != 'undefined') {
+    l.estimate = line.estimate;
+  }
+  if (typeof line.get('real') != 'undefined') {
+    l.real = line.get('real');
   }
   if (typeof line.categoryId != 'undefined') {
     l.categoryId = line.categoryId;
