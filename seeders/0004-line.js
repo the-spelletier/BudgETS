@@ -21,7 +21,7 @@ module.exports = {
                             name: 'lineTest' + ("0" + k).slice(-2) + ("0" + l).slice(-2),
                             description: 'descTest' + nbLines,
                             categoryId: categoryId,
-                            expenseEstimate: sign * i * j * k * l
+                            estimate: sign * i * j * k * l
                         });   
                     }
                 }
