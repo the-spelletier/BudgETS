@@ -24,13 +24,21 @@ module.exports = {
                 }
             }
         }
+    } else if (process.env.NODE_ENV == 'development') {
+        // Add real categories
+        categories.push({
+            id: nbCategories + 1,
+            name: 'categoryDevTest',
+            budgetId: 1,
+            type: 'revenue'
+        });
     }
 
-    // Add real categories
-    //...
+    if (categories.length > 0) {
+        return queryInterface.bulkInsert('Categories', categories, {});
+    }
 
-
-    return queryInterface.bulkInsert('Categories', categories, {});
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {

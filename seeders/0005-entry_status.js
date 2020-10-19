@@ -6,16 +6,21 @@ const settings = require('../config/testsConfig');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     let entryStatuses = []
-    let nbEntryStatus = 0;
 
-    // Add real entry statuses
-    entryStatuses.push({
-        id: 1,
-        name: 'Envoyé',
-        position: 1
-    });
+    if (process.env.NODE_ENV == 'development') {
+        // Add real entry statuses
+        entryStatuses.push({
+            id: 1,
+            name: 'Envoyé',
+            position: 1
+        });
+    }
 
-    return queryInterface.bulkInsert('EntryStatuses', entryStatuses, {});
+    if (entryStatuses.length > 0) {
+        return queryInterface.bulkInsert('EntryStatuses', entryStatuses, {});
+    }
+
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {

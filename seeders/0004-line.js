@@ -27,13 +27,22 @@ module.exports = {
                 }
             }
         }
+    } else if (process.env.NODE_ENV == 'development') {
+        // Add real lines
+        lines.push({
+            id: nbLines + 1,
+            name: 'lineDevTest',
+            description: 'descTest',
+            categoryId: 1,
+            estimate: 10
+        });
     }
 
-    // Add real lines
-    //...
+    if (lines.length > 0) {
+        return queryInterface.bulkInsert('Lines', lines, {});
+    }
 
-
-    return queryInterface.bulkInsert('Lines', lines, {});
+    return;
   },
 
   down: async (queryInterface, Sequelize) => {
