@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Card, Table, Button } from "antd";
+import moment from "moment";
+import { Card, Table, notification } from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateEntry from "./create/CreateEntry";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -14,6 +16,7 @@ const Entries = () => {
     const {budget} = useContext(BudgetContext);
 
     const [entries, setEntries] = useState(null);
+    const [currentEntry, setCurrentEntry] = useState(null);
     const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
 
     useEffect(() => {
@@ -25,22 +28,59 @@ const Entries = () => {
         getEntries();
     }, [createModalIsVisible]);
 
+    const onEditEntry = (entry) => {
+        setCurrentEntry(entry.id);
+        setCreateModalIsVisible(true);
+    };
+
+    const onCreateOrEditEntryModalCancel = () => {
+        setCurrentEntry(null);
+        setCreateModalIsVisible(false);
+    };
+
+    const onDeleteEntry = (entry) => {
+        const deleteEntry = async () => {
+            try {
+                await entryClient.delete(user.token, entry.id);
+                notification.open({
+                message: "Succès",
+                icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                description:
+                  "L'entrée a été supprimée avec succès",
+                });
+                
+                // Removes from our list
+                setEntries(entries.filter(e => e.id !== entry.id));
+            }
+            catch (error){
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                    "Une erreur est survenue en supprimant l'entrée",
+                    });
+            }
+        };
+
+        deleteEntry();
+    };
+
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} />
+            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditEntry(entry)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",
-            render: (entry) => entry.receiptId 
+            render: (entry) => entry.receiptCode
         },
         {
             title: "Categorie",
-            render: (entry) => entry.categoryId 
+            render: (entry) => entry.categoryName
         },
         {
             title: "Ligne",
-            render: (entry) => entry.lineId 
+            render: (entry) => entry.lineName
         },
         {
             title: "Description",
@@ -52,22 +92,22 @@ const Entries = () => {
         },
         {
             title: "Montant",
-            render: (entry) => entry.amount ? entry.type === "revenue" ? entry.amount : "(" + entry.amount + ")" : ""
+            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : ""
         },
         {
             title: "Date",
-            render: (entry) => entry.date 
+            render: (entry) => moment(entry.date).format("YYYY-MM-DD") 
         },
         {
             title: "Status",
-            render: (entry) => entry.status 
+            render: (entry) => entry.entryStatusName 
         }
     ]
 
     return (
         <Fragment>
             <BudgetHeader />
-            <CreateEntry visible={createModalIsVisible} onCancel={() => setCreateModalIsVisible(false)} />
+            <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
             </Card>

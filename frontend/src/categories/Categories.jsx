@@ -21,11 +21,6 @@ const Categories = () => {
     const {budget} = useContext(BudgetContext);
     const {user} = useContext(UserContext)
 
-    const getCategories = async() => {
-        var response = await categoryClient.getList(user.token, budget.id);
-        setCategories(response.data);
-    };
-
     // TODO : find a cleaner way 
     const [refreshCategories, setRefreshCategories] = useState(false);
 
@@ -138,6 +133,11 @@ const Categories = () => {
     const [categories, setCategories] = useState(null);
     const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
+    const getCategories = async() => {
+        var response = await categoryClient.getList(user.token, budget.id);
+        setCategories(response.data);
+    };
+    
     useEffect(() => {
         if (user.token && budget.id) {
             getCategories();
@@ -147,7 +147,7 @@ const Categories = () => {
 
     const buildColumns = (category) => {
         var totalEstimate = 0;
-        category.Lines.forEach((line) => totalEstimate += line.estimate);
+        category.lines.forEach((line) => totalEstimate += Number(line.estimate));
 
         return [
             {
@@ -175,8 +175,10 @@ const Categories = () => {
                 render: (line) => line.description
             },
             {
-                title: totalEstimate,
-                render: (line) => category.type === "revenue" ? line.expenseEstimate : "( " + line.expenseEstimate + " )"
+                title: totalEstimate.toFixed(2),
+                render: (line) => category.type === "revenue" ? 
+                    Number(line.estimate).toFixed(2) : 
+                    "( " + Number(line.estimate).toFixed(2) + " )"
             },
             {
                 title: "0", 
@@ -228,12 +230,12 @@ const Categories = () => {
                         <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
                         {
                             categories.map((category) => 
-                                <Fragment>
+                                <Fragment key={category.id}>
                                     {  
-                                        category.Lines && <EditableTable columns={buildColumns(category)} values={category.Lines}/> 
+                                        category.lines && <EditableTable columns={buildColumns(category)} values={category.lines}/> 
                                     }
                                     { 
-                                        category.Lines && category.Lines.length === 0 && 
+                                        category.lines && category.lines.length === 0 && 
                                         <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
                                     }
                                 </Fragment>

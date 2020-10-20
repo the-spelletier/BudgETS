@@ -5,13 +5,15 @@ import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import { CategoryClient } from "../../clients/CategoryClient";
+import { LineClient } from "../../clients/LineClient";
 import TextArea from "antd/lib/input/TextArea";
 import { EntryClient } from "../../clients/EntryClient";
 
 const { Option } = Select;
 
-const CreateEntry = ({visible, onCancel}) => {
+const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const categoryClient = new CategoryClient();
+    const lineClient = new LineClient();
     const entryClient = new EntryClient();
 
     const {user} = useContext(UserContext);
@@ -20,30 +22,48 @@ const CreateEntry = ({visible, onCancel}) => {
     const [entry, setEntry] = useState({categoryId : null});
     const [error, setError] = useState({name: false});
     
+    const [statuses, setStatuses] = useState([{id: 1, name: "Envoyé"}]);
     const [categories, setCategories] = useState(null);
     //Get according to selected category
     const [lines, setLines] = useState(null);
-    const [currentLine, setCurrentLine] = useState(null);
 
     useEffect(() => {
+        const getEntry = async () => {
+            var response = await entryClient.get(user.token, entryId);
+            setEntry(response.data);
+        };
+
         const fetchCategories = async() => {
             var response = await categoryClient.getList(user.token, budget.id);
             setCategories(response.data);
-            setEntry({...entry, categoryId: response.data[0].id});
+            
+            if(response.data){
+                setEntry({...entry, categoryId: response.data[0].id});
+            }
         };
 
+        const fetchStatuses = async() => {
+            // TODO : get all statuses into const statuses
+        }
+
         fetchCategories();
-    }, []);
+        
+        if(entryId){
+            getEntry();
+        }
+
+    }, [entryId]);
 
     useEffect(() => {
         const fetchLines = async() => {
-            var response = await categoryClient.get(user.token, entry.categoryId);
-            setLines(response.data.Lines ? response.data.Lines : []);
+            var response = await lineClient.getAll(user.token, entry.categoryId);
             
-            if(response.data.Lines && response.data.Lines.length > 0){
-                setEntry({...entry, lineId: response.data.Lines[0].id});
+            if(response.data && response.data.length > 0){
+                setLines(response.data);
+                setEntry({...entry, lineId: response.data[0].id});
             }
             else {
+                setLines([]);
                 setEntry({...entry, lineId: null});
             }
         }
@@ -53,10 +73,15 @@ const CreateEntry = ({visible, onCancel}) => {
         }
     }, [entry.categoryId]);
 
+    const onCancel = () => {
+        setEntry({categoryId: null});
+        onCancelParent();
+    };
+
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await entryClient.create(user.token, 'revenue', entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount);
+                await entryClient.create(user.token, entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -86,7 +111,7 @@ const CreateEntry = ({visible, onCancel}) => {
     const editEntry = () => {
         const save = async () => {
             try {
-                await entryClient.update(user.token, 'revenue', entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount);
+                await entryClient.update(user.token, entry.id, entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -120,7 +145,7 @@ const CreateEntry = ({visible, onCancel}) => {
             onOk={entry.id? editEntry : validateAndCreate}
             onCancel={onCancel}>
             {
-                categories && categories.length > 0 && lines &&
+                categories && categories.length > 0 && lines && statuses && 
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
@@ -162,8 +187,15 @@ const CreateEntry = ({visible, onCancel}) => {
                     </div>
                     <div className="form-section">                
                         <DatePicker 
-                            value={entry.date}
+                            value={moment(entry.date)}
                             onChange={(value) => setEntry({...entry, date: value})} />
+                    </div>
+                    <div className="form-section">
+                        <Select value={1}>
+                            {
+                                statuses.map((status) => <Option key={status.id} value={status.id}>{status.name}</Option>) 
+                            }
+                        </Select>
                     </div>
                     </Fragment>
             }
