@@ -68,7 +68,7 @@ const lineDTO = (line, l = {}) => {
   if (typeof line.estimate != 'undefined') {
     l.estimate = line.estimate;
   }
-  if (typeof line.get('real') != 'undefined') {
+  if (typeof line.get === 'function' && typeof line.get('real') != 'undefined') {
     l.real = line.get('real');
   }
   if (typeof line.categoryId != 'undefined') {
@@ -99,28 +99,28 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.receiptCode != 'undefined') {
     e.receiptCode = entry.receiptCode;
   }
-
-  //Line entity or lineId
-  if (typeof entry.Line != 'undefined') {
-    if (typeof entry.Line.get('lineName') != 'undefined') {
-      e.lineName = entry.Line.get('lineName');
-      if (typeof entry.Line.Category != 'undefined') {
-        e.categoryName = entry.Line.Category.get('categoryName');
-      }
-    } else {
-      e.lineId = entry.lineId;
-      e.categoryId = entry.Line.get('categoryId');
-    }
-  } else if (typeof entry.lineId != 'undefined') {
+  if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
   }
 
-  //EntryStatus entity or entryStatusId
-  if (typeof entry.EntryStatus != 'undefined') {
-    e.entryStatusName = entry.EntryStatus.get('name');
+  if (typeof entry.Line != 'undefined') {
+    if (typeof entry.Line.name != 'undefined') {
+      delete e.lineId;
+      e.lineName = entry.Line.name;
+    }
+    if (typeof entry.Line.Category != 'undefined' && typeof entry.Line.Category.name != 'undefined') {
+      e.categoryName = entry.Line.Category.name;
+    } else if (typeof entry.Line.categoryId != 'undefined') {
+      e.categoryId = entry.Line.categoryId;
+    }
+  }
+
+  if (typeof entry.EntryStatus != 'undefined' && typeof entry.EntryStatus.name != 'undefined') {
+    e.entryStatusName = entry.EntryStatus.name;
   } else if (typeof entry.entryStatusId != 'undefined') {
     e.entryStatusId = entry.entryStatusId;
   }
+
   return e;
 };
 
