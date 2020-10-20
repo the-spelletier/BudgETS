@@ -32,9 +32,9 @@ describe('3.0 - Catégories et lignes', () => {
                         for (let i = 0; i < response.body.length; ++i) {
                             const typeStr = ((5 + i) % 2 == 0) ? 'revenue' : 'expense';
                             if (i < response.body.length / 2) {
-                                expect(response.body[i]['Lines'].length).toEqual(4);
+                                expect(response.body[i]['lines'].length).toEqual(4);
                             } else {
-                                expect(response.body[i]['Lines'].length).toEqual(0);
+                                expect(response.body[i]['lines'].length).toEqual(0);
                             }
                             expect(response.body[i]).toEqual(
                                 expect.objectContaining({
@@ -59,7 +59,7 @@ describe('3.0 - Catégories et lignes', () => {
                 
             });
 
-            test("032003 - Obtenir toutes les catégories d'un budget qui ne m'appartient pas", (done) => {
+            test("031003 - Obtenir toutes les catégories d'un budget qui ne m'appartient pas", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -76,7 +76,7 @@ describe('3.0 - Catégories et lignes', () => {
                 
             });
 
-            test("032004 - Obtenir toutes les catégories d'un budget qui n'existe pas", (done) => {
+            test("031004 - Obtenir toutes les catégories d'un budget qui n'existe pas", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -103,15 +103,15 @@ describe('3.0 - Catégories et lignes', () => {
                         next();
                     })
                 });
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/2/category')
+
+                request(app)
+                    .get('/api/budget/2/category?light')
                     .expect(200)
                     .then((response) => {
                         expect(response.body.length).toEqual(4);
                         for (let i = 0; i < response.body.length; ++i) {
                             const typeStr = ((5 + i) % 2 == 0) ? 'revenue' : 'expense';
+                            expect(response.body[i]['lines']).toBeUndefined();
                             expect(response.body[i]).toEqual(
                                 expect.objectContaining({
                                     id: (5 + i).toString(),
@@ -123,22 +123,20 @@ describe('3.0 - Catégories et lignes', () => {
                             );
                         }
                         done();
-                    });*/
+                    });
             });
 
             test("031006 - Obtenir toutes les catégories d'un budget sans authentification (Version light)", (done) => {
                 // Original authentification service
                 auth.verifyAuth.callsFake(originalAuth);
     
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/2/category')
-                    .expect(401, done);*/
+                request(app)
+                    .get('/api/budget/2/category?light')
+                    .expect(401, done);
                 
             });
 
-            test("032007 - Obtenir toutes les catégories d'un budget qui ne m'appartient pas (Version light)", (done) => {
+            test("031007 - Obtenir toutes les catégories d'un budget qui ne m'appartient pas (Version light)", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -149,14 +147,12 @@ describe('3.0 - Catégories et lignes', () => {
                     })
                 });
                 
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/6/category')
-                    .expect(404, done);*/
+                request(app)
+                    .get('/api/budget/6/category?light')
+                    .expect(404, done);
             });
 
-            test("032008 - Obtenir toutes les catégories d'un budget qui n'existe pas (Version light)", (done) => {
+            test("031008 - Obtenir toutes les catégories d'un budget qui n'existe pas (Version light)", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -167,11 +163,9 @@ describe('3.0 - Catégories et lignes', () => {
                     })
                 });
     
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/-1/category')
-                    .expect(404, done);*/
+                request(app)
+                    .get('/api/budget/-1/category?light')
+                    .expect(404, done);
                 
             });
         
@@ -195,14 +189,14 @@ describe('3.0 - Catégories et lignes', () => {
                     .then((response) => {
                         expect(response.body.length).toEqual(4);
                         for (let i = 0; i < response.body.length; ++i) {
-                            const sign = ((5 + i) % 2 == 0) ? 1 : -1
+                            //const sign = ((5 + i) % 2 == 0) ? 1 : -1
                             expect(response.body[i]).toEqual(
                                 expect.objectContaining({
                                     id: (5 + i).toString(),
-                                    name: 'categoryTest02' + ("0" + (i + 1)).slice(-2),
+                                    name: 'lineTest02' + ("0" + (i + 1)).slice(-2)/*, // unused fields?
                                     description: (5 + i).toString(),
                                     categoryId: '2',
-                                    expenseEstimate: sign * (i + 1)
+                                    estimate: sign * (i + 1)*/
                                 })
                             );
                         }
@@ -220,7 +214,7 @@ describe('3.0 - Catégories et lignes', () => {
                 
             });
 
-            test("032011 - Obtenir toutes les lignes d'une catégorie qui ne m'appartient pas", (done) => {
+            test("031011 - Obtenir toutes les lignes d'une catégorie qui ne m'appartient pas", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -237,7 +231,7 @@ describe('3.0 - Catégories et lignes', () => {
                 
             });
 
-            test("032012 - Obtenir toutes les lignes d'une catégorie qui n'existe pas", (done) => {
+            test("031012 - Obtenir toutes les lignes d'une catégorie qui n'existe pas", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -264,42 +258,36 @@ describe('3.0 - Catégories et lignes', () => {
                         next();
                     })
                 });
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/2/category')
+
+                request(app)
+                    .get('/api/category/2/line?light')
                     .expect(200)
                     .then((response) => {
                         expect(response.body.length).toEqual(4);
                         for (let i = 0; i < response.body.length; ++i) {
-                            const typeStr = ((5 + i) % 2 == 0) ? 'revenue' : 'expense';
                             expect(response.body[i]).toEqual(
                                 expect.objectContaining({
                                     id: (5 + i).toString(),
-                                    name: 'categoryTest02' + ("0" + (i + 1)).slice(-2),
-                                    type: typeStr,
-                                    budgetId: '2'
+                                    name: 'lineTest02' + ("0" + (i + 1)).slice(-2)
                                 })
                                     
                             );
                         }
                         done();
-                    });*/
+                    });
             });
 
             test("031014 - Obtenir toutes les lignes d'une catégorie sans authentification (Version light)", (done) => {
                 // Original authentification service
                 auth.verifyAuth.callsFake(originalAuth);
     
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/2/category')
-                    .expect(401, done);*/
+                request(app)
+                    .get('/api/category/2/line?light')
+                    .expect(401, done);
                 
             });
 
-            test("032015 - Obtenir toutes les lignes d'une catégorie qui ne m'appartient pas (Version light)", (done) => {
+            test("031015 - Obtenir toutes les lignes d'une catégorie qui ne m'appartient pas (Version light)", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -310,14 +298,12 @@ describe('3.0 - Catégories et lignes', () => {
                     })
                 });
                 
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/6/category')
-                    .expect(404, done);*/
+                request(app)
+                    .get('/api/category/9/line?light')
+                    .expect(404, done);
             });
 
-            test("032016 - Obtenir toutes les lignes d'une catégorie qui n'existe pas (Version light)", (done) => {
+            test("031016 - Obtenir toutes les lignes d'une catégorie qui n'existe pas (Version light)", (done) => {
                 // Stub the verifyAuth
                 auth.verifyAuth.callsFake((req, res, next) => {
                     userService.getUser({
@@ -328,11 +314,9 @@ describe('3.0 - Catégories et lignes', () => {
                     })
                 });
     
-                expect("Not implemented").toEqual(false);
-                done();
-                /*request(app)
-                    .get('/api/budget/-1/category')
-                    .expect(404, done);*/
+                request(app)
+                    .get('/api/category/-1/line?light')
+                    .expect(404, done);
                 
             });
         });
@@ -433,7 +417,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(400, done);
+                .expect(403, done);
         });
 
         test("032004 - Créer une catégorie sans type", (done) => {
@@ -481,7 +465,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(400, done);
+                .expect(403, done);
         });
 
         test("032006 - Créer une catégorie sans nom", (done) => {
@@ -529,7 +513,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(400, done);
+                .expect(403, done);
         });
 
         test("032008 - Créer une catégorie sans budget", (done) => {
@@ -577,7 +561,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(400, done);
+                .expect(404, done);
         });
 
         test("032010 - Créer une catégorie avec budget qui n'existe pas", (done) => {
@@ -602,7 +586,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(400, done);
+                .expect(404, done);
         });
 
         test("032011 - Créer une catégorie sans authentification", (done) => {
@@ -646,7 +630,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(201)
@@ -656,7 +640,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            expenseEstimate: estimate.toString(),
+                            estimate: estimate.toString(),
                             categoryId: categoryId
                         })
                     );
@@ -685,7 +669,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(201)
@@ -695,7 +679,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            expenseEstimate: estimate.toString(),
+                            estimate: estimate.toString(),
                             categoryId: categoryId
                         })
                     );
@@ -722,7 +706,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .post('/api/line')
                 .send({
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(400, done);
@@ -749,10 +733,10 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
-                .expect(400, done);
+                .expect(404, done);
         });
 
         test("033005 - Créer une ligne sans description", (done) => {
@@ -774,7 +758,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .post('/api/line')
                 .send({
                     name: name,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(400, done);
@@ -801,7 +785,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(201)
@@ -811,7 +795,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            expenseEstimate: estimate.toString(),
+                            estimate: estimate.toString(),
                             categoryId: categoryId
                         })
                     );
@@ -865,7 +849,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(201)
@@ -875,7 +859,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            expenseEstimate: estimate.toString(),
+                            estimate: estimate.toString(),
                             categoryId: categoryId
                         })
                     );
@@ -903,7 +887,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(400, done)
         });
@@ -929,7 +913,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(404, done);
@@ -956,7 +940,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(404, done);
@@ -976,7 +960,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate,
+                    estimate: estimate,
                     categoryId: categoryId
                 })
                 .expect(401, done);
@@ -1056,7 +1040,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name
                 })
-                .expect(400, done);
+                .expect(403, done);
         });
 
         test("034004 - Mettre à jour une catégorie qui ne m'appartient pas", (done) => {
@@ -1141,7 +1125,7 @@ describe('3.0 - Catégories et lignes', () => {
                     name: name,
                     description: description,
                     categoryId: categoryId,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(200)
                 .then((response) => {
@@ -1151,7 +1135,7 @@ describe('3.0 - Catégories et lignes', () => {
                             name: name,
                             description: description,
                             categoryId: 9, // Should remain unchanged
-                            expenseEstimate: estimate.toString()
+                            estimate: estimate.toString()
                         })
                     );
                     done();
@@ -1176,7 +1160,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .put('/api/line/34')
                 .send({
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(400, done);
         });
@@ -1201,9 +1185,9 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
-                .expect(400, done);
+                .expect(403, done);
         });
 
         test("035004 - Mettre à jour une ligne sans description", (done) => {
@@ -1224,7 +1208,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .put('/api/line/36')
                 .send({
                     name: name,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(400, done);
         });
@@ -1249,7 +1233,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(200)
                 .then((response) => {
@@ -1259,7 +1243,7 @@ describe('3.0 - Catégories et lignes', () => {
                             name: name,
                             description: description,
                             categoryId: 10, // Should remain unchanged
-                            expenseEstimate: estimate.toString()
+                            estimate: estimate.toString()
                         })
                     );
                     done();
@@ -1309,7 +1293,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(200)
                 .then((response) => {
@@ -1319,7 +1303,7 @@ describe('3.0 - Catégories et lignes', () => {
                             name: name,
                             description: description,
                             categoryId: 10, // Should remain unchanged
-                            expenseEstimate: estimate.toString()
+                            estimate: estimate.toString()
                         })
                     );
                     done();
@@ -1346,7 +1330,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(404, done);
         });
@@ -1371,7 +1355,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(404, done);
         });
@@ -1389,7 +1373,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name,
                     description: description,
-                    expenseEstimate: estimate
+                    estimate: estimate
                 })
                 .expect(401, done);
         });
