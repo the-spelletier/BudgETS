@@ -6,6 +6,7 @@ import BudgetContainer from "./budget/BudgetContainer";
 import BudgetCreate from "./budget/create/BudgetCreate";
 import BudgetDetails from "./budget/details/BudgetDetails";
 import Categories from "./categories/Categories";
+import Entries from "./entries/Entries";
 import Help from "./help/Help";
 import EmptyState from "./EmptyState";
 
@@ -23,7 +24,7 @@ const AppRouter = () => {
                     <Route path="/budget/cat-and-lines"><Categories /></Route>
                     <Route path="/budget/revenues"><EmptyState /></Route>
                     <Route path="/budget/spending"><EmptyState /></Route>
-                    <Route path="/budget/entries"><EmptyState /></Route>
+                    <Route path="/budget/entries"><Entries /></Route>
                 </BudgetContainer>
             </Route>
             <Route path="/auth"><Auth /></Route>
