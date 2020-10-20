@@ -1,4 +1,4 @@
-# BudgETS financière
+# BudgETS
  Une application financière pour les clubs étudiants de l'ETS.
 
 ## Démarrage de l'application
