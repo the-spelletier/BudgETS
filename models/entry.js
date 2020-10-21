@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         entryStatusId: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: true
         },
         amount: {
             type: DataTypes.DECIMAL(10,2),

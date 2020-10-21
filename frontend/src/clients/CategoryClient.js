@@ -12,6 +12,11 @@ export class CategoryClient {
         return await apiClient.get(`/budget/${budgetId}/category`, token);
     }
 
+    get = async (token, categoryId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/category/${categoryId}`, token);
+    }
+
     update = async (token, budgetId, id, name, type) => {
         const apiClient = new ApiClient();
         var params = {budgetId, name, type};

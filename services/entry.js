@@ -9,13 +9,11 @@ const { entryDTO } = require('../dto');
 const getEntry = entry => {
     return Entry.findOne({
         where: entry,
-        include: [
-            {
-                model: Line,
-                required: true,
-                attributes: ['categoryId']
-            }
-        ]
+        include: {
+            model: Line,
+            required: true,
+            attributes: ['categoryId']
+        }
     });
 }
 
@@ -27,14 +25,19 @@ const getEntry = entry => {
 const getEntries = budgetId => {
     return Entry.findAll({ 
         include: [
-            EntryStatus, {
+            {
+                model: EntryStatus,
+                required: true,
+                attributes: ['name']
+            },
+            {
                 model: Line,
                 required: true,
-                attributes: [['name', 'lineName']],
+                attributes: ['name'],
                 include: {
                     model: Category,
                     required: true,
-                    attributes: [['name', 'categoryName']],
+                    attributes: ['name'],
                     where: {
                       budgetId: budgetId
                     }
