@@ -21,7 +21,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -33,7 +33,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
@@ -48,7 +48,7 @@ describe('9.0 - Clonage de budget', () => {
                             startDate: start,
                             endDate: end,
                             isActive: false,
-                            userId: '2'
+                            userId: '5'
                         })
                     );
                     done();
@@ -59,7 +59,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -88,7 +88,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
@@ -102,7 +102,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -127,7 +127,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -152,7 +152,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -163,7 +163,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     startDate: start,
                     endDate: end
@@ -175,7 +175,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -187,7 +187,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
@@ -200,7 +200,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -211,7 +211,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     endDate: end
@@ -223,7 +223,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -235,7 +235,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
@@ -248,7 +248,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -259,7 +259,7 @@ describe('9.0 - Clonage de budget', () => {
             const start = '2021-09-25 00:00:00'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start
@@ -271,7 +271,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -283,7 +283,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = ''
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
@@ -296,7 +296,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -308,7 +308,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: end,
@@ -321,7 +321,7 @@ describe('9.0 - Clonage de budget', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username:'budgets_test002'
+                    username:'budgets_test005'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -333,7 +333,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/5')
+                .post('/api/budget/clone/17')
                 .send({
                     name: name,
                     startDate: start,
