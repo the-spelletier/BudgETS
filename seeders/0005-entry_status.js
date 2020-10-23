@@ -14,6 +14,18 @@ module.exports = {
             name: 'Envoyé',
             position: 1
         });
+
+        entryStatuses.push({
+            id: 2,
+            name: 'À traiter',
+            position: 2
+        });
+
+        entryStatuses.push({
+            id: 3,
+            name: 'Traité',
+            position: 3
+        });
     }
 
     if (entryStatuses.length > 0) {

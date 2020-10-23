@@ -26,12 +26,85 @@ module.exports = {
         }
     } else if (process.env.NODE_ENV == 'development') {
         // Add real categories
+        nbCategories++;
         categories.push({
-            id: nbCategories + 1,
+            id: nbCategories,
             name: 'categoryDevTest',
             budgetId: 1,
             type: 'revenue'
         });
+
+        // Budget 03 (User 2)
+        for (let i = 0; i < 10; ++i) {
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev03' + ("0" + i).slice(-2),
+                budgetId: 3,
+                type: 'revenue'
+            });
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev03' + (i + 10),
+                budgetId: 3,
+                type: 'expense'
+            });
+        }
+
+        // Budget 04 (User 2)
+        for (let i = 0; i < 10; ++i) {
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev04' + ("0" + i).slice(-2),
+                budgetId: 4,
+                type: 'revenue'
+            });
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev04' + ("0" + (i + 10)).slice(-2),
+                budgetId: 4,
+                type: 'expense'
+            });
+        }
+
+        // Budget 05 (User 2)
+        for (let i = 0; i < 10; ++i) {
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev05' + ("0" + i).slice(-2),
+                budgetId: 5,
+                type: 'revenue'
+            });
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev05' + ("0" + (i + 10)).slice(-2),
+                budgetId: 5,
+                type: 'expense'
+            });
+        }
+
+        // Budget 06 (User 2)
+        for (let i = 0; i < 10; ++i) {
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev06' + ("0" + i).slice(-2),
+                budgetId: 6,
+                type: 'revenue'
+            });
+            nbCategories++;
+            categories.push({
+                id: nbCategories,
+                name: 'categoryDev06' + ("0" + (i + 10)).slice(-2),
+                budgetId: 6,
+                type: 'expense'
+            });
+        }
     }
 
     if (categories.length > 0) {
