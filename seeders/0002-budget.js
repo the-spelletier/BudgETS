@@ -25,7 +25,7 @@ module.exports = {
     } else if (process.env.NODE_ENV == 'development') {
         // Add real budgets
         budgets.push({
-            id: nbBudget + 1,
+            id: 1,
             name: '2019-2020',
             userId: 1,
             startDate: new Date(2019, 0, 1), // Months are indexed at 0, Days are indexed at 1
@@ -33,12 +33,57 @@ module.exports = {
             isActive: false
         });
         budgets.push({
-            id: nbBudget + 2,
+            id: 2,
             name: '2020-2021',
             userId: 1,
             startDate: new Date(2020, 0, 1), // Months are indexed at 0, Days are indexed at 1
             endDate: new Date(2020, 11, 31),
             isActive: true
+        });
+
+        budgets.push({
+            id: 3,
+            name: 'LAN 2020',
+            userId: 2,
+            startDate: new Date(2020, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2020, 11, 31),
+            isActive: true
+        });
+
+        budgets.push({
+            id: 4,
+            name: 'LAN 2019',
+            userId: 2,
+            startDate: new Date(2019, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2019, 11, 31),
+            isActive: false
+        });
+
+        budgets.push({
+            id: 5,
+            name: 'LAN 2018',
+            userId: 2,
+            startDate: new Date(2018, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2018, 11, 31),
+            isActive: false
+        });
+
+        budgets.push({
+            id: 6,
+            name: 'LAN 2017',
+            userId: 2,
+            startDate: new Date(2017, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2017, 11, 31),
+            isActive: false
+        });
+
+        budgets.push({
+            id: 7,
+            name: 'LAN 2016',
+            userId: 2,
+            startDate: new Date(2016, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2016, 11, 31),
+            isActive: false
         });
     }
 
