@@ -127,6 +127,12 @@ function clone(req, res) {
                 res.status(403).send({ message: 'Impossible de trouver le budget de référence' });
             });
         }
+        else {
+            res.status(403).send({ message: 'Erreur de validation' });
+        }
+    }
+    else {
+        res.status(403).send({ message: 'Aucun budget référence indiqué' });
     }
 }
 
