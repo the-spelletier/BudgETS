@@ -67,6 +67,7 @@
           "pageTitle": "BudgETS - Tests Report",
           "includeFailureMsg": true,
           "outputPath": "./tests/reports/test-report.html",
+          "statusIgnoreFilter": "passed, pending",
           "sort": "titleAsc"
         }
       ]
