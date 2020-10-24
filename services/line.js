@@ -1,4 +1,4 @@
-const { Line } = require('../models');
+const { Line, Category } = require('../models');
 const { lineDTO } = require('../dto');
 
 // Retourne une lingne (tous les paramètres) selon l'identificateur envoyé en paramètre
@@ -9,9 +9,11 @@ const getLine = line => {
 }
 
 // Retourne toutes les lignes
-const getLines = line => {
-  	return Line.findAll({ 
-        where: line
+const getLines = categoryId => {
+    return Line.findAll({ 
+        where: {
+            categoryId: categoryId
+        }
     });
 };
 
@@ -36,11 +38,11 @@ const updateLine = line => {
 
 // Suppression d'une ligne selon l'identificateur envoyé en paramètre
 const deleteLine = line => {
-  return Line.destroy({ 
-    where: { 
-        id: line.id 
-    } 
-  });
+    return Line.destroy({
+        where: {
+            id: line.id
+        }
+    });
 }
 
 module.exports = {

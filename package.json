@@ -8,6 +8,7 @@
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "start": "node server.js",
+    "clean-dev": "cross-env NODE_ENV=development npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "repository": {
@@ -46,15 +47,30 @@
   ],
   "license": "ISC",
   "jest": {
+    "collectCoverage": true,
     "testEnvironment": "node",
-    "testTimeout": 10000,
+    "testTimeout": 5000,
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/frontend/"
     ],
+    "coverageDirectory": "./tests/reports/coverage/",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/frontend/"
+    ],
+    "reporters": [
+      "default",
+      [
+        "./node_modules/jest-html-reporter",
+        {
+          "pageTitle": "BudgETS - Tests Report",
+          "includeFailureMsg": true,
+          "outputPath": "./tests/reports/test-report.html",
+          "statusIgnoreFilter": "passed, pending",
+          "sort": "titleAsc"
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -68,7 +84,13 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^26.4.2",
+    "jest-html-reporter": "^3.2.0",
     "sequelize-cli": "^6.2.0",
-    "supertest": "^5.0.0"
+    "sinon": "^9.2.0",
+    "supertest": "^5.0.0",
+    "prettier": "1.19.1",
+    "stylelint": "^13.2.0",
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-prettier": "^1.1.2"
   }
 }

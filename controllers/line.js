@@ -2,7 +2,7 @@ const { lineDTO } = require('../dto');
 const lineService = require('../services/line');
 
 function get(req, res) {
-    lineService.getLine(lineDTO(req.params)).then(line => {
+    lineService.getLine({ id: req.params.id }).then(line => {
         sendLine(line, res);
     }).catch(err => {
         console.log(err);
@@ -11,7 +11,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    lineService.getLines(lineDTO(req.params)).then(lines => {
+    lineService.getLines(req.params.categoryId).then(lines => {
         sendLine(lines, res);
     }).catch(err => {
         console.log(err);
@@ -21,7 +21,7 @@ function getAll(req, res) {
 
 function create(req, res) {
     let line = lineDTO(req.body);
-    if (line.name, line.description, line.expenseEstimate, line.categoryId) { 
+    if (line.name, line.description, line.estimate, line.categoryId) { 
         lineService.addLine(line).then(l => {
             res.status(201);
             sendLine(l, res);
@@ -70,6 +70,9 @@ function sendLine(line, res) {
         if (Array.isArray(line)) {
             line.forEach((b, i, arr) => {
                 arr[i] = lineDTO(b);
+                delete arr[i].description;
+                delete arr[i].estimate;
+                delete arr[i].categoryId;
             });
             lineRes = line;
         } else {

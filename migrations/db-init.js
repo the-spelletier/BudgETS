@@ -4,7 +4,6 @@ const {
     Budget,
     Category,
     Line,
-    Receipt,
     EntryStatus,
     Entry
 } = require('../models');
@@ -22,13 +21,11 @@ module.exports = {
         await Category.sync();
         await Line.sync();
         await EntryStatus.sync();
-        await Receipt.sync();
         await Entry.sync();
     },
 
     down: async (queryInterface, Sequelize) => {
         await Entry.drop();
-        await Receipt.drop();
         await EntryStatus.drop();
         await Line.drop();
         await Category.drop();

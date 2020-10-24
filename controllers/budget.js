@@ -1,5 +1,7 @@
-const { budgetDTO } = require('../dto');
+const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
 const budgetService = require('../services/budget');
+const categoryService = require('../services/category');
+const lineService = require('../services/line');
 
 function getCurrent(req, res) {
     budgetService.getBudget({
@@ -14,7 +16,9 @@ function getCurrent(req, res) {
 }
 
 function get(req, res) {
-    budgetService.resetGetActiveBudget(budgetDTO(req.params), req.user).then(b => {
+    let budget = budgetDTO(req.params);
+    budget.userId = req.user.id;
+    budgetService.resetGetActiveBudget(budget, req.user).then(b => {
         sendBudget(b, res);
     }).catch(err => {
         console.log(err);
@@ -23,7 +27,9 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets(budgetDTO(req.params)).then(budgets => {
+    let budget = budgetDTO(req.params);
+    budget.userId = req.user.id;
+    budgetService.getBudgets(budget).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);
@@ -65,7 +71,69 @@ function update(req, res) {
 }
 
 function clone(req, res) {
+    let budget = budgetDTO(req.body);
+    if (req.params.id) {
 
+        // Dates for validation
+        let sDate = new Date(budget.startDate);
+        let eDate = new Date(budget.endDate);
+        if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
+
+            budget.isActive = false;
+            budget.userId = req.user.id;
+
+            // Get for all categories and lines
+            budgetService.getBudgetByID(req.params.id).then(oldB => {
+
+                // Create new budgets
+                budgetService.addBudget(budget).then(newB => {
+
+                    // Adding each category
+                    let categoryAdd;
+                    let message = '';
+                    oldB.Categories.forEach(oldC => {
+                        categoryAdd = categoryDTO(oldC);
+                        delete categoryAdd.id;
+                        categoryAdd.budgetId = newB.id; // Assign cat to new budget
+                        categoryService.addCategory(categoryAdd).then(newC => {
+                            
+                            // Adding the lines
+                            let lineAdd;
+                            oldC.Lines.forEach(oldL => {
+                                lineAdd = lineDTO(oldL);
+
+                                delete lineAdd.id;
+                                lineAdd.categoryId = newC.id;
+                                lineService.addLine(lineAdd).catch(err => {
+                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + '\n';
+                                });
+                                
+                                return;
+                            });
+
+                            return ;
+                            
+                        }).catch(err => {
+                            message = message + 'Impossible d\'ajouter la catégorie ' + categoryAdd.name + '\n';
+                        });
+                    });
+                    
+                    sendBudget(newB, res);
+
+                }).catch(err => {
+                    res.status(403).send({ message: 'Impossible d\'ajouter le budget' });
+                });
+            }).catch(err => {
+                res.status(403).send({ message: 'Impossible de trouver le budget de référence' });
+            });
+        }
+        else {
+            res.status(403).send({ message: 'Erreur de validation' });
+        }
+    }
+    else {
+        res.status(403).send({ message: 'Aucun budget référence indiqué' });
+    }
 }
 
 function getSummary(req, res) {

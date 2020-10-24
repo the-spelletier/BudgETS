@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false
         },
-        expenseEstimate: {
+        estimate: {
             type: DataTypes.DECIMAL(10,2),
             allowNull: false,
             defaultValue: '0.00',

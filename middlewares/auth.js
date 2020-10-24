@@ -31,10 +31,17 @@ const verifyAuth = (req, res, next) => {
         userService.getUser({
             id: payload.id
         }).then(user => {
-            req.user = User.build(user, {raw: true});
-            next();
+            if (user) {
+                req.user = User.build(user, {raw: true});
+                next();
+            }
+            else {
+                return res.status(401).send({
+                    message: 'Invalid user'
+                });
+            }
         }).catch(err => {
-            console.log(err);
+            console.log(err)
             return res.status(401).send({
                 message: 'An unexpected error occurred'
             });

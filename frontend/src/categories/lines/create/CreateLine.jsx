@@ -14,7 +14,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const {user} = useContext(UserContext);
 
     //Form info
-    const defaultLine = {name: "", description: "", expenseEstimate: 0};
+    const defaultLine = {name: "", description: "", estimate: 0};
     const [line, setLine] = useState(defaultLine);
 
     //Validation
@@ -38,7 +38,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const addLine = () => {
         const save = async () => {
             try {
-                await lineClient.create(user.token, line.name, line.description, line.expenseEstimate, categoryId);
+                await lineClient.create(user.token, line.name, line.description, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -68,7 +68,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const editLine = () => {
         const save = async () => {
             try {
-                await lineClient.update(user.token, line.id, line.name, line.description, line.expenseEstimate, categoryId);
+                await lineClient.update(user.token, line.id, line.name, line.description, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -120,8 +120,8 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                     <InputNumber size="large"
                         min={0}
                         placeholder="Estimé"
-                        value={line.expenseEstimate}
-                        onChange={(value) => setLine({...line, expenseEstimate: value})} />
+                        value={line.estimate}
+                        onChange={(value) => setLine({...line, estimate: value})} />
                 </div>
         </Modal>
     );

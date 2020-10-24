@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 import { useHistory } from 'react-router-dom';
-import { Card, Input, Button } from "antd";
+import { Card, Input, Button, Form } from "antd";
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { AuthClient } from "../clients/AuthClient";
 import UserContext from "../contexts/user/UserContext";
@@ -52,27 +52,29 @@ const Auth = () => {
             {
                 !user.token && 
                 <Card title={<h2>Se connecter</h2>} className="connexion-card">
-                    <div className={error.username ? "connexion-input error" : "connexion-input"}>
-                        <Input size="large" 
-                            placeholder="Nom d'utilisateur" 
-                            value={username}
-                            onChange={(event) => setUsername(event.target.value)}/>
-                    </div>
-                    <div className={error.password ? "connexion-input error" : "connexion-input"}>
-                        <Input.Password  size="large"
-                            placeholder="Mot de passe"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}/>
-                    </div>
-                    <div className="connexion-button">
-                        <Button size="large" 
-                            type="primary"
-                            onClick={submit}>
-                                Se connecter
-                        </Button>
-                    </div>
-        </Card>
-        }
+                    <Form>
+                        <div className={error.username ? "connexion-input error" : "connexion-input"}>
+                            <Input size="large" 
+                                placeholder="Nom d'utilisateur" 
+                                value={username}
+                                onChange={(event) => setUsername(event.target.value)}/>
+                        </div>
+                        <div className={error.password ? "connexion-input error" : "connexion-input"}>
+                            <Input.Password  size="large"
+                                placeholder="Mot de passe"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}/>
+                        </div>
+                        <div className="connexion-button">
+                            <Button size="large" htmlType="submit"
+                                type="primary"
+                                onClick={submit}>
+                                    Se connecter
+                            </Button>
+                        </div>
+                    </Form>
+                </Card>
+            }
         </Fragment>
     );
 };

@@ -2,7 +2,7 @@ const { entryDTO } = require('../dto');
 const entryService = require('../services/entry');
 
 function get(req, res) {
-    entryService.getEntry(entryDTO(req.params)).then(entry => {
+    entryService.getEntry({ id: req.params.id }).then(entry => {
         sendEntry(entry, res);
     }).catch(err => {
         console.log(err);
@@ -17,14 +17,6 @@ function getAll(req, res) {
         console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
-}
-
-function getRevenues(req, res) {
-
-}
-
-function getExpenses(req, res) {
-
 }
 
 function create(req, res) {
@@ -76,8 +68,8 @@ function sendEntry(entry, res) {
     if (entry) {
         let entryRes;
         if (Array.isArray(entry)) {
-            entry.forEach((b, i, arr) => {
-                arr[i] = entryDTO(b);
+            entry.forEach((e, i, arr) => {
+                arr[i] = entryDTO(e);
             });
             entryRes = entry;
         } else {
@@ -92,8 +84,6 @@ function sendEntry(entry, res) {
 module.exports = {
     get,
     getAll,
-    getRevenues,
-    getExpenses,
     create,
     update,
     deleteOne

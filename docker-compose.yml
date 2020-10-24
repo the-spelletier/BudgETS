@@ -13,6 +13,7 @@ services:
           - MYSQL_DATABASE=BudgetETS
           - REACT_APP_SERVER_PORT=3000
           - MYSQL_HOST_IP= mysql
+         command: yarn start
     mysql:
         image: "mysql:latest"
         restart: always
@@ -24,6 +25,8 @@ services:
           - MYSQL_ROOT_PASSWORD=password
           - MYSQL_DATABASE=BudgetETS
           - REACT_APP_SERVER_PORT=3000
+        volumes:
+          - ./seeders:/docker-entrypoint-initdb.d/
         ports:
             - "3306:3306"
     client:
