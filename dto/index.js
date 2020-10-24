@@ -124,10 +124,30 @@ const entryDTO = (entry, e = {}) => {
   return e;
 };
 
+const memberDTO = (member, m = {}) => {
+  if (typeof member.id != 'undefined') {
+    m.id = member.id;
+  }
+  if (typeof member.userId != 'undefined') {
+    m.userId = member.userId;
+  }
+  if (typeof member.name != 'undefined') {
+    m.name = member.name;
+  }
+  if (typeof member.code != 'undefined') {
+    m.code = member.code;
+  }
+  if (typeof member.email != 'undefined') {
+    m.email = member.email;
+  }
+  return m;
+};
+
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
   lineDTO,
-  entryDTO
+  entryDTO,
+  memberDTO
 }
