@@ -27,15 +27,34 @@ module.exports = {
                 }
             }
         }
-    } else if (process.env.NODE_ENV == 'development') {
+    } else if (process.env.NODE_ENV == 'development') { 
         // Add real lines
+        nbLines++;
         lines.push({
-            id: nbLines + 1,
+            id: nbLines,
             name: 'lineDevTest',
             description: 'descTest',
             categoryId: 1,
             estimate: 10
         });
+
+        // (Budget For User 2)
+        for (let i = 3; i < 4; ++i) {
+            // Categories (Leave 2 categories empty for testing purposes)
+            for (let j = 0; j < 8; ++j) {
+                const categoryId = (i - 3) * 10 + j + 2
+                for (let k = 0; k < 10; ++k) {
+                    nbLines++;
+                    lines.push({
+                        id: nbLines,
+                        name: 'lineDev' + ("00" + nbLines).slice(-3),
+                        description: 'lineDesc' + ("00" + nbLines).slice(-3),
+                        categoryId: categoryId,
+                        estimate: Math.random() * (500 - (-500)) + (-500)
+                    });
+                }
+            }
+        }
     }
 
     if (lines.length > 0) {

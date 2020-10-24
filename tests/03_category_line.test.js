@@ -31,11 +31,6 @@ describe('3.0 - Catégories et lignes', () => {
                         expect(response.body.length).toEqual(4);
                         for (let i = 0; i < response.body.length; ++i) {
                             const typeStr = ((5 + i) % 2 == 0) ? 'revenue' : 'expense';
-                            if (i < response.body.length / 2) {
-                                expect(response.body[i]['lines'].length).toEqual(4);
-                            } else {
-                                expect(response.body[i]['lines'].length).toEqual(0);
-                            }
                             expect(response.body[i]).toEqual(
                                 expect.objectContaining({
                                     id: (5 + i).toString(),
@@ -44,6 +39,11 @@ describe('3.0 - Catégories et lignes', () => {
                                     budgetId: '2'
                                 })
                             );
+                            if (5 + i <= 6) {
+                                expect(response.body[i]['lines'].length).toEqual(4);
+                            } else {
+                                expect(response.body[i]['lines'].length).toEqual(0);
+                            }
                         }
                         done();
                     });
@@ -568,7 +568,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            estimate: estimate.toString(),
+                            estimate: estimate,
                             categoryId: categoryId
                         })
                     );
@@ -607,7 +607,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            estimate: estimate.toString(),
+                            estimate: estimate,
                             categoryId: categoryId
                         })
                     );
@@ -723,7 +723,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            estimate: estimate.toString(),
+                            estimate: estimate,
                             categoryId: categoryId
                         })
                     );
@@ -787,7 +787,7 @@ describe('3.0 - Catégories et lignes', () => {
                         expect.objectContaining({
                             name: name,
                             description: description,
-                            estimate: estimate.toString(),
+                            estimate: estimate,
                             categoryId: categoryId
                         })
                     );
@@ -915,7 +915,7 @@ describe('3.0 - Catégories et lignes', () => {
             request(app)
                 .put('/api/category/17')
                 .send({
-                    id: id,
+                    id: id.toString(),
                     name: name,
                     type: type,
                     budgetId: budgetId
@@ -1059,11 +1059,11 @@ describe('3.0 - Catégories et lignes', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: 33, // Should remain unchanged
+                            id: '33', // Should remain unchanged
                             name: name,
                             description: description,
-                            categoryId: 9, // Should remain unchanged
-                            estimate: estimate.toString()
+                            categoryId: 17, // Should remain unchanged
+                            estimate: estimate
                         })
                     );
                     done();
@@ -1167,11 +1167,11 @@ describe('3.0 - Catégories et lignes', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: 37, // Should remain unchanged
+                            id: '37', // Should remain unchanged
                             name: name,
                             description: description,
-                            categoryId: 10, // Should remain unchanged
-                            estimate: estimate.toString()
+                            categoryId: '18', // Should remain unchanged
+                            estimate: estimate
                         })
                     );
                     done();
@@ -1227,11 +1227,11 @@ describe('3.0 - Catégories et lignes', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: 39, // Should remain unchanged
+                            id: '39', // Should remain unchanged
                             name: name,
                             description: description,
-                            categoryId: 10, // Should remain unchanged
-                            estimate: estimate.toString()
+                            categoryId: '18', // Should remain unchanged
+                            estimate: estimate
                         })
                     );
                     done();
