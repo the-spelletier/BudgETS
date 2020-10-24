@@ -34,8 +34,8 @@ const Sidebar = () => {
                     <Menu.Item key="/budget/revenues">
                         <Link to="/budget/revenues">Revenus</Link>
                     </Menu.Item>
-                    <Menu.Item key="/budget/spending">
-                        <Link to="/budget/spending">Dépenses</Link>
+                    <Menu.Item key="/budget/expenses">
+                        <Link to="/budget/expenses">Dépenses</Link>
                     </Menu.Item>
                     <Menu.Item key="/budget/entries">
                         <Link to="/budget/entries">Entrées budgétaires</Link>
