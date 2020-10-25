@@ -40,9 +40,12 @@ const Sidebar = () => {
                     <Menu.Item key="/budget/entries">
                         <Link to="/budget/entries">Entrées budgétaires</Link>
                     </Menu.Item>
+                    <Menu.Item key="/members">
+                        <Link to="/members">Membres</Link>
+                    </Menu.Item>
                 </Fragment>
             }
-            <Menu.Item key="6">
+            <Menu.Item key="/help">
                 <Link to="/help">Aide</Link>
             </Menu.Item>
             <Menu.Item className="bottom login" key="/auth">
