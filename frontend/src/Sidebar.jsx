@@ -1,17 +1,20 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { Menu } from 'antd';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserContext from "./contexts/user/UserContext";
 
 const Sidebar = () => {
     const history = useHistory();
+    const storedJwt = localStorage.getItem('token');
+
     const {user, setCurrentUser} = useContext(UserContext);
+    user.token = storedJwt || null;
 
     const logout = () => {
         //Call to logout
+        localStorage.removeItem('token');
         setCurrentUser({username: null, token: null});
         return history.push("/auth");
-
     };
 
     const location = useLocation();

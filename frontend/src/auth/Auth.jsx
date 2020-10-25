@@ -23,6 +23,7 @@ const Auth = () => {
         const login = async() => {
             try {
                 var loggedUser = await authClient.login(username, password);
+                localStorage.setItem('token', loggedUser.data.token);
                 setCurrentUser({username: username, token: loggedUser.data.token});
                 return history.push("/budget/summary");
             }
