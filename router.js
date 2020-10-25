@@ -311,7 +311,7 @@ module.exports.set = app => {
         entryController.deleteOne
     );
 
-    // BUDGET MEMBER ENDPOINTS
+    // USER MEMBER ENDPOINTS
 
     // MEMBER : GET
     // Get the member from specified ID
@@ -331,7 +331,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/user/:userId/members',
+        '/api/members',
         authMiddleware.verifyAuth,
         memberController.getAll
     );

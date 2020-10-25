@@ -3,6 +3,7 @@ const memberService = require('../services/member');
 
 function get(req, res) {
     memberService.getMember({ id: req.params.id }).then(member => {
+        member.userId = req.user.id;
         sendMember(member, res);
     }).catch(err => {
         console.log(err);
@@ -11,7 +12,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    memberService.getMembers(req.params.userId).then(members => {
+    memberService.getMembers(req.user.id).then(members => {
         sendMember(members, res);
     }).catch(err => {
         console.log(err);
@@ -21,7 +22,7 @@ function getAll(req, res) {
 
 function create(req, res) {
     let member = memberDTO(req.body);
-    console.log(member);
+    member.userId = req.user.id;
     if (member.name, member.code, member.email) { 
         memberService.addMember(member).then(m => {
             res.status(201);
@@ -36,8 +37,7 @@ function create(req, res) {
 
 function update(req, res) {
     let member = memberDTO(req.body);
-    console.log(req.body);
-    console.log(member);
+    member.userId = req.user.id;
     if (req.params.id) {
         member.id = req.params.id;
         memberService.updateMember(member).then(m => {
