@@ -2,7 +2,7 @@ const { memberDTO } = require('../dto');
 const memberService = require('../services/member');
 
 function get(req, res) {
-    memberService.getMember({ id: req.params.id }).then(member => {
+    memberService.getMember( req.params.id ).then(member => {
         member.userId = req.user.id;
         sendMember(member, res);
     }).catch(err => {

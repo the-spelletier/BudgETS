@@ -27,7 +27,6 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     }, [memberId]);
 
     const onCancel = () => {
-        // getMember({userId: null});
         onCancelParent();
     };
 
@@ -103,6 +102,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                     </div>
                     <div className="form-section">
                         <Input size="large"
+                            type="email"
                             placeholder="E-mail"
                             value={member.email}
                             onChange={(event) => setMember({...member, email: event.target.value})} />

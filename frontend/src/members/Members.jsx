@@ -29,8 +29,12 @@ const Members = () => {
     }, [createModalIsVisible]);
 
     const onEditMember = (member) => {
-        console.log(member);
         setCurrentMember(member.id);
+        setCreateModalIsVisible(true);
+    };
+
+    const onCreateMember = () => {
+        setCurrentMember(null);
         setCreateModalIsVisible(true);
     };
 
