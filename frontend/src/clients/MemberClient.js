@@ -1,6 +1,11 @@
 import { ApiClient } from './ApiClient';
 
 export class MemberClient {
+    get = async (token, id) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/member/${id}`, token);
+    }
+
     getAll = async (token) => {
         const apiClient = new ApiClient();
         return await apiClient.get(`/members`, token);
