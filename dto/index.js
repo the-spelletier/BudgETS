@@ -87,9 +87,6 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.date != 'undefined') {
     e.date = entry.date;
   }
-  if (typeof entry.member != 'undefined') {
-    e.member = entry.member;
-  }
   if (typeof entry.description != 'undefined') {
     e.description = entry.description;
   }
@@ -101,6 +98,9 @@ const entryDTO = (entry, e = {}) => {
   }
   if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
+  }
+  if (typeof entry.memberId != 'undefined') {
+    e.memberId = entry.memberId;
   }
 
   if (typeof entry.Line != 'undefined') {
@@ -119,6 +119,12 @@ const entryDTO = (entry, e = {}) => {
     e.entryStatusName = entry.EntryStatus.name;
   } else if (typeof entry.entryStatusId != 'undefined') {
     e.entryStatusId = entry.entryStatusId;
+  }
+
+  if (typeof entry.Member != 'undefined' && entry.Member != null && typeof entry.Member.name != 'undefined') {
+    e.memberName = entry.Member.name;
+  } else {
+    e.memberName = "";
   }
 
   return e;

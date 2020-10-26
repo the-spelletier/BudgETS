@@ -22,8 +22,8 @@ module.exports = {
         await Category.sync();
         await Line.sync();
         await EntryStatus.sync();
-        await Entry.sync();
         await Member.sync();
+        await Entry.sync();
     },
 
     down: async (queryInterface, Sequelize) => {

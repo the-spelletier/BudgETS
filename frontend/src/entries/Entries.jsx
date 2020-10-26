@@ -88,7 +88,7 @@ const Entries = () => {
         },
         {
             title: "Membre",
-            render: (entry) => entry.member 
+            render: (entry) => entry.memberName 
         },
         {
             title: "Montant",

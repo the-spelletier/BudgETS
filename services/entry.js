@@ -1,4 +1,4 @@
-const { Entry, EntryStatus, Line, Category } = require('../models');
+const { Entry, EntryStatus, Line, Category, Member } = require('../models');
 const { entryDTO } = require('../dto');
 
 /**
@@ -29,6 +29,10 @@ const getEntries = budgetId => {
                 model: EntryStatus,
                 required: true,
                 attributes: ['name']
+            },
+            {
+                model: Member,
+                required: false
             },
             {
                 model: Line,

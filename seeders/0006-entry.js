@@ -13,10 +13,10 @@ module.exports = {
           id: nbEntries,
           amount: "10.00",
           date: "2021-09-25 00:00:00",
-          member: "Bob",
           description: "Description de l'entrée",
           type: "revenue",
           lineId: 1,
+          memberId: 1,
           entryStatusId: 1
         });
 
@@ -38,7 +38,6 @@ module.exports = {
                             id: nbEntries,
                             amount: Math.random() * (500 - (-500)) + (-500),
                             date: new Date(year, month, day),
-                            member: "LAN",
                             description: 'entryDesc' + ("0000" + nbEntries).slice(-5),
                             type: type,
                             lineId: lineId,

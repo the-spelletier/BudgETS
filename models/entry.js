@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'entryStatusId',
                 onDelete: 'RESTRICT'
             });
+            Entry.belongsTo(models.Member, {
+                foreignKey: 'memberId',
+                onDelete: 'RESTRICT'
+            });
         }
     };
 
@@ -33,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: true
         },
+        memberId: {
+            type: DataTypes.UUID,
+            allowNull: true
+        },
         amount: {
             type: DataTypes.DECIMAL(10,2),
             allowNull: false,
@@ -40,9 +48,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         date: {
             type: DataTypes.DATE,
-        },
-        member: {
-            type: DataTypes.STRING
         },
         description: {
             type: DataTypes.STRING
