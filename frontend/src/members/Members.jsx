@@ -91,11 +91,14 @@ const Members = () => {
 
     return (
         <Fragment>
-            {/* <BudgetHeader /> */}
             <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={members} className="no-paging" />
             </Card>
+            { 
+                members && members.length === 0 && 
+                <Button onClick={() => {onCreateMember()}}>Ajouter un membre</Button>
+            }
         </Fragment>
     );
 };
