@@ -167,10 +167,11 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     </div>
                     <div className={"form-section"}>
                         <Select 
+                            size="large"
                             value={entry.memberId} 
                             onChange={(id) => setEntry({...entry, memberId: id})}>
                             { 
-                                members.map((member) => <Option key={member.id} value={member.id}>{member.name}</Option>) 
+                                members.map((member) => <Option key={member.id} value={member.id}>{member.name + " " + member.code + " " + member.email}</Option>) 
                             }                            
                         </Select>    
                     </div>
