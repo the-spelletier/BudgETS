@@ -64,7 +64,7 @@
 
 .site-layout-background {
     margin: auto !important;
-    width: 60%;
+    width: 70%;
 }
 
 .content {
@@ -111,4 +111,12 @@ h2 {
 .ant-btn-primary:hover {
     background-color: $success-pale;
     border-color: $success-pale;
+}
+
+.ant-table-placeholder{
+    display: none;
+}
+
+.right-text{
+    text-align: right;
 }
