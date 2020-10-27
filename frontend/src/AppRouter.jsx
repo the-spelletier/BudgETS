@@ -10,24 +10,25 @@ import Entries from "./entries/Entries";
 import RevenuesOrExpenses from "./revenues-or-expenses/RevenuesOrExpenses";
 import Help from "./help/Help";
 import EmptyState from "./EmptyState";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 const AppRouter = () => {
     return (
         <Switch>
-            <Route exact path="/"><EmptyState /></Route>
-            <Route path="/budget/create"><BudgetCreate clone={ false } /></Route>
-            <Route path="/budget">
+            <ProtectedRoute exact path="/"><EmptyState /></ProtectedRoute>
+            <ProtectedRoute path="/budget/create"><BudgetCreate clone={ false } /></ProtectedRoute>
+            <ProtectedRoute path="/budget">
                 <BudgetContainer>
-                    <Route path="/budget/clone"><BudgetCreate clone={ true }  /></Route>
-                    <Route path="/budget/summary"><EmptyState /></Route>
-                    <Route path="/budget/details"><BudgetDetails /></Route>
-                    <Route path="/budget/cat-and-lines"><Categories /></Route>
-                    <Route path="/budget/revenues"><RevenuesOrExpenses type="revenue" /></Route>
-                    <Route path="/budget/expenses"><RevenuesOrExpenses type="expense" /></Route>
-                    <Route path="/budget/entries"><Entries /></Route>
+                    <ProtectedRoute path="/budget/clone"><BudgetCreate clone={ true }  /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/summary"><EmptyState /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/details" component={ BudgetDetails }></ProtectedRoute>
+                    <ProtectedRoute path="/budget/cat-and-lines"><Categories /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/revenues"><RevenuesOrExpenses type="revenue" /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/spending"><RevenuesOrExpenses type="expense" /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/entries"><Entries /></ProtectedRoute>
                 </BudgetContainer>
-            </Route>
+            </ProtectedRoute>
             <Route path="/auth"><Auth /></Route>
             <Route path="/help"><Help /></Route>
         </Switch>
