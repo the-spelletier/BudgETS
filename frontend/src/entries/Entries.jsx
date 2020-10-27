@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { Card, Table, notification } from "antd";
+import { Card, Table, Button, notification } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateEntry from "./create/CreateEntry";
@@ -19,13 +19,15 @@ const Entries = () => {
     const [currentEntry, setCurrentEntry] = useState(null);
     const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
 
-    useEffect(() => {
-        const getEntries = async() => {
-            var response = await entryClient.getList(user.token, budget.id);
-            setEntries(response.data.length > 0 ? response.data : [{}]);
-        }
+    const getEntries = async() => {
+        var response = await entryClient.getList(user.token, budget.id);
+        setEntries(response.data);
+    }
 
-        getEntries();
+    useEffect(() => {
+        if (user.token && budget.id) {
+            getEntries();
+        }
     }, [createModalIsVisible]);
 
     const onEditEntry = (entry) => {
@@ -110,6 +112,10 @@ const Entries = () => {
             <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
+                {
+                    entries && entries.length === 0 &&
+                    <Button onClick={() => {setCreateModalIsVisible(true)}}>Ajouter une entrée</Button>
+                }
             </Card>
         </Fragment>
     );
