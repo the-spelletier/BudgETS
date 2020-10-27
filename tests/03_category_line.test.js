@@ -924,7 +924,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: 17, // Should remain unchanged
+                            id: '17', // Should remain unchanged
                             name: name,
                             type: 'expense', // Should remain unchanged
                             budgetId: 9 // Should remain unchanged
