@@ -8,6 +8,7 @@ import BudgetDetails from "./budget/details/BudgetDetails";
 import Categories from "./categories/Categories";
 import Entries from "./entries/Entries";
 import Members from "./members/Members";
+import RevenuesOrExpenses from "./revenues-or-expenses/RevenuesOrExpenses";
 import Help from "./help/Help";
 import EmptyState from "./EmptyState";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -24,8 +25,8 @@ const AppRouter = () => {
                     <ProtectedRoute path="/budget/summary"><EmptyState /></ProtectedRoute>
                     <ProtectedRoute path="/budget/details" component={ BudgetDetails }></ProtectedRoute>
                     <ProtectedRoute path="/budget/cat-and-lines"><Categories /></ProtectedRoute>
-                    <ProtectedRoute path="/budget/revenues"><EmptyState /></ProtectedRoute>
-                    <ProtectedRoute path="/budget/spending"><EmptyState /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/revenues"><RevenuesOrExpenses type="revenue" /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/spending"><RevenuesOrExpenses type="expense" /></ProtectedRoute>
                     <ProtectedRoute path="/budget/entries"><Entries /></ProtectedRoute>
                 </BudgetContainer>
             </ProtectedRoute>
