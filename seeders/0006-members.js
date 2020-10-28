@@ -37,6 +37,21 @@ module.exports = {
                 userId: 1
             });
 
+            members.push({
+                id: 3,
+                name: 'Simon',
+                code: 'SIM12345',
+                email: 'simon@budgets.com',
+                userId: 4,
+            });
+
+            members.push({
+                id: 4,
+                name: 'Michel',
+                code: 'MIC23456',
+                email: 'michel@budgets.com',
+                userId: 4
+            });
         }
         
         if (members.length > 0) {
