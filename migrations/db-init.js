@@ -5,7 +5,8 @@ const {
     Category,
     Line,
     EntryStatus,
-    Entry
+    Entry,
+    Member
 } = require('../models');
 
 module.exports = {
@@ -21,10 +22,12 @@ module.exports = {
         await Category.sync();
         await Line.sync();
         await EntryStatus.sync();
+        await Member.sync();
         await Entry.sync();
     },
 
     down: async (queryInterface, Sequelize) => {
+        await Member.drop();
         await Entry.drop();
         await EntryStatus.drop();
         await Line.drop();

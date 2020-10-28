@@ -4,6 +4,7 @@ const categoryController = require('./controllers/category');
 const entryController = require('./controllers/entry');
 const lineController = require('./controllers/line');
 const userController = require('./controllers/user');
+const memberController = require('./controllers/member');
 
 const authMiddleware = require('./middlewares/auth');
 
@@ -308,6 +309,71 @@ module.exports.set = app => {
         '/api/entry/:id',
         authMiddleware.verifyAuth,
         entryController.deleteOne
+    );
+
+    // USER MEMBER ENDPOINTS
+
+    // MEMBER : GET
+    // Get the member from specified ID
+    // Params : { memberId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/member/:id',
+        authMiddleware.verifyAuth,
+        memberController.get
+    );
+
+
+    // MEMBER : GET
+    // Get all the user's members
+    // Params : { userId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/members',
+        authMiddleware.verifyAuth,
+        memberController.getAll
+    );
+
+    // MEMBER : POST
+    // Create a user member
+    // Params :
+    // {
+    //      member { userId, name,  code, email }
+    // }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/member',
+        authMiddleware.verifyAuth,
+        memberController.create
+    );
+
+    // MEMBER : PUT
+    // Updates a user's member
+    // Params :
+    // {
+    //      memberId,
+    //      member { name, code, email }
+    // }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.put(
+        '/api/member/:id',
+        authMiddleware.verifyAuth,
+        memberController.update
+    );
+
+    // MEMBER : DELETE
+    // Deletes a member
+    // Params : { memberId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.delete(
+        '/api/member/:id',
+        authMiddleware.verifyAuth,
+        memberController.deleteOne
     );
 
     // USER ENDPOINTS

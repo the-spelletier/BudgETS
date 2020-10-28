@@ -6,6 +6,7 @@ import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import { CategoryClient } from "../../clients/CategoryClient";
 import { LineClient } from "../../clients/LineClient";
+import { MemberClient } from "../../clients/MemberClient";
 import TextArea from "antd/lib/input/TextArea";
 import { EntryClient } from "../../clients/EntryClient";
 
@@ -15,6 +16,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const categoryClient = new CategoryClient();
     const lineClient = new LineClient();
     const entryClient = new EntryClient();
+    const memberClient = new MemberClient();
 
     const {user} = useContext(UserContext);
     const {budget} = useContext(BudgetContext);
@@ -24,6 +26,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     
     const [statuses, setStatuses] = useState([{id: 1, name: "Envoyé"}]);
     const [categories, setCategories] = useState(null);
+    const [members, setMembers] = useState(null);
     //Get according to selected category
     const [lines, setLines] = useState(null);
 
@@ -42,11 +45,17 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             }
         };
 
+        const fetchMembers = async() => {
+            var response = await memberClient.getAll(user.token);
+            setMembers(response.data);
+        };
+
         const fetchStatuses = async() => {
             // TODO : get all statuses into const statuses
         }
 
         fetchCategories();
+        fetchMembers();
         
         if(entryId){
             getEntry();
@@ -81,7 +90,8 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await entryClient.create(user.token, entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1);
+                await entryClient.create(user.token, entry.lineId, entry.description, 
+                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1, entry.memberId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -99,19 +109,15 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     });
             }
         };
-
-        if(!entry.member || entry.member === "") {
-            setError({...error, name: true});
-        }
-        else {
-            save();
-        }
+        
+        save();
     }
 
     const editEntry = () => {
         const save = async () => {
             try {
-                await entryClient.update(user.token, entry.id, entry.lineId, entry.member, entry.description, moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1);
+                await entryClient.update(user.token, entry.id, entry.lineId, entry.description, 
+                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1, entry.memberId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -130,12 +136,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             }
         };
 
-        if(!entry.member || entry.member === "") {
-            setError({...error, name: true});
-        }
-        else {
-            save();
-        }
+        save();
     }
 
     return (
@@ -145,7 +146,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             onOk={entry.id? editEntry : validateAndCreate}
             onCancel={onCancel}>
             {
-                categories && categories.length > 0 && lines && statuses && 
+                categories && categories.length > 0 && lines && statuses && members &&
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
@@ -165,10 +166,14 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         </Select>    
                     </div>
                     <div className={"form-section"}>
-                        <Input size="large"
-                            placeholder="Nom du membre"
-                            value={entry.member}
-                            onChange={(event) => setEntry({...entry, member: event.target.value})} />
+                        <Select 
+                            size="large"
+                            value={entry.memberId} 
+                            onChange={(id) => setEntry({...entry, memberId: id})}>
+                            { 
+                                members.map((member) => <Option key={member.id} value={member.id}>{member.name + " " + member.code + " " + member.email}</Option>) 
+                            }                            
+                        </Select>    
                     </div>
                     <div className="form-section">
                         <TextArea size="large"

@@ -87,9 +87,6 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.date != 'undefined') {
     e.date = entry.date;
   }
-  if (typeof entry.member != 'undefined') {
-    e.member = entry.member;
-  }
   if (typeof entry.description != 'undefined') {
     e.description = entry.description;
   }
@@ -101,6 +98,9 @@ const entryDTO = (entry, e = {}) => {
   }
   if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
+  }
+  if (typeof entry.memberId != 'undefined') {
+    e.memberId = entry.memberId;
   }
 
   if (typeof entry.Line != 'undefined') {
@@ -121,7 +121,32 @@ const entryDTO = (entry, e = {}) => {
     e.entryStatusId = entry.entryStatusId;
   }
 
+  if (typeof entry.Member != 'undefined' && entry.Member != null && typeof entry.Member.name != 'undefined') {
+    e.memberName = entry.Member.name;
+  } else {
+    e.memberName = "";
+  }
+
   return e;
+};
+
+const memberDTO = (member, m = {}) => {
+  if (typeof member.id != 'undefined') {
+    m.id = member.id;
+  }
+  if (typeof member.userId != 'undefined') {
+    m.userId = member.userId;
+  }
+  if (typeof member.name != 'undefined') {
+    m.name = member.name;
+  }
+  if (typeof member.code != 'undefined') {
+    m.code = member.code;
+  }
+  if (typeof member.email != 'undefined') {
+    m.email = member.email;
+  }
+  return m;
 };
 
 module.exports = {
@@ -129,5 +154,6 @@ module.exports = {
   budgetDTO,
   categoryDTO,
   lineDTO,
-  entryDTO
+  entryDTO,
+  memberDTO
 }
