@@ -41,6 +41,13 @@ module.exports = {
                 password: bcrypt.hashSync('dev123', config.saltRounds),
                 isAdmin: false
             });
+
+            users.push({
+                id: 4,
+                username: 'simon_demo',
+                password: bcrypt.hashSync('demo_2020', config.saltRounds),
+                isAdmin: false
+            });
         }
 
         if (users.length > 0) {
