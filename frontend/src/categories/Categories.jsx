@@ -131,7 +131,7 @@ const Categories = () => {
 
     // General usage
     const [categories, setCategories] = useState(null);
-    const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
+    // const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
     const getCategories = async() => {
         var response = await categoryClient.getList(user.token, budget.id);
@@ -179,10 +179,6 @@ const Categories = () => {
                 render: (line) => category.type === "revenue" ? 
                     Number(line.estimate).toFixed(2) : 
                     "( " + Number(line.estimate).toFixed(2) + " )"
-            },
-            {
-                title: "0", 
-                render: () => 0
             }
         ]
     };
@@ -203,20 +199,30 @@ const Categories = () => {
         {
             title: "",
             render: () => ""
-        },
-        {
-            title: "",
-            render: (val) => val.total
-        },
-        {
-            title: "Prévisions",
-            render: (val) => val.estimateTotal
-        },
-        {
-            title: "Réel",
-            render: (val) => val.realTotal
         }
     ];
+
+    const renderCategories = (categories) => {
+        return categories
+                .sort(function (a, b){
+                    return a.orderNumber > b.orderNumber;
+                }).map((category) => 
+                    <Fragment key={category.id}>
+                        {  
+                            category.lines && 
+                            <EditableTable 
+                                columns={buildColumns(category)} 
+                                values={category.lines.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                })}/> 
+                        }
+                        { 
+                            category.lines && category.lines.length === 0 && 
+                            <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                        }
+                    </Fragment>
+                )
+    }
 
     return (
         <Fragment>
@@ -228,28 +234,14 @@ const Categories = () => {
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
                     <Card>
-                        <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
+                        <h1 className="main-title">Dépenses</h1>
                         {
-                            categories
-                            .sort(function (a, b){
-                                return a.orderNumber > b.orderNumber;
-                            }).map((category) => 
-                                <Fragment key={category.id}>
-                                    {  
-                                        category.lines && 
-                                        <EditableTable 
-                                            columns={buildColumns(category)} 
-                                            values={category.lines.sort(function (a, b){
-                                                return a.orderNumber > b.orderNumber;
-                                            })}/> 
-                                    }
-                                    { 
-                                        category.lines && category.lines.length === 0 && 
-                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                                    }
-                                </Fragment>
-                            )
-                        }    
+                            renderCategories(categories.filter(cat => cat.type === "expense"))
+                        }
+                        <h1 className="main-title">Revenus</h1>
+                        {
+                            renderCategories(categories.filter(cat => cat.type === "revenue"))
+                        }
                     </Card>
                 </Fragment>
             }

@@ -44,6 +44,13 @@
     text-align: center;
 }
 
+.main-title {
+    margin-top: 20px;
+    font-size: 2rem;
+    color: $primary;
+    text-align: center;
+}
+
 .error input, .error .ant-input-affix-wrapper {
     border-color: $primary;
 }
