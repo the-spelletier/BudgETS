@@ -153,7 +153,9 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
-                                categories.map((category) => <Option key={category.id} value={category.id}>{category.name}</Option>) 
+                                categories.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                }).map((category) => <Option key={category.id} value={category.id}>{category.orderNumber + ' - ' + category.name}</Option>) 
                             }                            
                         </Select>    
                     </div>
@@ -161,7 +163,9 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         <Select value={entry.lineId} 
                             onChange={(id) => setEntry({...entry, lineId: id})}>
                             { 
-                                lines.map((line) => <Option key={line.id} value={line.id}>{line.name}</Option>) 
+                                lines.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                }).map((line) => <Option key={line.id} value={line.id}>{line.orderNumber + ' - ' + line.name}</Option>) 
                             }                            
                         </Select>    
                     </div>

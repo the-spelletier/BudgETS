@@ -124,10 +124,10 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.Line != 'undefined') {
     if (typeof entry.Line.name != 'undefined') {
       delete e.lineId;
-      e.lineName = entry.Line.name;
+      e.lineName = entry.Line.orderNumber + " - " + entry.Line.name;
     }
     if (typeof entry.Line.Category != 'undefined' && typeof entry.Line.Category.name != 'undefined') {
-      e.categoryName = entry.Line.Category.name;
+      e.categoryName = entry.Line.Category.orderNumber + " - " + entry.Line.Category.name;
     } else if (typeof entry.Line.categoryId != 'undefined') {
       e.categoryId = entry.Line.categoryId;
     }

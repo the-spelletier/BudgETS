@@ -37,11 +37,11 @@ const getEntries = budgetId => {
             {
                 model: Line,
                 required: true,
-                attributes: ['name'],
+                attributes: ['name', 'orderNumber'],
                 include: {
                     model: Category,
                     required: true,
-                    attributes: ['name'],
+                    attributes: ['name', 'orderNumber'],
                     where: {
                       budgetId: budgetId
                     }
