@@ -22,7 +22,7 @@ function getAll(req, res) {
 function create(req, res) {
     let entry = entryDTO(req.body);
     // TODO add validation for member
-    if (entry.lineId, entry.amount, entry.date, entry.description) { 
+    if (entry.lineId && entry.amount && entry.date && entry.description) { 
         entryService.addEntry(entry).then(e => {
             res.status(201);
             sendEntry(e, res);

@@ -22,7 +22,7 @@ module.exports = {
                                 id: nbEntries,
                                 amount: sign * ((nbEntries * 10) % 1000),
                                 date: new Date(2020, 9, 31), // Month indexed at 0 (2020-10-31)
-                                member: 'user' + ('0' + i).slice(-2),
+                                memberId: 1,
                                 description: 'entryDesc' + ("0000" + nbEntries).slice(-5),
                                 lineId: lineId,
                                 entryStatusId: ((nbEntries % 3) + 1)
