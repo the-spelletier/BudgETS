@@ -21,7 +21,8 @@ module.exports = {
                             name: 'lineTest' + ("0" + k).slice(-2) + ("0" + l).slice(-2),
                             description: 'descTest' + nbLines,
                             categoryId: categoryId,
-                            estimate: sign * i * j * k * l
+                            estimate: sign * i * j * k * l,
+                            orderNumber: 1
                         });   
                     }
                 }
@@ -35,7 +36,8 @@ module.exports = {
             name: 'lineDevTest',
             description: 'descTest',
             categoryId: 1,
-            estimate: 10
+            estimate: 10,
+            orderNumber: 1
         });
 
         // (Budget For User 2)
@@ -50,7 +52,8 @@ module.exports = {
                         name: 'lineDev' + ("00" + nbLines).slice(-3),
                         description: 'lineDesc' + ("00" + nbLines).slice(-3),
                         categoryId: categoryId,
-                        estimate: Math.random() * (500 - (-500)) + (-500)
+                        estimate: Math.random() * (500 - (-500)) + (-500),
+                        orderNumber: 1  
                     });
                 }
             }
@@ -63,7 +66,8 @@ module.exports = {
                 name: 'Camion',
                 description: 'Pour livraison et transport',
                 categoryId: i + '001',
-                estimate: 1500
+                estimate: 1500,
+                orderNumber: 1
             });
             nbLines++;
             lines.push({
@@ -71,7 +75,8 @@ module.exports = {
                 name: 'Transpalette',
                 description: 'Transport de marchandise',
                 categoryId: i + '001',
-                estimate: 300
+                estimate: 300,
+                orderNumber: 2
             });
             nbLines++;
             lines.push({
@@ -79,7 +84,8 @@ module.exports = {
                 name: 'Câbles',
                 description: 'RJ45',
                 categoryId: i + '002',
-                estimate: 650
+                estimate: 650,
+                orderNumber: 1
             });
             nbLines++;
             lines.push({
@@ -87,7 +93,8 @@ module.exports = {
                 name: 'Serveur',
                 description: 'Rack et autres',
                 categoryId: i + '002',
-                estimate: 1000
+                estimate: 1000,
+                orderNumber: 2
             });
             nbLines++;
             lines.push({
@@ -95,7 +102,8 @@ module.exports = {
                 name: 'Tape',
                 description: 'Gaffer',
                 categoryId: i + '003',
-                estimate: 1700
+                estimate: 1700,
+                orderNumber: 1
             });
             nbLines++;
             lines.push({
@@ -103,7 +111,8 @@ module.exports = {
                 name: 'Peinture',
                 description: 'Pour décorations',
                 categoryId: i + '003',
-                estimate: 250
+                estimate: 250,
+                orderNumber: 2
             });
             nbLines++;
             lines.push({
@@ -111,7 +120,8 @@ module.exports = {
                 name: 'Paypal',
                 description: 'En ligne',
                 categoryId: i + '004',
-                estimate: 5000
+                estimate: 5000,
+                orderNumber: 1
             });
             nbLines++;
             lines.push({
@@ -119,7 +129,8 @@ module.exports = {
                 name: 'Stripe',
                 description: 'En ligne',
                 categoryId: i + '004',
-                estimate: 2500
+                estimate: 2500,
+                orderNumber: 2
             });
             nbLines++;
             lines.push({
@@ -127,7 +138,8 @@ module.exports = {
                 name: 'Cash',
                 description: 'Sur place',
                 categoryId: i + '004',
-                estimate: 500
+                estimate: 500,
+                orderNumber: 3
             });
             nbLines++;
             lines.push({
@@ -135,7 +147,8 @@ module.exports = {
                 name: 'Big Money',
                 description: 'Sponsor principal',
                 categoryId: i + '005',
-                estimate: 10000
+                estimate: 10000,
+                orderNumber: 1
             });
             nbLines++;
             lines.push({
@@ -143,7 +156,8 @@ module.exports = {
                 name: 'Artistes',
                 description: '10 vendeurs',
                 categoryId: i + '005',
-                estimate: 1200
+                estimate: 1200,
+                orderNumber: 2
             });
         }
     }
