@@ -35,10 +35,13 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    let line = lineDTO(req.body);
-    if (req.params.id && line.name && typeof line.description != 'undefined' && typeof line.estimate != 'undefined') { 
-        line.id = req.params.id;
-        lineService.updateLine(line).then(l => {
+    if (req.params.id && req.body.name && typeof req.body.description != 'undefined' && typeof req.body.estimate != 'undefined') { 
+        lineService.updateLine({
+            id: req.params.id, 
+            name: req.body.name, 
+            description: req.body.description, 
+            estimate: req.body.estimate
+        }).then(l => {
             sendLine(l, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
