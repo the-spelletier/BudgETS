@@ -923,7 +923,7 @@ describe('3.0 - Catégories et lignes', () => {
                             id: '17', // Should remain unchanged
                             name: name,
                             type: 'expense', // Should remain unchanged
-                            budgetId: 9 // Should remain unchanged
+                            budgetId: '9' // Should remain unchanged
                         })
                     );
                     done();
@@ -1058,7 +1058,7 @@ describe('3.0 - Catégories et lignes', () => {
                             id: '33', // Should remain unchanged
                             name: name,
                             description: description,
-                            categoryId: 17, // Should remain unchanged
+                            categoryId: '17', // Should remain unchanged
                             estimate: estimate
                         })
                     );
