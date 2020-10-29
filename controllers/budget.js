@@ -10,7 +10,6 @@ function getCurrent(req, res) {
     }).then(budget => {
         sendBudget(budget, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -21,7 +20,6 @@ function get(req, res) {
     budgetService.resetGetActiveBudget(budget, req.user).then(b => {
         sendBudget(b, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -32,7 +30,6 @@ function getAll(req, res) {
     budgetService.getBudgets(budget).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -108,10 +105,10 @@ function clone(req, res) {
                                     message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + '\n';
                                 });
                                 
-                                return;
+                                //return;
                             });
 
-                            return ;
+                            //return ;
                             
                         }).catch(err => {
                             message = message + 'Impossible d\'ajouter la catégorie ' + categoryAdd.name + '\n';
