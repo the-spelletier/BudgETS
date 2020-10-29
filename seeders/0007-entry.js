@@ -58,13 +58,11 @@ module.exports = {
                         const year = (i == 3) ? 2020 : 2019;
                         const month = Math.random() * (11 - 0) + 0;
                         const day = Math.random() * (28 - 1) + 1;
-                        const type = Math.random() < 0.5 ? 'revenue' : 'expense';
                         entries.push({
                             id: nbEntries,
                             amount: Math.random() * (500 - (-500)) + (-500),
                             date: new Date(year, month, day),
                             description: 'entryDesc' + ("0000" + nbEntries).slice(-5),
-                            type: type,
                             lineId: lineId,
                             entryStatusId: Math.round(Math.random() * (3 - 1) + 1)
                         });
