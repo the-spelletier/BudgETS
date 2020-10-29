@@ -39,11 +39,6 @@ describe('3.0 - Catégories et lignes', () => {
                                     budgetId: '2'
                                 })
                             );
-                            if (5 + i <= 6) {
-                                expect(response.body[i]['lines'].length).toEqual(4);
-                            } else {
-                                expect(response.body[i]['lines'].length).toEqual(0);
-                            }
                         }
                         done();
                     });
