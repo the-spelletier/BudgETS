@@ -109,6 +109,7 @@ const Entries = () => {
     return (
         <Fragment>
             <BudgetHeader />
+            <h1 className="logo">Entrées</h1>
             <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />

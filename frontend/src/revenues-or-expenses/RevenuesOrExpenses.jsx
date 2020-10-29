@@ -172,9 +172,9 @@ const RevenuesOrExpenses = ({type}) => {
     return (
         <Fragment>
             <BudgetHeader/>
+            <h1 className="logo">{ type === "revenue" ? "Revenus" : "Dépenses"}</h1>
             <Spin tip="Chargement..." spinning={!revenuesOrExpenses}>
                 <Card>
-                    <h1>{ type === "revenue" ? "Revenus" : "Dépenses"}</h1>
                     {
                         revenuesOrExpenses &&
                         <Fragment>
