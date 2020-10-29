@@ -47,10 +47,11 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    let category = categoryDTO(req.body);
-    if (req.params.id && category.name) {
-        category.id = req.params.id;
-        categoryService.updateCategory(category).then(c => {
+    if (req.params.id && req.body.name) {
+        categoryService.updateCategory({
+            id: req.params.id,
+            name: req.body.name
+        }).then(c => {
             sendCategory(c, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
