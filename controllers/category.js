@@ -21,6 +21,16 @@ function getAll(req, res) {
     });
 }
 
+function getSummary(req, res) {
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    categoryService.getCategoriesSummary(req.params.budgetId, type).then(c => {
+        sendCategory(c, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
 function create(req, res) {
     let category = categoryDTO(req.body);
     if (category.name, category.type, category.budgetId) { 
@@ -88,5 +98,6 @@ module.exports = {
     getAll,
     create,
     update,
-    deleteOne
+    deleteOne,
+    getSummary
 };

@@ -60,6 +60,17 @@ module.exports.set = app => {
         budgetController.getAll
     );
 
+    // BUDGET : GET
+    // Get a summary and history of specified budget
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:id/summary',
+        authMiddleware.verifyAuth,
+        budgetController.getSummary
+    );
+
     // BUDGET : POST
     // Create a new budget
     // Params : { startDate, endDate, name }
@@ -88,20 +99,9 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
-        '/api/budget/clone/:id',
+        '/api/budget/:id/clone',
         authMiddleware.verifyAuth,
         budgetController.clone
-    );
-
-    // BUDGET : GET
-    // Get a summary and history of specified budget
-    // Params : { budgetId }
-    // Requires user to be authentified
-    // Returns : Code 200 if user is authentified
-    app.get(
-        '/api/budget/summary/:id',
-        authMiddleware.verifyAuth,
-        budgetController.getSummary
     );
 
     // BUDGET : DELETE
@@ -137,6 +137,17 @@ module.exports.set = app => {
         '/api/budget/:budgetId/category',
         authMiddleware.verifyAuth,
         categoryController.getAll
+    );
+
+    // BUDGET : GET
+    // Get a summary of the specified budget, grouped by categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/category/summary',
+        authMiddleware.verifyAuth,
+        categoryController.getSummary
     );
 
     // CATEGORY : POST

@@ -11,7 +11,7 @@ function getCurrent(req, res) {
         sendBudget(budget, res);
     }).catch(err => {
         console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
 }
 
@@ -22,7 +22,7 @@ function get(req, res) {
         sendBudget(b, res);
     }).catch(err => {
         console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
 }
 
@@ -33,8 +33,34 @@ function getAll(req, res) {
         sendBudget(budgets, res);
     }).catch(err => {
         console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
+}
+
+function getSummary(req, res) {
+    let count = typeof req.query.count !== 'undefined' ? req.query.count : 0;
+    if (req.params.id) {
+        budgetService.getLastBudgetsFromDate(req.params.id, count).then(budgets => {
+            if (!budgets) { return budgetNotFoundResponse(res); }
+            let counter = 0;
+            budgets.previousBudgets.push(budgets.currentBudget);
+            budgets.previousBudgets.forEach((b, i, arr) => {
+                if (!b) { return budgetNotFoundResponse(res); }
+                categoryService.getCategories(b.id).then(categories => {
+                    budgetService.getBudgetSummary(b, categories);
+                    if (++counter === arr.length) {
+                        budgets.previousBudgets.pop();
+                        sendBudget(budgets, res);
+                    }
+                });
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(403).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(400).send({ message: 'Invalid parameters' });
+    }
 }
 
 function create(req, res) {
@@ -136,35 +162,43 @@ function clone(req, res) {
     }
 }
 
-function getSummary(req, res) {
-
-}
-
 function sendBudget(budget, res) {
     if (budget) {
         let budgetRes;
         if (Array.isArray(budget)) {
-            budget.forEach((b, i, arr) => {
-                arr[i] = budgetDTO(b);
-                delete arr[i].startDate;
-                delete arr[i].endDate;
-            });
+            budgetRes = formatBudgetArray(budget);
+        } else if (budget.hasOwnProperty('currentBudget')) {
+            budget.currentBudget = formatBudgetArray([budget.currentBudget])[0];
+            formatBudgetArray(budget.previousBudgets);
             budgetRes = budget;
         } else {
             budgetRes = budgetDTO(budget);
         }
         res.send(budgetRes);
     } else {
-        res.status(404).send({ message: "Budget Not Found" });
+        budgetNotFoundResponse(res);
     }
+}
+
+function budgetNotFoundResponse(res) {
+    res.status(404).send({ message: "Budget Not Found" });
+}
+
+function formatBudgetArray(budgets) {
+    budgets.forEach((b, i, arr) => {
+        arr[i] = budgetDTO(b);
+        delete arr[i].startDate;
+        delete arr[i].endDate;
+    });
+    return budgets;
 }
 
 module.exports = {
     getCurrent,
     get,
     getAll,
+    getSummary,
     create,
     update,
-    clone,
-    getSummary
+    clone
 };

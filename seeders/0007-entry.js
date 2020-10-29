@@ -14,7 +14,6 @@ module.exports = {
           amount: "10.00",
           date: "2021-09-25 00:00:00",
           description: "Description de l'entrée",
-          type: "revenue",
           lineId: 1,
           memberId: 1,
           entryStatusId: 1
