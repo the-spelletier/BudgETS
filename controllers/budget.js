@@ -105,7 +105,7 @@ function clone(req, res) {
                                 delete lineAdd.id;
                                 lineAdd.categoryId = newC.id;
                                 lineService.addLine(lineAdd).catch(err => {
-                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + '\n';
+                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + ' ';
                                 });
                                 
                                 return;
@@ -114,17 +114,19 @@ function clone(req, res) {
                             return ;
                             
                         }).catch(err => {
-                            message = message + 'Impossible d\'ajouter la catégorie ' + categoryAdd.name + '\n';
+                            message = message + 'Impossible d\'ajouter la categorie ' + categoryAdd.name + ' ';
                         });
                     });
-                    
+                    message = 'Le budget ' + newB.name + ' a ete ajoute! ' + message;
+                    console.log(message);
+                    res.statusMessage = message;
                     sendBudget(newB, res);
 
                 }).catch(err => {
                     res.status(403).send({ message: 'Impossible d\'ajouter le budget' });
                 });
             }).catch(err => {
-                res.status(403).send({ message: 'Impossible de trouver le budget de référence' });
+                res.status(403).send({ message: 'Impossible de trouver le budget de reference' });
             });
         }
         else {
