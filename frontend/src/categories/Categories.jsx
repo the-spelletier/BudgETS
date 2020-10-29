@@ -155,7 +155,7 @@ const Categories = () => {
                 render: () => ""
             },
             { 
-                title: category.id,
+                title: category.orderNumber,
                 render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
             },
             {
@@ -164,7 +164,7 @@ const Categories = () => {
             },
             {
                 title: "",
-                render: (line) => line.id
+                render: (line) => line.orderNumber
             },
             {
                 title: "",
@@ -229,10 +229,18 @@ const Categories = () => {
                     <Card>
                         <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
                         {
-                            categories.map((category) => 
+                            categories
+                            .sort(function (a, b){
+                                return a.orderNumber > b.orderNumber;
+                            }).map((category) => 
                                 <Fragment key={category.id}>
                                     {  
-                                        category.lines && <EditableTable columns={buildColumns(category)} values={category.lines}/> 
+                                        category.lines && 
+                                        <EditableTable 
+                                            columns={buildColumns(category)} 
+                                            values={category.lines.sort(function (a, b){
+                                                return a.orderNumber > b.orderNumber;
+                                            })}/> 
                                     }
                                     { 
                                         category.lines && category.lines.length === 0 && 

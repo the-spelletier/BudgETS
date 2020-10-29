@@ -82,7 +82,7 @@ const RevenuesOrExpenses = ({type}) => {
 
         return [
             { 
-                title: category.id,
+                title: category.orderNumber,
                 render: ""
             },
             {
@@ -90,7 +90,7 @@ const RevenuesOrExpenses = ({type}) => {
                 colSpan: 2,
                 render: (line) => {
                     return {
-                        children: <span className="line-id">{line.id}</span>,
+                        children: <span className="line-id">{line.orderNumber}</span>,
                         props: {
                           colSpan: 1,
                         }
@@ -180,7 +180,11 @@ const RevenuesOrExpenses = ({type}) => {
                         <Fragment>
                             <Table columns={headerColumns} tableLayout="fixed" dataSource={[headerData]} className="no-paging"/>
                             {
-                                revenuesOrExpenses.map((category) =><Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/>)
+                                revenuesOrExpenses.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                }).map((category) =><Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                })}/>)
                             }
                         </Fragment>
                     }
