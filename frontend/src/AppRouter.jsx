@@ -26,7 +26,7 @@ const AppRouter = () => {
                     <ProtectedRoute path="/budget/details" component={ BudgetDetails }></ProtectedRoute>
                     <ProtectedRoute path="/budget/cat-and-lines"><Categories /></ProtectedRoute>
                     <ProtectedRoute path="/budget/revenues"><RevenuesOrExpenses type="revenue" /></ProtectedRoute>
-                    <ProtectedRoute path="/budget/spending"><RevenuesOrExpenses type="expense" /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/expenses"><RevenuesOrExpenses type="expense" /></ProtectedRoute>
                     <ProtectedRoute path="/budget/entries"><Entries /></ProtectedRoute>
                 </BudgetContainer>
             </ProtectedRoute>
