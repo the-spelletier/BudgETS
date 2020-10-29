@@ -23,7 +23,7 @@ function getAll(req, res) {
 function create(req, res) {
     let member = memberDTO(req.body);
     member.userId = req.user.id;
-    if (member.name, member.code, member.email) { 
+    if (member.name && member.code && member.email) { 
         memberService.addMember(member).then(m => {
             res.status(201);
             sendMember(m, res);

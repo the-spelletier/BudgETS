@@ -2,6 +2,7 @@ const { categoryDTO } = require('../dto');
 const categoryService = require('../services/category');
 
 function get(req, res) {
+    return res.sendStatus(404);
     categoryService.getCategory({ id: req.params.id }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
@@ -33,7 +34,7 @@ function getSummary(req, res) {
 
 function create(req, res) {
     let category = categoryDTO(req.body);
-    if (category.name, category.type, category.budgetId) { 
+    if (category.name && category.type && category.budgetId) { 
         categoryService.addCategory(category).then(c => {
             res.status(201);
             sendCategory(c, res);
@@ -47,7 +48,7 @@ function create(req, res) {
 
 function update(req, res) {
     let category = categoryDTO(req.body);
-    if (req.params.id) {
+    if (req.params.id && category.name) {
         category.id = req.params.id;
         categoryService.updateCategory(category).then(c => {
             sendCategory(c, res);

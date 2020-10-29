@@ -2,6 +2,7 @@ const { lineDTO } = require('../dto');
 const lineService = require('../services/line');
 
 function get(req, res) {
+    return res.sendStatus(404);
     lineService.getLine({ id: req.params.id }).then(line => {
         sendLine(line, res);
     }).catch(err => {
@@ -21,7 +22,7 @@ function getAll(req, res) {
 
 function create(req, res) {
     let line = lineDTO(req.body);
-    if (line.name, line.description, line.estimate, line.categoryId) { 
+    if (line.name && line.categoryId && typeof line.description != 'undefined' && typeof line.estimate != 'undefined') { 
         lineService.addLine(line).then(l => {
             res.status(201);
             sendLine(l, res);
@@ -35,7 +36,7 @@ function create(req, res) {
 
 function update(req, res) {
     let line = lineDTO(req.body);
-    if (req.params.id) {
+    if (req.params.id && line.name && typeof line.description != 'undefined' && typeof line.estimate != 'undefined') { 
         line.id = req.params.id;
         lineService.updateLine(line).then(l => {
             sendLine(l, res);
