@@ -68,8 +68,13 @@ const BudgetHeader = () => {
             {
                 budgets &&
                 <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)}>
-                    {budgets.map((option) => 
-                        <Option key={option.id} value={option.id}><h2 className="budget-select-option">{option.name}</h2></Option>
+                    {budgets
+                    .sort(function(a, b){
+                        return a.startDate < b.startDate;
+                    }).map((option) => 
+                        <Option key={option.id} value={option.id}>
+                            <h2 className="budget-select-option">{option.name}</h2>
+                        </Option>
                     )}
                 </Select>
             }

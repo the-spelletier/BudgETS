@@ -189,8 +189,7 @@ function budgetNotFoundResponse(res) {
 function formatBudgetArray(budgets) {
     budgets.forEach((b, i, arr) => {
         arr[i] = budgetDTO(b);
-        delete arr[i].startDate;
-        delete arr[i].endDate;
+        arr[i].name = arr[i].name + " (" + arr[i].startDate.toDateString() + " - " + arr[i].endDate.toDateString() + ")";
     });
     return budgets;
 }
