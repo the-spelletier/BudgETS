@@ -49,6 +49,9 @@ const categoryDTO = (category, c = {}) => {
   if (typeof category.type != 'undefined') {
     c.type = category.type;
   }
+  if (typeof category.orderNumber != 'undefined') {
+    c.orderNumber = category.orderNumber;
+  }
   if (typeof category.budgetId != 'undefined') {
     c.budgetId = category.budgetId;
   }
@@ -76,6 +79,9 @@ const lineDTO = (line, l = {}) => {
   }
   if (typeof line.description != 'undefined') {
     l.description = line.description;
+  }
+  if (typeof line.orderNumber != 'undefined') {
+    l.orderNumber = line.orderNumber;
   }
   if (typeof line.estimate != 'undefined') {
     l.estimate = line.estimate;
