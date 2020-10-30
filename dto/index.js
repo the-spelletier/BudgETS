@@ -128,6 +128,9 @@ const entryDTO = (entry, e = {}) => {
     }
     if (typeof entry.Line.Category != 'undefined' && typeof entry.Line.Category.name != 'undefined') {
       e.categoryName = entry.Line.Category.orderNumber + " - " + entry.Line.Category.name;
+      e.receiptCode = (entry.Line.Category.type === 'expense' ? 'D-' : 'R-') + 
+        entry.Line.Category.orderNumber + '.' + entry.Line.orderNumber + '-' + 
+        entry.description;
     } else if (typeof entry.Line.categoryId != 'undefined') {
       e.categoryId = entry.Line.categoryId;
     }
