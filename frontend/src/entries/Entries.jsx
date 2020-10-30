@@ -21,7 +21,9 @@ const Entries = () => {
 
     const getEntries = async() => {
         var response = await entryClient.getList(user.token, budget.id);
-        setEntries(response.data);
+        setEntries(response.data.sort(function (a, b){
+            return a.date < b.date;
+        }));
     }
 
     useEffect(() => {
