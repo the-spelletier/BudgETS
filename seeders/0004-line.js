@@ -10,9 +10,9 @@ module.exports = {
         // Add test lines per category
         for (let i = 1; i <= settings.NB_TEST_USERS; ++i) {
             for (let j = 1; j <= settings.NB_TEST_BUDGET_WITH_CHILD_PER_USER; ++j) {
-                const budgetId = (i - 1) * settings.NB_TEST_BUDGET_WITH_CHILD_PER_USER + j
+                const budgetId = (i - 1) * settings.NB_TEST_BUDGET_PER_USER + j
                 for (let k = 1; k <= settings.NB_TEST_CATEGORY_WITH_CHILD_PER_BUDGET; ++k) {
-                    const categoryId = (budgetId - 1) * settings.NB_TEST_CATEGORY_PER_BUDGET + k;
+                    const categoryId = (budgetId + j - 2) * settings.NB_TEST_CATEGORY_WITH_CHILD_PER_BUDGET + k;
                     for (let l = 1; l <= settings.NB_TEST_LINE_PER_CATEGORY; ++l) {
                         nbLines++;
                         const sign = (l % 2) == 0 ? 1 : -1;

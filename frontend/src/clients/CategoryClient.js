@@ -17,9 +17,14 @@ export class CategoryClient {
         return await apiClient.get(`/budget/${budgetId}/category?type=${type}`, token);
     }
 
-    get = async (token, categoryId) => {
+    getSummary = async (token, budgetId) => {
         const apiClient = new ApiClient();
-        return await apiClient.get(`/category/${categoryId}`, token);
+        return await apiClient.get(`/budget/${budgetId}/category/summary`, token);
+    }
+
+    get = async (token, id) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/category/${id}`, token);
     }
 
     update = async (token, budgetId, id, name, type) => {
@@ -28,8 +33,8 @@ export class CategoryClient {
         return await apiClient.put(`/category/${id}`, params, token);
     }
 
-    delete = async (token, budgetId, id) => {
+    delete = async (token, id) => {
         const apiClient = new ApiClient();
-        return await apiClient.delete(`/category/${id}?budgetId=${budgetId}`, token);
+        return await apiClient.delete(`/category/${id}`, token);
     }
 }

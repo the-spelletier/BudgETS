@@ -33,7 +33,7 @@ export class BudgetClient {
         const apiClient = new ApiClient();
         var params = {name, startDate, endDate, isActive};
         if (clone)
-            return await apiClient.post(`/budget/clone/${budgetId}`, params, token);
+            return await apiClient.post(`/budget/${budgetId}/clone`, params, token);
         else
             return await apiClient.post('/budget', params, token);
     }

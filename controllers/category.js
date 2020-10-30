@@ -2,6 +2,7 @@ const { categoryDTO } = require('../dto');
 const categoryService = require('../services/category');
 
 function get(req, res) {
+    return res.sendStatus(404);
     categoryService.getCategory({ id: req.params.id }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
@@ -21,9 +22,19 @@ function getAll(req, res) {
     });
 }
 
+function getSummary(req, res) {
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    categoryService.getCategoriesSummary(req.params.budgetId, type).then(c => {
+        sendCategory(c, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
 function create(req, res) {
     let category = categoryDTO(req.body);
-    if (category.name, category.type, category.budgetId) { 
+    if (category.name && category.type && category.budgetId) { 
         categoryService.addCategory(category).then(c => {
             res.status(201);
             sendCategory(c, res);
@@ -36,10 +47,11 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    let category = categoryDTO(req.body);
-    if (req.params.id) {
-        category.id = req.params.id;
-        categoryService.updateCategory(category).then(c => {
+    if (req.params.id && req.body.name) {
+        categoryService.updateCategory({
+            id: req.params.id,
+            name: req.body.name
+        }).then(c => {
             sendCategory(c, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
@@ -88,5 +100,6 @@ module.exports = {
     getAll,
     create,
     update,
-    deleteOne
+    deleteOne,
+    getSummary
 };

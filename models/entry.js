@@ -52,13 +52,6 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING
         },
-        type: {
-            type: DataTypes.ENUM('revenue', 'expense'),
-            allowNull: false,
-            validate: {
-                isIn: [['revenue', 'expense']]
-            }
-        },
         receiptCode: {
             type: DataTypes.STRING
         }

@@ -47,7 +47,7 @@ const Categories = () => {
     const onDeleteCategory = (category) => {
         const deleteCategory = async() => {
             try {
-                await categoryClient.delete(user.token, budget.id, category.id);
+                await categoryClient.delete(user.token, category.id);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
