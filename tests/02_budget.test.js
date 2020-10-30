@@ -302,7 +302,7 @@ describe('2.0 - Budget', () => {
 
             request(app)
                 .get('/api/budget/current')
-                .expect(500, done);
+                .expect(403, done);
             
         });
 
@@ -443,7 +443,7 @@ describe('2.0 - Budget', () => {
 
             request(app)
                 .get('/api/budget/')
-                .expect(500, done);
+                .expect(403, done);
             
         });
 
@@ -467,7 +467,7 @@ describe('2.0 - Budget', () => {
 
             request(app)
                 .get('/api/budget/1')
-                .expect(500, done);
+                .expect(403, done);
             
         });
 

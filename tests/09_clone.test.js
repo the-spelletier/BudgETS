@@ -26,7 +26,7 @@ describe('9.0 - Clonage de budget', () => {
         categoryService.addCategory.callsFake(originalAddCategory);
         lineService.addLine.callsFake(originalAddLine);
     });
-/*
+
     describe('9.1 - Route pour cloner', () => {
         test('091001 - Cloner un budget', (done) => {
             // Stub the verifyAuth
@@ -91,9 +91,9 @@ describe('9.0 - Clonage de budget', () => {
                 .expect(404, done);
         });
     });
-*/
+
     describe('9.2 - Cloner un budget', () => {
-        /*test("092001 - Cloner un budget sans authentification", (done) => {
+        test("092001 - Cloner un budget sans authentification", (done) => {
             const name = 'Budget Clone 3'
             const start = '2021-09-25 00:00:00'
             const end = '2021-09-30 23:59:59'
@@ -327,104 +327,6 @@ describe('9.0 - Clonage de budget', () => {
                 })
                 .expect(400, done);
         });
-
-        test('092011 - Cloner un budget avec nom non unique', (done) => {
-            // Stub the verifyAuth
-            auth.verifyAuth.callsFake((req, res, next) => {
-                userService.getUser({
-                    username:'budgets_test005'
-                }).then(user => {
-                    req.user = User.build(user, {raw: true});
-                    next();
-                })
-            });
-
-            const name = 'budgetTest00201'
-            const start = '2021-09-25 00:00:00'
-            const end = '2021-09-30 23:59:59'
-
-            request(app)
-                .post('/api/budget/clone/17')
-                .send({
-                    name: name,
-                    startDate: start,
-                    endDate: end
-                })
-                .expect(403, done);
-        });
-        */
-        test('092012 - Cloner un budget, stub ajouter lignes', (done) => {
-            // Stub the verifyAuth
-            auth.verifyAuth.callsFake((req, res, next) => {
-                userService.getUser({
-                    username:'budgets_test005'
-                }).then(user => {
-                    req.user = User.build(user, {raw: true});
-                    next();
-                })
-            });
-
-            // Stub the addBudget service
-            lineService.addLine.callsFake(line => {
-                return new Promise((resolve, reject) => {
-                    reject('DB down');
-                });
-            });
-
-            const name = 'Budget Clone 12'
-            const start = '2021-09-25 00:00:00'
-            const end = '2021-09-30 23:59:59'
-
-            request(app)
-                .post('/api/budget/clone/17')
-                .send({
-                    name: name,
-                    startDate: start,
-                    endDate: end
-                })
-                .expect(200)
-                .then((response) => {
-                    console.log(response.body);
-                    done();
-                });
-        });
-
-        /*test('092013 - Cloner un budget, stub ajouter categories', (done) => {
-            // Stub the verifyAuth
-            auth.verifyAuth.callsFake((req, res, next) => {
-                userService.getUser({
-                    username:'budgets_test005'
-                }).then(user => {
-                    req.user = User.build(user, {raw: true});
-                    next();
-                })
-            });
-
-            // Stub the addBudget service
-            categoryService.addCategory.callsFake(line => {
-                return new Promise((resolve, reject) => {
-                    reject('DB down');
-                });
-            });
-
-            const name = 'Budget Clone 13'
-            const start = '2021-09-25 00:00:00'
-            const end = '2021-09-30 23:59:59'
-
-            request(app)
-                .post('/api/budget/clone/17')
-                .send({
-                    name: name,
-                    startDate: start,
-                    endDate: end
-                })
-                .expect(200)
-                .then((response) => {
-                    console.log(response.body);
-                    done();
-                });
-        });
-        */
 
     });
 });

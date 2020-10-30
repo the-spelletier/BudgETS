@@ -52,7 +52,6 @@ function getSummary(req, res) {
                 });
             });
         }).catch(err => {
-            console.log(err);
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
