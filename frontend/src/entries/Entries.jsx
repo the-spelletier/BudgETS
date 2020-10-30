@@ -30,7 +30,7 @@ const Entries = () => {
         if (user.token && budget.id) {
             getEntries();
         }
-    }, [createModalIsVisible]);
+    }, [createModalIsVisible, budget.id]);
 
     const onEditEntry = (entry) => {
         setCurrentEntry(entry.id);
