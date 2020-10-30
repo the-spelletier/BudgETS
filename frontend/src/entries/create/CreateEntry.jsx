@@ -150,27 +150,36 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
+                            placeholder="Catégorie"
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
-                                categories.sort(function (a, b){
+                                categories
+                                .sort(function (a, b){
                                     return a.orderNumber > b.orderNumber;
-                                }).map((category) => <Option key={category.id} value={category.id}>{category.orderNumber + ' - ' + category.name}</Option>) 
-                            }                            
+                                }).map((category) => 
+                                    <Option key={category.id} value={category.id}>
+                                        {(category.type === 'expense' ? 'D - ' : 'R - ') + category.orderNumber + ' - ' + category.name}
+                                    </Option>
+                                )
+                            }
                         </Select>    
                     </div>
                     <div className={"form-section"}>
-                        <Select value={entry.lineId} 
+                        <Select 
+                            placeholder="Ligne"
+                            value={entry.lineId} 
                             onChange={(id) => setEntry({...entry, lineId: id})}>
                             { 
                                 lines.sort(function (a, b){
                                     return a.orderNumber > b.orderNumber;
                                 }).map((line) => <Option key={line.id} value={line.id}>{line.orderNumber + ' - ' + line.name}</Option>) 
-                            }                            
-                        </Select>    
+                            }
+                        </Select>
                     </div>
                     <div className={"form-section"}>
                         <Select 
+                            placeholder="Membre"
                             size="large"
                             value={entry.memberId} 
                             onChange={(id) => setEntry({...entry, memberId: id})}>
