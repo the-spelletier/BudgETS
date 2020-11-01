@@ -128,9 +128,12 @@ const entryDTO = (entry, e = {}) => {
     }
     if (typeof entry.Line.Category != 'undefined' && typeof entry.Line.Category.name != 'undefined') {
       e.categoryName = entry.Line.Category.orderNumber + " - " + entry.Line.Category.name;
-      e.receiptCode = (entry.Line.Category.type === 'expense' ? 'D-' : 'R-') + 
-        entry.Line.Category.orderNumber + '.' + entry.Line.orderNumber + '-' + 
-        entry.description;
+      if (typeof entry.Line.Category.type != 'undefined') {
+        e.receiptCode = (entry.Line.Category.type === 'expense' ? 'D-' : 'R-') + 
+          entry.Line.Category.orderNumber + '.' + entry.Line.orderNumber + '-' + 
+          entry.description;
+        e.type = entry.Line.Category.type;
+      }
     } else if (typeof entry.Line.categoryId != 'undefined') {
       e.categoryId = entry.Line.categoryId;
     }
