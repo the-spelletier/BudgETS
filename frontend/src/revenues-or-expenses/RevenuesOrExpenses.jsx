@@ -61,21 +61,21 @@ const RevenuesOrExpenses = ({type}) => {
             colSpan: 1,
             render: (val) => type === "revenue" ?
                 <div className="right-text">{val.estimateTotal.toFixed(2)}</div> : 
-                <div className="right-text">({val.estimateTotal.toFixed(2)})</div>
+                <div className="right-text">{val.estimateTotal.toFixed(2)}</div>
         },
         {
             title: <div className="right-text">Réel</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
                 <div className="right-text">{val.realTotal.toFixed(2)}</div> : 
-                <div className="right-text">({val.realTotal.toFixed(2)})</div>
+                <div className="right-text">{val.realTotal.toFixed(2)}</div>
         },
         {
             title: <div className="right-text">Reste</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
                 <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div> : 
-                <div className="right-text">({(val.estimateTotal - val.realTotal).toFixed(2)})</div>
+                <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div>
         }
     ];
 
@@ -132,19 +132,19 @@ const RevenuesOrExpenses = ({type}) => {
                 title: <div className="right-text">{estimateTotal.toFixed(2)}</div>,
                 render: (line) => type === "revenue" ? 
                     <div className="right-text">{Number(line.estimate).toFixed(2)}</div> : 
-                    <div className="right-text">({Number(line.estimate).toFixed(2)})</div>
+                    <div className="right-text">{Number(line.estimate).toFixed(2)}</div>
             },
             {
                 title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
                 render: (line) =>  type === "revenue" ? 
                     <div className="right-text">{Number(line.real).toFixed(2)}</div> : 
-                    <div className="right-text">({Number(line.real).toFixed(2)})</div>
+                    <div className="right-text">{Number(line.real).toFixed(2)}</div>
             },
             {
                 title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
                 render: (line) =>  type === "revenue" ? 
                     <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div> : 
-                    <div className="right-text">({Number(line.estimate - line.real).toFixed(2)})</div>
+                    <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div>
             }
         ]
     };

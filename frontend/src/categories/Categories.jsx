@@ -175,7 +175,9 @@ const Categories = () => {
                 render: (line) => line.description
             },
             {
-                title: totalEstimate.toFixed(2),
+                title: category.type === "revenue" ? 
+                    Number(totalEstimate).toFixed(2) : 
+                    "( " + Number(totalEstimate).toFixed(2) + " )",
                 render: (line) => category.type === "revenue" ? 
                     Number(line.estimate).toFixed(2) : 
                     "( " + Number(line.estimate).toFixed(2) + " )"
