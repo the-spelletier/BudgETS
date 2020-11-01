@@ -40,7 +40,8 @@ function update(req, res) {
             id: req.params.id, 
             name: req.body.name, 
             description: req.body.description, 
-            estimate: req.body.estimate
+            estimate: req.body.estimate, 
+            orderNumber: req.body.orderNumber
         }).then(l => {
             sendLine(l, res);
         }).catch(err => {
