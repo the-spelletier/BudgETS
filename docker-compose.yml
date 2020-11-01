@@ -2,46 +2,50 @@ version: '3'
 
 services:
     web:
-         build: .
-         depends_on: 
+        build: .
+        depends_on: 
            - mysql
-         ports:
+        expose:
+            - "3000"
+        ports:
              - "3000:3000"
-         environment:
-          - MYSQL_USER=root
-          - MYSQL_PASSWORD=samplepassword
-          - MYSQL_DATABASE=BudgetETS
+        environment:
+          - MYSQL_PASSWORD=mysql
+          - MYSQL_DATABASE=budgets_development
           - REACT_APP_SERVER_PORT=3000
           - MYSQL_HOST_IP= mysql
-         command: yarn start
+        links:
+            - mysql
+        command: npm run start
     mysql:
         image: "mysql:latest"
         restart: always
         hostname: mysql
         container_name: mysql
         environment:
-          - MYSQL_USER=root
-          - MYSQL_PASSWORD=samplepassword
-          - MYSQL_ROOT_PASSWORD=password
-          - MYSQL_DATABASE=BudgetETS
+          - MYSQL_PASSWORD=mysql
+          - MYSQL_ROOT_PASSWORD=mysql
+          - MYSQL_DATABASE=budgets_development
           - REACT_APP_SERVER_PORT=3000
+        command: --character-set-server=utf8
         volumes:
-          - ./seeders:/docker-entrypoint-initdb.d/
+            - ./seeders:/docker-entrypoint-initdb.d
         ports:
             - "3306:3306"
     client:
         stdin_open: true
         build: ./frontend
         environment:
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD=samplepassword
-            - MYSQL_DATABASE=BudgetETS
+            - MYSQL_PASSWORD=mysql
+            - MYSQL_DATABASE=budgets_development
             - REACT_APP_SERVER_PORT=3000
             - NODE_PATH=src
         expose:
             - "5000"
         ports:
             - "5000:5000"
+        volumes:
+            - ./frontend:/frontend
         links:
             - web
         command: yarn start
