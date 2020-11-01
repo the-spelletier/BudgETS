@@ -1,8 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Table, Card, notification, Button} from "antd";
+import { Table, Card, notification, Button } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
-import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
 import BudgetHeader from "../budget/header/BudgetHeader";
 import CreateCategory from "./create/CreateCategorie";
@@ -236,8 +235,22 @@ const Categories = () => {
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
                     <Card>
+                        <Table columns={headerColumns} tableLayout="fixed" dataSource={[headerData]} className="no-paging"/>
                         <h1 className="main-title">Dépenses</h1>
                         {
+                            categories.map((category) => 
+                                <Fragment key={category.id}>
+                                    {  
+                                        category.lines && 
+                                        <Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/> 
+                                    }
+                                    { 
+                                        category.lines && category.lines.length === 0 && 
+                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                                    }
+                                </Fragment>
+                            )
+                        }    
                             renderCategories(categories.filter(cat => cat.type === "expense"))
                         }
                         <h1 className="main-title">Revenus</h1>
