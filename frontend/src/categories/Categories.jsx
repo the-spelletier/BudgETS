@@ -225,7 +225,7 @@ const Categories = () => {
     return (
         <Fragment>
             <BudgetHeader />
-            <h1 className="logo">Catégories et lignes</h1>
+            <h1 className="logo">Lignes et catégories</h1>
             {
                 categories &&
                 <Fragment>
