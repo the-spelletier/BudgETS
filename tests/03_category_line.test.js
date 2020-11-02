@@ -840,7 +840,7 @@ describe('3.0 - Catégories et lignes', () => {
                     estimate: estimate,
                     categoryId: categoryId
                 })
-                .expect(404, done);
+                .expect(403, done);
         });
 
         test("033011 - Créer une ligne avec categorie qui n'existe pas", (done) => {
