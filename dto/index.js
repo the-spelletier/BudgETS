@@ -61,6 +61,9 @@ const categoryDTO = (category, c = {}) => {
   if (typeof category.estimate != 'undefined') {
     c.estimate = category.estimate;
   }
+  if (typeof category.type != 'undefined' && typeof category.orderNumber != 'undefined' && typeof category.name != 'undefined') {
+    c.displayName = (category.type === 'expense' ? 'D - ' : 'R - ') + category.orderNumber + ' - ' + category.name;
+  }
   if (typeof category.Lines != 'undefined') {
     c.lines = [];
     category.Lines.forEach(l => {

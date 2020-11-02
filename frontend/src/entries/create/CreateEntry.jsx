@@ -156,10 +156,11 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             { 
                                 categories
                                 .sort(function (a, b){
-                                    return a.orderNumber > b.orderNumber;
-                                }).map((category) => 
+                                    return a.displayName > b.displayName;
+                                })
+                                .map((category) => 
                                     <Option key={category.id} value={category.id}>
-                                        {(category.type === 'expense' ? 'D - ' : 'R - ') + category.orderNumber + ' - ' + category.name}
+                                        {category.displayName}
                                     </Option>
                                 )
                             }
