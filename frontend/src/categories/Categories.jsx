@@ -64,7 +64,7 @@ const Categories = () => {
             }
         };
 
-        if (!category.Lines || category.Lines.length === 0) {
+        if (!category.lines || category.lines.length === 0) {
             deleteCategory();
 
             var newCategories = categories.filter((c) => c.id !== category.id);
