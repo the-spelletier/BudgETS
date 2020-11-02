@@ -130,10 +130,10 @@ function clone(req, res) {
                                     message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + ' ';
                                 });
                                 
-                                //return;
+                                return;
                             });
 
-                            //return ;
+                            return ;
                             
                         }).catch(err => {
                             message = message + 'Impossible d\'ajouter la categorie ' + categoryAdd.name + ' ';

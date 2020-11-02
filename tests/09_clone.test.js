@@ -1,8 +1,5 @@
 const request = require('supertest');
 const sinon = require('sinon');
-
-const categoryService = require('../services/category');
-const lineService = require('../services/line');
 const auth = require('../middlewares/auth');
 
 const { User } = require('../models');
@@ -10,12 +7,6 @@ const userService = require('../services/user');
 
 const originalAuth = auth.verifyAuth;
 const stubAuth = sinon.stub(auth, 'verifyAuth');
-
-const originalAddLine = lineService.addLine;
-const stubAddLine = sinon.stub(lineService, 'addLine');
-
-const originalAddCategory = categoryService.addCategory;
-const stubAddCategory = sinon.stub(categoryService, 'addCategory');
 
 const app = require('../app.js');
 
@@ -31,8 +22,6 @@ describe('9.0 - Clonage de budget', () => {
     beforeEach(() => {
         // Original services
         auth.verifyAuth.callsFake(originalAuth);
-        categoryService.addCategory.callsFake(originalAddCategory);
-        lineService.addLine.callsFake(originalAddLine);
     });
 
     describe('9.1 - Route pour cloner', () => {
