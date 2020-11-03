@@ -43,7 +43,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "La ligne a été créé avec succès",
+                      "La ligne a été créée avec succès",
                     });
                 onCancel(); // Closes modal
             }

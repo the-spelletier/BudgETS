@@ -38,7 +38,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le membre a été créée avec succès",
+                      "Le membre a été créé avec succès",
                     });
                 onCancel(); // Closes modal
             }
@@ -63,7 +63,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le membre a été modifiée avec succès",
+                      "Le membre a été modifié avec succès",
                     });
                 onCancel(); // Closes modal
             }

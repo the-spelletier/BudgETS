@@ -44,7 +44,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "La catégorie a été créé avec succès",
+                      "La catégorie a été créée avec succès",
                     });
                 onCancel(); // Closes modal
             }
