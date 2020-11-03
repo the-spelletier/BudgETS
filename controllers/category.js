@@ -3,7 +3,7 @@ const categoryService = require('../services/category');
 
 function get(req, res) {
     return res.sendStatus(404);
-    categoryService.getCategory({ id: req.params.id }).then(category => {
+    categoryService.getCategory({ id: req.params.categoryId }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
         console.log(err);
@@ -47,9 +47,9 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    if (req.params.id && req.body.name) {
+    if (req.params.categoryId && req.body.name) {
         categoryService.updateCategory({
-            id: req.params.id,
+            id: req.params.categoryId,
             name: req.body.name
         }).then(c => {
             sendCategory(c, res);
@@ -62,9 +62,10 @@ function update(req, res) {
 }
 
 function deleteOne(req, res) {
-    let category = categoryDTO(req.params);
-    if (category.id) {
-        categoryService.deleteCategory(category).then(result => {
+    if (req.params.categoryId) {
+        categoryService.deleteCategory({
+            id: req.params.categoryId
+        }).then(result => {
             if (result) {
                 res.sendStatus(204);
             } else {
