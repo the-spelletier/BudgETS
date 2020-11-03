@@ -150,6 +150,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
+                            dropdownMatchSelectWidth={false}
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
@@ -159,6 +160,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     </div>
                     <div className={"form-section"}>
                         <Select value={entry.lineId} 
+                            dropdownMatchSelectWidth={false}
                             onChange={(id) => setEntry({...entry, lineId: id})}>
                             { 
                                 lines.map((line) => <Option key={line.id} value={line.id}>{line.name}</Option>) 
@@ -168,6 +170,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     <div className={"form-section"}>
                         <Select 
                             size="large"
+                            dropdownMatchSelectWidth={false}
                             value={entry.memberId} 
                             onChange={(id) => setEntry({...entry, memberId: id})}>
                             { 
@@ -196,7 +199,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             onChange={(value) => setEntry({...entry, date: value})} />
                     </div>
                     <div className="form-section">
-                        <Select value={1}>
+                        <Select value={1} dropdownMatchSelectWidth={false}>
                             {
                                 statuses.map((status) => <Option key={status.id} value={status.id}>{status.name}</Option>) 
                             }
