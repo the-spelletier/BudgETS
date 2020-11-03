@@ -10,7 +10,6 @@ function getCurrent(req, res) {
     }).then(budget => {
         sendBudget(budget, res);
     }).catch(err => {
-        console.log(err);
         res.status(403).send({ message: 'Validation error' });
     });
 }
@@ -21,7 +20,6 @@ function get(req, res) {
     budgetService.resetGetActiveBudget(budget, req.user).then(b => {
         sendBudget(b, res);
     }).catch(err => {
-        console.log(err);
         res.status(403).send({ message: 'Validation error' });
     });
 }
@@ -32,7 +30,6 @@ function getAll(req, res) {
     budgetService.getBudgets(budget).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
-        console.log(err);
         res.status(403).send({ message: 'Validation error' });
     });
 }
@@ -55,7 +52,6 @@ function getSummary(req, res) {
                 });
             });
         }).catch(err => {
-            console.log(err);
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
