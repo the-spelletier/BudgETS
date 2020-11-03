@@ -4,7 +4,7 @@ const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const entryService = require('../services/entry');
 
-const validateBudget = (budgetId, reqUserId, res, next, checkOwner = false) => {
+const validateBudget = (budgetId, reqUserId, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
     return budgetService.getBudget({
         id: budgetId
@@ -42,13 +42,13 @@ const validateBudget = (budgetId, reqUserId, res, next, checkOwner = false) => {
     });
 }
 
-const validateCategory = (categoryId, reqUserId, res, next) => {
+const validateCategory = (categoryId, reqUserId, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
     return categoryService.getCategory({
         id: categoryId
     }).then(category => {
         if (category) {
-            return validateBudget(category.budgetId, reqUserId, res, next);
+            return validateBudget(category.budgetId, reqUserId, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid category'
@@ -61,13 +61,13 @@ const validateCategory = (categoryId, reqUserId, res, next) => {
     });
 }
 
-const validateLine = (lineId, reqUserId, res, next) => {
+const validateLine = (lineId, reqUserId, res, next, checkOwner) => {
     // Obtenir le categoryId à partir de la ligne
     lineService.getLine({
         id: lineId
     }).then(line => {
         if (line) {
-            return validateCategory(line.categoryId, reqUserId, res, next);
+            return validateCategory(line.categoryId, reqUserId, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid line'
@@ -80,13 +80,13 @@ const validateLine = (lineId, reqUserId, res, next) => {
     });
 }
 
-const validateEntry = (entryId, reqUserId, res, next) => {
+const validateEntry = (entryId, reqUserId, res, next, checkOwner) => {
     // Obtenir le lineId à partir de l'entrée
     entryService.getEntry({
         id: entryId
     }).then(entry => {
         if (entry) {
-            return validateLine(entry.lineId, reqUserId, res, next);
+            return validateLine(entry.lineId, reqUserId, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid entry'
@@ -106,7 +106,7 @@ const hasBudgetAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateBudget(budgetId, req.user.id, res, next);
+    return validateBudget(budgetId, req.user.id, res, next, checkOwner);
 };
 
 const isBudgetOwner = (req, res, next) => {
@@ -120,7 +120,7 @@ const hasCategoryAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateCategory(categoryId, req.user.id, res, next);
+    return validateCategory(categoryId, req.user.id, res, next, checkOwner);
 };
 
 const isCategoryOwner = (req, res, next) => {
@@ -134,7 +134,7 @@ const hasLineAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateLine(lineId, req.user.id, res, next);
+    return validateLine(lineId, req.user.id, res, next, checkOwner);
 };
 
 const isLineOwner = (req, res, next) => {
@@ -148,7 +148,7 @@ const hasEntryAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateEntry(entryId, req.user.id, res, next);
+    return validateEntry(entryId, req.user.id, res, next, checkOwner);
 };
 
 const isEntryOwner = (req, res, next) => {
