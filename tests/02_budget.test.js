@@ -17,11 +17,14 @@ const stubGetBudget = sinon.stub(budgetService, 'getBudget');
 const originalGetBudgets = budgetService.getBudgets;
 const stubGetBudgets = sinon.stub(budgetService, 'getBudgets');
 
-const originalResetGetActiveBudget = budgetService.resetGetActiveBudget;
-const stubResetGetActiveBudget = sinon.stub(budgetService, 'resetGetActiveBudget');
-
 const originalAddBudget = budgetService.addBudget;
 const stubAddBudget = sinon.stub(budgetService, 'addBudget');
+
+const originalUpdateUser = userService.updateUser;
+const stubUpdateUser = sinon.stub(userService, 'updateUser');
+
+const originalGetUserActiveBudget = userService.getUserActiveBudget;
+const stubGetUserActiveBudget = sinon.stub(userService, 'getUserActiveBudget');
 
 
 const app = require('../app.js');
@@ -32,8 +35,9 @@ describe('2.0 - Budget', () => {
         auth.verifyAuth.callsFake(originalAuth);
         budgetService.getBudget.callsFake(originalGetBudget);
         budgetService.getBudgets.callsFake(originalGetBudgets);
-        budgetService.resetGetActiveBudget.callsFake(originalResetGetActiveBudget);
         budgetService.addBudget.callsFake(originalAddBudget);
+        userService.updateUser.callsFake(originalUpdateUser);
+        userService.getUserActiveBudget.callsFake(originalGetUserActiveBudget);
     });
 
     describe('2.1 - Créer un nouveau budget', () => {
@@ -66,7 +70,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest_create',
                             startDate: start,
                             endDate: end,
-                            isActive: false,
                             userId: '1'
                         })
                     );
@@ -179,8 +182,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: '',
                     startDate: start,
-                    endDate: end,
-                    isActive: true
+                    endDate: end
                 })
                 .expect(400, done);
         });
@@ -266,7 +268,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest00201',
                             startDate: new Date(2020, 0, 1).toJSON(),
                             endDate: new Date(2020, 11, 31).toJSON(),
-                            isActive: true,
                             userId: '2'
                         })
                     );
@@ -294,7 +295,7 @@ describe('2.0 - Budget', () => {
             });
 
             // Stub the getBudget service
-            budgetService.getBudget.callsFake(budget => {
+            userService.getUserActiveBudget.callsFake(budget => {
                 return new Promise((resolve, reject) => {
                     reject('DB down');
                 });
@@ -330,7 +331,6 @@ describe('2.0 - Budget', () => {
                         expect(response.body).toContainEqual({
                                 id: (5 + i).toString(),
                                 name: 'budgetTest002' + ("0" + (i + 1)).slice(-2),
-                                isActive: active,
                                 userId: '2'
                         });
                     }
@@ -370,7 +370,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest00102',
                             startDate: new Date(2019, 0, 1).toJSON(),
                             endDate: new Date(2019, 11, 31).toJSON(),
-                            isActive: true,
                             userId: '1'
                         })
                     );
@@ -459,7 +458,7 @@ describe('2.0 - Budget', () => {
             });
 
             // Stub the resetGetActiveBudget service
-            budgetService.resetGetActiveBudget.callsFake((budget, user) => {
+            userService.updateUser.callsFake(budget => {
                 return new Promise((resolve, reject) => {
                     reject('DB down');
                 });
@@ -494,8 +493,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated1',
                     startDate: start,
-                    endDate: end,
-                    isActive: true
+                    endDate: end
                 })
                 .expect(200)
                 .then((response) => {
@@ -505,7 +503,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest_updated1',
                             startDate: start,
                             endDate: end,
-                            isActive: true,
                             userId: '3'
                         })
                     );
@@ -533,8 +530,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated2',
                     startDate: end,
-                    endDate: start,
-                    isActive: false
+                    endDate: start
                 })
                 .expect(403, done);
             
@@ -552,8 +548,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated3',
                     startDate: start,
-                    endDate: end,
-                    isActive: false
+                    endDate: end
                 })
                 .expect(401, done);
             
@@ -578,8 +573,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated4',
                     startDate: start,
-                    endDate: end,
-                    isActive: false
+                    endDate: end
                 })
                 .expect(404, done);
             
@@ -604,8 +598,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated5',
                     startDate: start,
-                    endDate: end,
-                    isActive: false
+                    endDate: end
                 })
                 .expect(404, done);
             
