@@ -12,6 +12,16 @@ export class BudgetClient {
         return await apiClient.get(`/budget/${budgetId}`, token);
     }
 
+    getSummary = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/budget/${budgetId}/summary`, token);
+    }
+
+    getSummaryCategories = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/budget/${budgetId}/category/summary`, token);
+    }
+
     getCurrent = async (token) => {
         const apiClient = new ApiClient();
         return await apiClient.get("/budget/current", token);
