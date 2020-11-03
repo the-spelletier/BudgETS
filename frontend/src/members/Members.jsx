@@ -51,7 +51,7 @@ const Members = () => {
                 message: "Succès",
                 icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                 description:
-                  "Le membre a été supprimée avec succès",
+                  "Le membre a été supprimé avec succès",
                 });
                 
                 // Removes from our list
@@ -94,11 +94,11 @@ const Members = () => {
             <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={members} className="no-paging" />
-            </Card>
-            { 
-                members && members.length === 0 && 
+                { 
+                members && 
                 <Button onClick={() => {onCreateMember()}}>Ajouter un membre</Button>
-            }
+                }
+            </Card>
         </Fragment>
     );
 };

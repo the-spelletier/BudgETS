@@ -113,7 +113,7 @@ const Entries = () => {
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
                 {
-                    entries && entries.length === 0 &&
+                    entries &&
                     <Button onClick={() => {setCreateModalIsVisible(true)}}>Ajouter une entrée</Button>
                 }
             </Card>
