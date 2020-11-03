@@ -67,7 +67,7 @@ const BudgetHeader = () => {
         <div className="header">
             {
                 budgets &&
-                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)}>
+                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)} dropdownMatchSelectWidth={false}>
                     {budgets.map((option) => 
                         <Option key={option.id} value={option.id}><h2 className="budget-select-option">{option.name}</h2></Option>
                     )}
