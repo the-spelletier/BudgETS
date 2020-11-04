@@ -1,5 +1,5 @@
 #entrypoint.sh
 
 npm install
-npx sequelize mysql:migrate
-npm run dev
+npx sequelize db:create
+npx sequelize db:migrate
