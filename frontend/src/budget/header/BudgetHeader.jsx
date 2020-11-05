@@ -73,7 +73,7 @@ const BudgetHeader = () => {
                         return a.startDate < b.startDate;
                     }).map((option) => 
                         <Option key={option.id} value={option.id}>
-                            <h2 className="budget-select-option">{option.name}</h2>
+                            <h2 className="budget-select-option">{option.shortName}</h2>
                         </Option>
                     )}
                 </Select>

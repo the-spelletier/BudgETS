@@ -154,11 +154,11 @@ const Categories = () => {
                 render: () => ""
             },
             { 
+                title: category.orderNumber,
                 align: 'left',
                 colSpan: 2,
                 width: 50,
                 render: (line) =>(<EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
-                title: category.orderNumber,
             },
             {
                 title: "",
@@ -206,24 +206,39 @@ const Categories = () => {
         }
     ];
 
-    const renderCategories = (categories) => {
-        return categories
-                
-                .map((category) => 
-                <Fragment key={category.id}>
-                    {  
-                        category.lines && 
-                        category.lines.sort(function (a, b) {
-                            return a.orderNumber > b.orderNumber;
-                        }) && 
-                        <Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/> 
-                    }
-                    { 
-                        category.lines && category.lines.length === 0 && 
-                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                    }
-                </Fragment>
-            )
+    const renderCategories = (categories, type, title) => {
+        return <Card title={ <h2>{title}</h2>} >
+                    {
+                    categories
+                    .filter(cat => cat.type === type)
+                    .sort(function (a, b){
+                        return a.orderNumber > b.orderNumber;
+                    })
+                    .map((category) => 
+                        <Fragment key={category.id}>
+                            {  
+                                category.lines && 
+                                <Table tableLayout="fixed" 
+                                    className="no-paging" 
+                                    size="small" 
+                                    key={category.id} 
+                                    columns={buildColumns(category)} 
+                                    dataSource={category.lines.sort(function (a,b){
+                                        return a.orderNumber > b.orderNumber;
+                                    })}/> 
+                            }
+                            { 
+                                category.lines && 
+                                <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                            }
+                        </Fragment>
+                    )                        
+                    }    
+                    <footer>
+                    <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
+                    </footer>
+                </Card>
+        
     }
 
     return (
@@ -235,26 +250,12 @@ const Categories = () => {
                 <Fragment>
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
-                    <Card>
-                        <h1 className="main-title">Dépenses</h1>
-                        {
-                            categories.map((category) => 
-                                <Fragment key={category.id}>
-                                    {  
-                                        category.lines && 
-                                        <Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/> 
-                                    }
-                                    { 
-                                        category.lines && 
-                                        <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                                    }
-                                </Fragment>
-                            )
-                        }    
-                        <footer>
-                        <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
-                        </footer>
-                    </Card>
+                    {
+                        renderCategories(categories, "expense", "Dépenses")
+                    } 
+                    {
+                        renderCategories(categories, "revenue", "Revenus")
+                    } 
                 </Fragment>
             }
         </Fragment>
