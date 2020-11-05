@@ -53,6 +53,7 @@ const getLastBudgetsFromDate = (id, count) => {
     return getBudget({id: id}).then(b => {
         let res = null;
         if (b) {
+            let userId = b.userId;
             res = {
                 currentBudget: b,
                 previousBudgets: []
@@ -60,6 +61,7 @@ const getLastBudgetsFromDate = (id, count) => {
             if (count > 0) {
                 return Budget.findAll({ 
                     where: { 
+                        userId: userId,
                         startDate: { 
                             [Op.lt]: b.startDate 
                         }
