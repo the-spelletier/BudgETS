@@ -16,13 +16,13 @@ const Entries = () => {
     const {budget} = useContext(BudgetContext);
 
     const [entries, setEntries] = useState(null);
-    const [currentEntry, setCurrentEntry] = useState(null);
+    const [currentEntryId, setCurrentEntryId] = useState(null);
     const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
 
     const getEntries = async() => {
         var response = await entryClient.getList(user.token, budget.id);
         setEntries(response.data);
-    }
+    };
 
     useEffect(() => {
         if (user.token && budget.id) {
@@ -30,13 +30,13 @@ const Entries = () => {
         }
     }, [createModalIsVisible]);
 
-    const onEditEntry = (entry) => {
-        setCurrentEntry(entry.id);
+    const onCreateOrEditEntry = (entryId) =>{
+        setCurrentEntryId(entryId);
         setCreateModalIsVisible(true);
     };
 
     const onCreateOrEditEntryModalCancel = () => {
-        setCurrentEntry(null);
+        setCurrentEntryId(null);
         setCreateModalIsVisible(false);
     };
 
@@ -70,7 +70,7 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditEntry(entry)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} onNewClick={() => onCreateOrEditEntry(null)} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",
@@ -104,12 +104,12 @@ const Entries = () => {
             title: "Status",
             render: (entry) => entry.entryStatusName 
         }
-    ]
+    ];
 
     return (
         <Fragment>
             <BudgetHeader />
-            <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
+            <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
                 {
