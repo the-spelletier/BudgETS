@@ -38,7 +38,24 @@ const getCategories = (budgetId, light, type) => {
         options.where.type = type;
     }
     return Category.findAll(options);
-};
+}
+
+const getCategoriesSummary = (budgetId, light, type) => {
+    return getCategories(budgetId, light, type).then(categories => {
+        categories.forEach((c, i, arr) => {
+            c.real = 0;
+            c.estimate = 0;
+            c.Lines.forEach(l => {
+                c.real += Number(l.get('real'));
+                c.estimate += Number(l.get('estimate'));
+            })
+            c.real = c.real.toFixed(2);
+            c.estimate = c.estimate.toFixed(2);
+            delete c.Lines;
+        });
+        return categories;
+    });
+}
 
 // Ajout d'une catégorie
 const addCategory = category => {
@@ -74,5 +91,6 @@ module.exports = {
     getCategories,
     addCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoriesSummary
 };

@@ -105,6 +105,44 @@ module.exports = {
                 type: 'expense'
             });
         }
+
+        for (let i = 8; i <= 9; ++i){
+            
+            categories.push({
+                id: i * 1000 + 1,
+                name: 'Locations',
+                budgetId: i,
+                type: 'expense'
+            });
+
+            categories.push({
+                id: i * 1000 + 2,
+                name: 'Infra',
+                budgetId: i,
+                type: 'expense'
+            });
+
+            categories.push({
+                id: i * 1000 + 3,
+                name: 'Forunitures',
+                budgetId: i,
+                type: 'expense'
+            });
+
+            categories.push({
+                id: i * 1000 + 4,
+                name: 'Ventes',
+                budgetId: i,
+                type: 'revenue'
+            });
+
+            categories.push({
+                id: i * 1000 + 5,
+                name: 'Sponsors',
+                budgetId: i,
+                type: 'revenue'
+            });
+        }
     }
 
     if (categories.length > 0) {

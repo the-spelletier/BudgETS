@@ -10,9 +10,17 @@ const stubAuth = sinon.stub(auth, 'verifyAuth');
 
 const app = require('../app.js');
 
+function getRouteClone(budgetId) {
+    if (budgetId) {
+        return '/api/budget/' + budgetId + '/clone';
+    } else {
+        return '/api/budget/clone';
+    }
+}
+
 describe('9.0 - Clonage de budget', () => {
     beforeEach(() => {
-        // Original authentification service
+        // Original services
         auth.verifyAuth.callsFake(originalAuth);
     });
 
@@ -33,7 +41,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start,
@@ -47,7 +55,6 @@ describe('9.0 - Clonage de budget', () => {
                             name: name,
                             startDate: start,
                             endDate: end,
-                            isActive: false,
                             userId: '5'
                         })
                     );
@@ -71,7 +78,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/')
+                .post(getRouteClone())
                 .send({
                     name: name,
                     startDate: start,
@@ -88,7 +95,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start,
@@ -114,7 +121,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/9')
+                .post(getRouteClone(9))
                 .send({
                     name: name,
                     startDate: start,
@@ -139,7 +146,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/-1')
+                .post(getRouteClone(-1))
                 .send({
                     name: name,
                     startDate: start,
@@ -163,7 +170,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     startDate: start,
                     endDate: end
@@ -187,7 +194,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start,
@@ -211,7 +218,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     endDate: end
@@ -235,7 +242,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start,
@@ -259,7 +266,7 @@ describe('9.0 - Clonage de budget', () => {
             const start = '2021-09-25 00:00:00'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start
@@ -283,7 +290,7 @@ describe('9.0 - Clonage de budget', () => {
             const end = ''
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: start,
@@ -308,38 +315,13 @@ describe('9.0 - Clonage de budget', () => {
             const end = '2021-09-30 23:59:59'
 
             request(app)
-                .post('/api/budget/clone/17')
+                .post(getRouteClone(17))
                 .send({
                     name: name,
                     startDate: end,
                     endDate: start
                 })
                 .expect(400, done);
-        });
-
-        test('092011 - Cloner un budget avec nom non unique', (done) => {
-            // Stub the verifyAuth
-            auth.verifyAuth.callsFake((req, res, next) => {
-                userService.getUser({
-                    username:'budgets_test005'
-                }).then(user => {
-                    req.user = User.build(user, {raw: true});
-                    next();
-                })
-            });
-
-            const name = 'budgetTest00201'
-            const start = '2021-09-25 00:00:00'
-            const end = '2021-09-30 23:59:59'
-
-            request(app)
-                .post('/api/budget/clone/17')
-                .send({
-                    name: name,
-                    startDate: start,
-                    endDate: end
-                })
-                .expect(403, done);
         });
 
     });
