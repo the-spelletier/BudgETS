@@ -220,6 +220,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     <Fragment>
                     <div className={"form-section"}>
                         <Select 
+                            dropdownMatchSelectWidth={false}
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
