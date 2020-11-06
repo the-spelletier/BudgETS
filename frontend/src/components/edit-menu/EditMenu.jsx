@@ -4,11 +4,10 @@ import { Popover, Button } from "antd";
 
 import { SettingOutlined, DeleteOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 
-const EditMenu = ({onEditClick, onDeleteClick, onNewClick}) => {
+const EditMenu = ({onEditClick, onDeleteClick}) => {
 
     const popoverContent = (
         <Fragment>
-            <Button icon={<PlusOutlined/>} onClick={onNewClick}/>
             <Button icon={<EditOutlined/>} onClick={onEditClick}/>
             <Button icon={<DeleteOutlined/>} onClick={onDeleteClick}/>
         </Fragment>

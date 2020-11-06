@@ -70,7 +70,7 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => onCreateOrEditEntry(null)} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",

@@ -73,7 +73,7 @@ const Members = () => {
     const columns = [
         {
             title: "",
-            render: (member) => <EditMenu key={member.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
+            render: (member) => <EditMenu key={member.id} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
         },
         {
             title: "Nom",
