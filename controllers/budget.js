@@ -6,7 +6,17 @@ const userService = require('../services/user');
 
 function getCurrent(req, res) {
     userService.getUserActiveBudget(req.user.id).then(user => {
-        sendBudget(user.activeBudget, res);
+        if (user.activeBudgetId)
+            sendBudget(user.activeBudget, res);
+        else {
+            budgetService.getBudgets({
+                userId: req.user.id
+            }).then(budgets => {
+                sendBudget(budgets[0], res);
+            }).catch(err => {
+                res.status(403).send({ message: 'Validation error' });
+            });
+        }
     }).catch(err => {
         res.status(403).send({ message: 'Validation error' });
     });
