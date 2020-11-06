@@ -55,7 +55,6 @@ describe('9.0 - Clonage de budget', () => {
                             name: name,
                             startDate: start,
                             endDate: end,
-                            isActive: false,
                             userId: '5'
                         })
                     );
@@ -153,7 +152,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: start,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(404, done);
         });
 
         test('092004 - Cloner un budget sans nom', (done) => {
@@ -176,7 +175,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: start,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092005 - Cloner un budget avec nom vide', (done) => {
@@ -201,7 +200,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: start,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092006 - Cloner un budget sans date de début', (done) => {
@@ -224,7 +223,7 @@ describe('9.0 - Clonage de budget', () => {
                     name: name,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092007 - Cloner un budget avec date de début vide', (done) => {
@@ -249,7 +248,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: start,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092008 - Cloner un budget sans date de fin', (done) => {
@@ -272,7 +271,7 @@ describe('9.0 - Clonage de budget', () => {
                     name: name,
                     startDate: start
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092009 - Cloner un budget avec date de fin vide', (done) => {
@@ -297,7 +296,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: start,
                     endDate: end
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test('092010 - Cloner un budget avec date de fin < date de début', (done) => {
@@ -322,7 +321,7 @@ describe('9.0 - Clonage de budget', () => {
                     startDate: end,
                     endDate: start
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
     });

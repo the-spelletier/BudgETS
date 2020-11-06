@@ -3,7 +3,7 @@ const lineService = require('../services/line');
 
 function get(req, res) {
     return res.sendStatus(404);
-    lineService.getLine({ id: req.params.id }).then(line => {
+    lineService.getLine({ id: req.params.lineId }).then(line => {
         sendLine(line, res);
     }).catch(err => {
         console.log(err);
@@ -35,9 +35,9 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    if (req.params.id && req.body.name && typeof req.body.description != 'undefined' && typeof req.body.estimate != 'undefined') { 
+    if (req.params.lineId && req.body.name && typeof req.body.description != 'undefined' && typeof req.body.estimate != 'undefined') { 
         lineService.updateLine({
-            id: req.params.id, 
+            id: req.params.lineId, 
             name: req.body.name, 
             description: req.body.description, 
             estimate: req.body.estimate, 
@@ -53,9 +53,10 @@ function update(req, res) {
 }
 
 function deleteOne(req, res) {
-    let line = lineDTO(req.params);
-    if (line.id) {
-        lineService.deleteLine(line).then(result => {
+    if (req.params.lineId) {
+        lineService.deleteLine({
+            id: req.params.lineId
+        }).then(result => {
             if (result) {
                 res.sendStatus(204);
             } else {

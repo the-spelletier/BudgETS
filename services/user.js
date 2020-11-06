@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const config = require('../config/jsonConfig');
-const { User } = require('../models');
+const { User, Budget } = require('../models');
 
 // Retourne un utilisateur (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getUser = user => {
@@ -32,9 +32,14 @@ const updateUser = user => {
         }
     }).then(u => {
         if (u) {
-            u.isAdmin = user.isAdmin;
+            if (user.isAdmin) {
+                u.isAdmin = user.isAdmin;
+            }
             if (user.password) {
                 u.password = bcrypt.hashSync(user.password, config.saltRounds);
+            }
+            if (user.activeBudgetId) {
+                u.activeBudgetId = user.activeBudgetId;
             }
             return u.save(); 
         }
@@ -51,10 +56,23 @@ const deleteUser = user => {
     });
 }
 
+const getUserActiveBudget = userId => {
+    return User.findOne({
+        where: {
+            id: userId
+        },
+        include: [{
+            model: Budget,
+            as: 'activeBudget'
+        }]
+    });
+}
+
 module.exports = {
     getUser,
     getUsers,
     addUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserActiveBudget
 };

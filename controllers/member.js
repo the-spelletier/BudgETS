@@ -2,7 +2,8 @@ const { memberDTO } = require('../dto');
 const memberService = require('../services/member');
 
 function get(req, res) {
-    memberService.getMember( req.params.id ).then(member => {
+    memberService.getMember( req.params.memberId ).then(member => {
+        // TODO
         member.userId = req.user.id;
         sendMember(member, res);
     }).catch(err => {
@@ -37,9 +38,9 @@ function create(req, res) {
 
 function update(req, res) {
     let member = memberDTO(req.body);
-    member.userId = req.user.id;
-    if (req.params.id) {
-        member.id = req.params.id;
+    if (req.params.memberId) {
+        member.id = req.params.memberId;
+        member.userId = req.user.id;
         memberService.updateMember(member).then(m => {
             sendMember(m, res);
         }).catch(err => {
@@ -52,9 +53,10 @@ function update(req, res) {
 }
 
 function deleteOne(req, res) {
-    let member = memberDTO(req.params);
-    if (member.id) {
-        memberService.deleteMember(member).then(result => {
+    if (req.params.memberId) {
+        memberService.deleteMember({
+            id: req.params.memberId
+        }).then(result => {
             if (result) {
                 res.sendStatus(204);
             } else {

@@ -8,6 +8,9 @@ const userDTO = (user, u = {}) => {
   if (typeof user.isAdmin != 'undefined') {
     u.isAdmin = user.isAdmin === true;
   }
+  if (typeof user.activeBudgetId != 'undefined') {
+    u.activeBudgetId = user.activeBudgetId;
+  }
   return u;
 };
 
@@ -23,9 +26,6 @@ const budgetDTO = (budget, b = {}) => {
   }
   if (typeof budget.endDate != 'undefined') {
     b.endDate = budget.endDate;
-  }
-  if (typeof budget.isActive != 'undefined') {
-    b.isActive = budget.isActive;
   }
   if (typeof budget.userId != 'undefined') {
     b.userId = budget.userId;
