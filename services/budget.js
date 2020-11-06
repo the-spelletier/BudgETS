@@ -53,15 +53,14 @@ const getLastBudgetsFromDate = (id, count) => {
     return getBudget({id: id}).then(b => {
         let res = null;
         if (b) {
-            let userId = b.userId;
             res = {
                 currentBudget: b,
                 previousBudgets: []
             }
             if (count > 0) {
                 return Budget.findAll({ 
-                    where: { 
-                        userId: userId,
+                    where: {
+                        userId: b.userId,
                         startDate: { 
                             [Op.lt]: b.startDate 
                         }
@@ -90,8 +89,7 @@ const addBudget = budget => {
 const updateBudget = budget => {
     return Budget.findOne({
         where: {
-            id: budget.id,
-            userId: budget.userId
+            id: budget.id
         }
     }).then(b => {
         let startDate = new Date(budget.startDate || b.startDate);
@@ -116,27 +114,6 @@ const deleteBudget = budget => {
     });
 }
 
-// Retourne le budget selon son id et set isActive à true
-const resetGetActiveBudget = (budget, reqUser) => {
-    return getBudget(budget).then(b => {
-        if (b) {
-            return Budget.update({ 
-                isActive: false 
-            }, { 
-                where: {
-                    id : { 
-                        [Op.notIn]: [b.id] 
-                    },
-                    userId: reqUser.id
-                }
-            }).then(() => {
-                b.isActive = true;
-                return b.save();
-            });
-        }
-    })
-}
-
 module.exports = {
     getBudget,
     getBudgetByID,
@@ -145,6 +122,5 @@ module.exports = {
     getLastBudgetsFromDate,
     addBudget,
     updateBudget,
-    deleteBudget,
-    resetGetActiveBudget
+    deleteBudget
 };

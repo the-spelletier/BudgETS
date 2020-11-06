@@ -16,7 +16,8 @@ module.exports = {
                     id: nbUsers,
                     username: 'budgets_test' + ('00' + i).slice(-3),
                     password: bcrypt.hashSync('test123', config.saltRounds),
-                    isAdmin: (i == 1)
+                    isAdmin: (i == 1),
+                    activeBudgetId: i == 2 ? '5' : null
                 });
             }
         } else if (process.env.NODE_ENV == 'development') {

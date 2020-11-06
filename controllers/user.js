@@ -24,9 +24,11 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    let user = userDTO(req.body);
-    if (req.params.id && !user.username) {
-        user.id = req.params.id;
+    if (req.params.userId && !req.body.username && !req.body.activeBudgetId) {
+        let user = { id: req.params.userId };
+        if (req.body.password) {
+            user.password = req.body.password;
+        }
         userService.updateUser(user).then((result) => {
             if (user) {
                 res.send(userDTO(result));

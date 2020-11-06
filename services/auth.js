@@ -64,6 +64,7 @@ const authenticate = params => {
             });
         }
     }).catch(err => {
+        console.log(err);
         throw err;
     });
 };
