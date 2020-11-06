@@ -89,7 +89,7 @@ const RevenuesOrExpenses = ({type}) => {
 
         return [
             { 
-                title: category.orderNumber,
+                title: category.orderNumber.toString().padStart(3, "0"),
                 render: ""
             },
             {
@@ -97,7 +97,7 @@ const RevenuesOrExpenses = ({type}) => {
                 colSpan: 2,
                 render: (line) => {
                     return {
-                        children: <span className="line-id">{line.orderNumber}</span>,
+                        children: <span className="line-id">{line.orderNumber.toString().padStart(3, "0")}</span>,
                         props: {
                           colSpan: 1,
                         }

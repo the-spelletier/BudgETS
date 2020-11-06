@@ -174,7 +174,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             { 
                                 lines.sort(function (a, b){
                                     return a.orderNumber > b.orderNumber;
-                                }).map((line) => <Option key={line.id} value={line.id}>{line.orderNumber + ' - ' + line.name}</Option>) 
+                                }).map((line) => <Option key={line.id} value={line.id}>{line.displayName}</Option>) 
                             }
                         </Select>
                     </div>

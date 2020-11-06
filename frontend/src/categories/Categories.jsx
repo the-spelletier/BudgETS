@@ -154,7 +154,7 @@ const Categories = () => {
                 render: () => ""
             },
             { 
-                title: category.orderNumber,
+                title: category.orderNumber.toString().padStart(3, "0"),
                 align: 'left',
                 colSpan: 2,
                 width: 50,
@@ -164,7 +164,7 @@ const Categories = () => {
                 title: "",
                 colSpan: 0,
                 width: 'auto',
-                render: (line) => line.orderNumber
+                render: (line) => line.orderNumber.toString().padStart(3, "0")
             },
             {
                 title: category.name,
