@@ -29,6 +29,8 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const [members, setMembers] = useState(null);
     //Get according to selected category
     const [lines, setLines] = useState(null);
+    // Wether entry.lineId should change when entry.categoryId changes
+    const [KeepLineId, setKeepLineId] = useState(false);
 
     useEffect(() => {
         const getEntry = async () => {
@@ -40,7 +42,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             var response = await categoryClient.getList(user.token, budget.id);
             setCategories(response.data);
             
-            if(response.data){
+            if(response.data && response.data.length > 0 && entryId == null){
                 setEntry({...entry, categoryId: response.data[0].id});
             }
         };
@@ -54,14 +56,19 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             // TODO : get all statuses into const statuses
         }
 
-        fetchCategories();
-        fetchMembers();
-        
-        if(entryId){
-            getEntry();
-        }
+        if(visible){
+            fetchCategories();
+            fetchMembers();
 
-    }, [entryId]);
+            if(entryId){
+                getEntry();
+                setKeepLineId(true);
+            }
+            else{
+                setKeepLineId(false);
+            }
+        }
+    }, [visible]);
 
     useEffect(() => {
         const fetchLines = async() => {
@@ -69,7 +76,9 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             
             if(response.data && response.data.length > 0){
                 setLines(response.data);
-                setEntry({...entry, lineId: response.data[0].id});
+                if(KeepLineId == false){
+                    setEntry({...entry, lineId: response.data[0].id});
+                }
             }
             else {
                 setLines([]);
@@ -79,6 +88,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     
         if(entry.categoryId){
             fetchLines();
+            setKeepLineId(false);
         }
     }, [entry.categoryId]);
 
@@ -146,7 +156,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
             onOk={entry.id? editEntry : validateAndCreate}
             onCancel={onCancel}>
             {
-                categories && categories.length > 0 && lines && statuses && members &&
+                (categories && categories.length > 0 && lines && lines.length > 0 && statuses && members &&
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
@@ -206,6 +216,24 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         </Select>
                     </div>
                     </Fragment>
+                ) || (categories && categories.length > 0 && (lines == null || lines.length === 0) &&
+                    <Fragment>
+                    <div className={"form-section"}>
+                        <Select 
+                            value={entry.categoryId ? entry.categoryId : categories[0].id} 
+                            onChange={(id) => setEntry({...entry, categoryId: id})}>
+                            { 
+                                categories.map((category) => <Option key={category.id} value={category.id}>{category.name}</Option>) 
+                            }                            
+                        </Select>    
+                    </div>
+                    <span className="label">La catégorie ne contient aucune ligne.</span>
+                    </Fragment>
+                ) || ((categories == null || categories.length === 0) &&
+                    <Fragment>
+                    <span className="label">Le budget ne contient aucune catégorie.</span>
+                    </Fragment>
+                )
             }
         </Modal>
     );

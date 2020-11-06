@@ -2,32 +2,48 @@ const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
 const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
+const userService = require('../services/user');
 
 function getCurrent(req, res) {
-    budgetService.getBudget({
-        isActive: true,
-        userId: req.user.id
-    }).then(budget => {
-        sendBudget(budget, res);
+    userService.getUserActiveBudget(req.user.id).then(user => {
+        if (user.activeBudgetId)
+            sendBudget(user.activeBudget, res);
+        else {
+            budgetService.getBudgets({
+                userId: req.user.id
+            }).then(budgets => {
+                sendBudget(budgets[0], res);
+            }).catch(err => {
+                res.status(403).send({ message: 'Validation error' });
+            });
+        }
     }).catch(err => {
         res.status(403).send({ message: 'Validation error' });
     });
 }
 
 function get(req, res) {
-    let budget = budgetDTO(req.params);
-    budget.userId = req.user.id;
-    budgetService.resetGetActiveBudget(budget, req.user).then(b => {
-        sendBudget(b, res);
+    budgetService.getBudget({ 
+        id: req.params.budgetId
+    }).then(b => {
+        if (!b) { return budgetNotFoundResponse(res); }
+        userService.updateUser({ 
+            id: req.user.id,
+            activeBudgetId: b.id
+        }).then(() => {
+            sendBudget(b, res);
+        }).catch(err => {
+            res.status(403).send({ message: 'Validation error' });
+        });
     }).catch(err => {
         res.status(403).send({ message: 'Validation error' });
     });
 }
 
 function getAll(req, res) {
-    let budget = budgetDTO(req.params);
-    budget.userId = req.user.id;
-    budgetService.getBudgets(budget).then(budgets => {
+    budgetService.getBudgets({
+        userId: req.user.id
+    }).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
         res.status(403).send({ message: 'Validation error' });
@@ -36,8 +52,8 @@ function getAll(req, res) {
 
 function getSummary(req, res) {
     let count = typeof req.query.count !== 'undefined' ? req.query.count : 0;
-    if (req.params.id) {
-        budgetService.getLastBudgetsFromDate(req.params.id, count).then(budgets => {
+    if (req.params.budgetId) {
+        budgetService.getLastBudgetsFromDate(req.params.budgetId, count).then(budgets => {
             if (!budgets) { return budgetNotFoundResponse(res); }
             let counter = 0;
             budgets.previousBudgets.push(budgets.currentBudget);
@@ -64,7 +80,6 @@ function create(req, res) {
     let sDate = new Date(budget.startDate);
     let eDate = new Date(budget.endDate);
     if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
-        budget.isActive = false;
         budget.userId = req.user.id;
         budgetService.addBudget(budget).then(b => {
             res.status(201);
@@ -79,9 +94,8 @@ function create(req, res) {
 
 function update(req, res) {
     let budget = budgetDTO(req.body);
-    if (req.params.id) {
-        budget.id = req.params.id;
-        budget.userId = req.user.id;
+    if (req.params.budgetId && !req.body.userId) {
+        budget.id = req.params.budgetId;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {
@@ -94,18 +108,17 @@ function update(req, res) {
 
 function clone(req, res) {
     let budget = budgetDTO(req.body);
-    if (req.params.id) {
+    if (req.params.budgetId) {
 
         // Dates for validation
         let sDate = new Date(budget.startDate);
         let eDate = new Date(budget.endDate);
         if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
 
-            budget.isActive = false;
             budget.userId = req.user.id;
 
             // Get for all categories and lines
-            budgetService.getBudgetByID(req.params.id).then(oldB => {
+            budgetService.getBudgetByID(req.params.budgetId).then(oldB => {
 
                 // Create new budgets
                 budgetService.addBudget(budget).then(newB => {
@@ -152,11 +165,11 @@ function clone(req, res) {
             });
         }
         else {
-            res.status(403).send({ message: 'Erreur de validation' });
+            res.status(400).send({ message: 'Erreur de validation' });
         }
     }
     else {
-        res.status(403).send({ message: 'Aucun budget référence indiqué' });
+        res.status(400).send({ message: 'Aucun budget référence indiqué' });
     }
 }
 

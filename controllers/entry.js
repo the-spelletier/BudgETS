@@ -2,7 +2,7 @@ const { entryDTO } = require('../dto');
 const entryService = require('../services/entry');
 
 function get(req, res) {
-    entryService.getEntry({ id: req.params.id }).then(entry => {
+    entryService.getEntry({ id: req.params.entryId }).then(entry => {
         sendEntry(entry, res);
     }).catch(err => {
         console.log(err);
@@ -36,8 +36,8 @@ function create(req, res) {
 
 function update(req, res) {
     let entry = entryDTO(req.body);
-    if (req.params.id) {
-        entry.id = req.params.id;
+    if (req.params.entryId) {
+        entry.id = req.params.entryId;
         entryService.updateEntry(entry).then(e => {
             sendEntry(e, res);
         }).catch(err => {
@@ -49,9 +49,10 @@ function update(req, res) {
 }
 
 function deleteOne(req, res) {
-    let entry = entryDTO(req.params);
-    if (entry.id) {
-        entryService.deleteEntry(entry).then(result => {
+    if (req.params.entryId) {
+        entryService.deleteEntry({
+            id: req.params.entryId
+        }).then(result => {
             if (result) {
                 res.sendStatus(204);
             } else {

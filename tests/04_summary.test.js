@@ -205,7 +205,6 @@ describe('4.0 - Sommaire', () => {
                         currentBudget: {
                             id: '1',
                             name: 'budgetTest00101',
-                            isActive: true,
                             userId: '1',
                             revenue: {
                                 real: '40.00',
@@ -220,7 +219,6 @@ describe('4.0 - Sommaire', () => {
                             {
                                 id: '2',
                                 name: 'budgetTest00102',
-                                isActive: false,
                                 userId: '1',
                                 revenue: {
                                     real: '40.00',
@@ -234,7 +232,6 @@ describe('4.0 - Sommaire', () => {
                             {
                                 id: '3',
                                 name: 'budgetTest00103',
-                                isActive: false,
                                 userId: '1',
                                 revenue: {
                                     real: '0.00',
@@ -248,7 +245,6 @@ describe('4.0 - Sommaire', () => {
                             {
                                 id: '4',
                                 name: 'budgetTest00104',
-                                isActive: false,
                                 userId: '1',
                                 revenue: {
                                     real: '0.00',

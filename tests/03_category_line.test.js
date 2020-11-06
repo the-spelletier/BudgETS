@@ -510,7 +510,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(403, done);
+                .expect(404, done);
         });
 
         test("032011 - Créer une catégorie sans authentification", (done) => {
@@ -840,7 +840,7 @@ describe('3.0 - Catégories et lignes', () => {
                     estimate: estimate,
                     categoryId: categoryId
                 })
-                .expect(403, done);
+                .expect(404, done);
         });
 
         test("033011 - Créer une ligne avec categorie qui n'existe pas", (done) => {
@@ -867,7 +867,7 @@ describe('3.0 - Catégories et lignes', () => {
                     estimate: estimate,
                     categoryId: categoryId
                 })
-                .expect(403, done);
+                .expect(404, done);
         });
 
         test("033012 - Créer une ligne sans authentification", (done) => {

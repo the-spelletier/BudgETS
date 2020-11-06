@@ -151,22 +151,24 @@ const Categories = () => {
         return [
             {
                 title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                width: 50,
                 render: () => ""
             },
             { 
                 title: category.id,
-                render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
-            },
-            {
-                title: category.name,
-                render: () => ""
+                align: 'left',
+                colSpan: 2,
+                width: 50,
+                render: (line) =>(<EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
             },
             {
                 title: "",
+                colSpan: 0,
+                width: 'auto',
                 render: (line) => line.id
             },
             {
-                title: "",
+                title: category.name,
                 render: (line) => line.name
             },
             {
@@ -189,10 +191,12 @@ const Categories = () => {
     const headerColumns = [
         {
             title: "",
+            width: 50,
             render: () => ""
         },
         {
             title: "",
+            width: 50,
             render: () => ""
         },
         {
@@ -235,12 +239,15 @@ const Categories = () => {
                                         <Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/> 
                                     }
                                     { 
-                                        category.lines && category.lines.length === 0 && 
-                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                                        category.lines && 
+                                        <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
                                     }
                                 </Fragment>
                             )
                         }    
+                        <footer>
+                        <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
+                        </footer>
                     </Card>
                 </Fragment>
             }
