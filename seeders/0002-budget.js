@@ -85,6 +85,24 @@ module.exports = {
             endDate: new Date(2016, 11, 31),
             isActive: false
         });
+
+        budgets.push({
+            id: 8,
+            name: 'LAN 2021',
+            userId: 4,
+            startDate: new Date(2021, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2021, 11, 31),
+            isActive: true
+        });
+
+        budgets.push({
+            id: 9,
+            name: 'LAN 2022',
+            userId: 4,
+            startDate: new Date(2022, 0, 1), // Months are indexed at 0, Days are indexed at 1
+            endDate: new Date(2022, 11, 31),
+            isActive: false
+        });
     }
 
     if (budgets.length > 0) {

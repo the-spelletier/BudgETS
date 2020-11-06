@@ -8,6 +8,9 @@ const userDTO = (user, u = {}) => {
   if (typeof user.isAdmin != 'undefined') {
     u.isAdmin = user.isAdmin === true;
   }
+  if (typeof user.activeBudgetId != 'undefined') {
+    u.activeBudgetId = user.activeBudgetId;
+  }
   return u;
 };
 
@@ -24,11 +27,14 @@ const budgetDTO = (budget, b = {}) => {
   if (typeof budget.endDate != 'undefined') {
     b.endDate = budget.endDate;
   }
-  if (typeof budget.isActive != 'undefined') {
-    b.isActive = budget.isActive;
-  }
   if (typeof budget.userId != 'undefined') {
     b.userId = budget.userId;
+  }
+  if (typeof budget.revenue != 'undefined') {
+    b.revenue = budget.revenue;
+  }
+  if (typeof budget.expense != 'undefined') {
+    b.expense = budget.expense;
   }
   return b;
 };
@@ -45,6 +51,12 @@ const categoryDTO = (category, c = {}) => {
   }
   if (typeof category.budgetId != 'undefined') {
     c.budgetId = category.budgetId;
+  }
+  if (typeof category.real != 'undefined') {
+    c.real = category.real;
+  }
+  if (typeof category.estimate != 'undefined') {
+    c.estimate = category.estimate;
   }
   if (typeof category.Lines != 'undefined') {
     c.lines = [];
@@ -87,9 +99,6 @@ const entryDTO = (entry, e = {}) => {
   if (typeof entry.date != 'undefined') {
     e.date = entry.date;
   }
-  if (typeof entry.member != 'undefined') {
-    e.member = entry.member;
-  }
   if (typeof entry.description != 'undefined') {
     e.description = entry.description;
   }
@@ -101,6 +110,9 @@ const entryDTO = (entry, e = {}) => {
   }
   if (typeof entry.lineId != 'undefined') {
     e.lineId = entry.lineId;
+  }
+  if (typeof entry.memberId != 'undefined') {
+    e.memberId = entry.memberId;
   }
 
   if (typeof entry.Line != 'undefined') {
@@ -121,7 +133,32 @@ const entryDTO = (entry, e = {}) => {
     e.entryStatusId = entry.entryStatusId;
   }
 
+  if (typeof entry.Member != 'undefined' && entry.Member != null && typeof entry.Member.name != 'undefined') {
+    e.memberName = entry.Member.name;
+  } else {
+    e.memberName = "";
+  }
+
   return e;
+};
+
+const memberDTO = (member, m = {}) => {
+  if (typeof member.id != 'undefined') {
+    m.id = member.id;
+  }
+  if (typeof member.userId != 'undefined') {
+    m.userId = member.userId;
+  }
+  if (typeof member.name != 'undefined') {
+    m.name = member.name;
+  }
+  if (typeof member.code != 'undefined') {
+    m.code = member.code;
+  }
+  if (typeof member.email != 'undefined') {
+    m.email = member.email;
+  }
+  return m;
 };
 
 module.exports = {
@@ -129,5 +166,6 @@ module.exports = {
   budgetDTO,
   categoryDTO,
   lineDTO,
-  entryDTO
+  entryDTO,
+  memberDTO
 }

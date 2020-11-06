@@ -2,39 +2,77 @@ const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
 const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
+const userService = require('../services/user');
 
 function getCurrent(req, res) {
-    budgetService.getBudget({
-        isActive: true,
-        userId: req.user.id
-    }).then(budget => {
-        sendBudget(budget, res);
+    userService.getUserActiveBudget(req.user.id).then(user => {
+        if (user.activeBudgetId)
+            sendBudget(user.activeBudget, res);
+        else {
+            budgetService.getBudgets({
+                userId: req.user.id
+            }).then(budgets => {
+                sendBudget(budgets[0], res);
+            }).catch(err => {
+                res.status(403).send({ message: 'Validation error' });
+            });
+        }
     }).catch(err => {
-        console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
 }
 
 function get(req, res) {
-    let budget = budgetDTO(req.params);
-    budget.userId = req.user.id;
-    budgetService.resetGetActiveBudget(budget, req.user).then(b => {
-        sendBudget(b, res);
+    budgetService.getBudget({ 
+        id: req.params.budgetId
+    }).then(b => {
+        if (!b) { return budgetNotFoundResponse(res); }
+        userService.updateUser({ 
+            id: req.user.id,
+            activeBudgetId: b.id
+        }).then(() => {
+            sendBudget(b, res);
+        }).catch(err => {
+            res.status(403).send({ message: 'Validation error' });
+        });
     }).catch(err => {
-        console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
 }
 
 function getAll(req, res) {
-    let budget = budgetDTO(req.params);
-    budget.userId = req.user.id;
-    budgetService.getBudgets(budget).then(budgets => {
+    budgetService.getBudgets({
+        userId: req.user.id
+    }).then(budgets => {
         sendBudget(budgets, res);
     }).catch(err => {
-        console.log(err);
-        res.status(500).send({ message: 'An unexpected error occurred' });
+        res.status(403).send({ message: 'Validation error' });
     });
+}
+
+function getSummary(req, res) {
+    let count = typeof req.query.count !== 'undefined' ? req.query.count : 0;
+    if (req.params.budgetId) {
+        budgetService.getLastBudgetsFromDate(req.params.budgetId, count).then(budgets => {
+            if (!budgets) { return budgetNotFoundResponse(res); }
+            let counter = 0;
+            budgets.previousBudgets.push(budgets.currentBudget);
+            budgets.previousBudgets.forEach((b, i, arr) => {
+                if (!b) { return budgetNotFoundResponse(res); }
+                categoryService.getCategories(b.id).then(categories => {
+                    budgetService.getBudgetSummary(b, categories);
+                    if (++counter === arr.length) {
+                        budgets.previousBudgets.pop();
+                        sendBudget(budgets, res);
+                    }
+                });
+            });
+        }).catch(err => {
+            res.status(403).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(400).send({ message: 'Invalid parameters' });
+    }
 }
 
 function create(req, res) {
@@ -42,7 +80,6 @@ function create(req, res) {
     let sDate = new Date(budget.startDate);
     let eDate = new Date(budget.endDate);
     if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
-        budget.isActive = false;
         budget.userId = req.user.id;
         budgetService.addBudget(budget).then(b => {
             res.status(201);
@@ -57,9 +94,8 @@ function create(req, res) {
 
 function update(req, res) {
     let budget = budgetDTO(req.body);
-    if (req.params.id) {
-        budget.id = req.params.id;
-        budget.userId = req.user.id;
+    if (req.params.budgetId && !req.body.userId) {
+        budget.id = req.params.budgetId;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
         }).catch(err => {
@@ -72,18 +108,17 @@ function update(req, res) {
 
 function clone(req, res) {
     let budget = budgetDTO(req.body);
-    if (req.params.id) {
+    if (req.params.budgetId) {
 
         // Dates for validation
         let sDate = new Date(budget.startDate);
         let eDate = new Date(budget.endDate);
         if (budget.name && budget.startDate && budget.endDate && sDate.getTime() < eDate.getTime()) {
 
-            budget.isActive = false;
             budget.userId = req.user.id;
 
             // Get for all categories and lines
-            budgetService.getBudgetByID(req.params.id).then(oldB => {
+            budgetService.getBudgetByID(req.params.budgetId).then(oldB => {
 
                 // Create new budgets
                 budgetService.addBudget(budget).then(newB => {
@@ -105,7 +140,7 @@ function clone(req, res) {
                                 delete lineAdd.id;
                                 lineAdd.categoryId = newC.id;
                                 lineService.addLine(lineAdd).catch(err => {
-                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + '\n';
+                                    message = message + 'Impossible d\'ajouter la ligne ' + lineAdd.name + ' ';
                                 });
                                 
                                 return;
@@ -114,57 +149,67 @@ function clone(req, res) {
                             return ;
                             
                         }).catch(err => {
-                            message = message + 'Impossible d\'ajouter la catégorie ' + categoryAdd.name + '\n';
+                            message = message + 'Impossible d\'ajouter la categorie ' + categoryAdd.name + ' ';
                         });
                     });
-                    
+                    message = 'Le budget ' + newB.name + ' a ete ajoute! ' + message;
+                    console.log(message);
+                    res.statusMessage = message;
                     sendBudget(newB, res);
 
                 }).catch(err => {
                     res.status(403).send({ message: 'Impossible d\'ajouter le budget' });
                 });
             }).catch(err => {
-                res.status(403).send({ message: 'Impossible de trouver le budget de référence' });
+                res.status(403).send({ message: 'Impossible de trouver le budget de reference' });
             });
         }
         else {
-            res.status(403).send({ message: 'Erreur de validation' });
+            res.status(400).send({ message: 'Erreur de validation' });
         }
     }
     else {
-        res.status(403).send({ message: 'Aucun budget référence indiqué' });
+        res.status(400).send({ message: 'Aucun budget référence indiqué' });
     }
-}
-
-function getSummary(req, res) {
-
 }
 
 function sendBudget(budget, res) {
     if (budget) {
         let budgetRes;
         if (Array.isArray(budget)) {
-            budget.forEach((b, i, arr) => {
-                arr[i] = budgetDTO(b);
-                delete arr[i].startDate;
-                delete arr[i].endDate;
-            });
+            budgetRes = formatBudgetArray(budget);
+        } else if (budget.hasOwnProperty('currentBudget')) {
+            budget.currentBudget = formatBudgetArray([budget.currentBudget])[0];
+            formatBudgetArray(budget.previousBudgets);
             budgetRes = budget;
         } else {
             budgetRes = budgetDTO(budget);
         }
         res.send(budgetRes);
     } else {
-        res.status(404).send({ message: "Budget Not Found" });
+        budgetNotFoundResponse(res);
     }
+}
+
+function budgetNotFoundResponse(res) {
+    res.status(404).send({ message: "Budget Not Found" });
+}
+
+function formatBudgetArray(budgets) {
+    budgets.forEach((b, i, arr) => {
+        arr[i] = budgetDTO(b);
+        delete arr[i].startDate;
+        delete arr[i].endDate;
+    });
+    return budgets;
 }
 
 module.exports = {
     getCurrent,
     get,
     getAll,
+    getSummary,
     create,
     update,
-    clone,
-    getSummary
+    clone
 };
