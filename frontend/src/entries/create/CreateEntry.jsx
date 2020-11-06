@@ -183,7 +183,8 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             placeholder="Membre"
                             size="large"
                             value={entry.memberId} 
-                            onChange={(id) => setEntry({...entry, memberId: id})}>
+                            onChange={(id) => setEntry({...entry, memberId: id})}
+                            allowClear>
                             { 
                                 members.map((member) => <Option key={member.id} value={member.id}>{member.name + " " + member.code + " " + member.email}</Option>) 
                             }                            
@@ -206,6 +207,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     </div>
                     <div className="form-section">                
                         <DatePicker 
+                            allowClear={false}
                             value={moment(entry.date)}
                             onChange={(value) => setEntry({...entry, date: value})} />
                     </div>
