@@ -16,7 +16,7 @@ const Entries = () => {
     const {budget} = useContext(BudgetContext);
 
     const [entries, setEntries] = useState(null);
-    const [currentEntry, setCurrentEntry] = useState(null);
+    const [currentEntryId, setCurrentEntryId] = useState(null);
     const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
 
     const getEntries = async() => {
@@ -32,13 +32,13 @@ const Entries = () => {
         }
     }, [createModalIsVisible, budget.id]);
 
-    const onEditEntry = (entry) => {
-        setCurrentEntry(entry.id);
+    const onCreateOrEditEntry = (entryId) =>{
+        setCurrentEntryId(entryId);
         setCreateModalIsVisible(true);
     };
 
     const onCreateOrEditEntryModalCancel = () => {
-        setCurrentEntry(null);
+        setCurrentEntryId(null);
         setCreateModalIsVisible(false);
     };
 
@@ -72,7 +72,7 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditEntry(entry)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} onNewClick={() => onCreateOrEditEntry(null)} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",
@@ -115,13 +115,13 @@ const Entries = () => {
             render: (entry) => entry.entryStatusName ,
             sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
         }
-    ]
+    ];
 
     return (
         <Fragment>
             <BudgetHeader />
             <h1 className="logo">Entrées</h1>
-            <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
+            <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />
                 {
