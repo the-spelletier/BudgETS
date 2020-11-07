@@ -46,7 +46,7 @@ services:
         ports:
             - "5000:5000"
         volumes:
-            - ./frontend:/frontend
+            - ./frontend/src:/app/src
         links:
             - web
         command: yarn start

@@ -2,11 +2,12 @@ FROM node:12
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json /app/
 
 RUN npm install
 RUN npm install -g sequelize-cli
-COPY . .
+
+COPY . /app
 
 EXPOSE 3000
 CMD ["npm","start"]

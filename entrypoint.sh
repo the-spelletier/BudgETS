@@ -1,7 +1,10 @@
 #entrypoint.sh
 
 npm install
-npx sequelize db:create
-npx sequelize db:migrate
+npm uninstall bcrypt
+npm install bcrypt
 npm run clean-dev
-npm start
+
+echo "Starting API server"
+
+npm run start
