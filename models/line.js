@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING
         },
+        orderNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: '99'
+        },
         categoryId: {
             type: DataTypes.UUID,
             allowNull: false

@@ -21,7 +21,6 @@ export class EntryClient {
     update = async (token, id, lineId, description, date, amount, entryStatusId, memberId) => {
         const apiClient = new ApiClient();
         var params = { lineId, description, date, amount, entryStatusId, memberId};
-        console.log(params);
         return await apiClient.put(`/entry/${id}`, params, token);
     }
 

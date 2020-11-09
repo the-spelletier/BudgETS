@@ -160,26 +160,41 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 <Fragment>
                     <div className={"form-section"}>
                         <Select 
+                            placeholder="Catégorie"
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
-                                categories.map((category) => <Option key={category.id} value={category.id}>{category.name}</Option>) 
-                            }                            
-                        </Select>    
-                    </div>
-                    <div className={"form-section"}>
-                        <Select value={entry.lineId} 
-                            onChange={(id) => setEntry({...entry, lineId: id})}>
-                            { 
-                                lines.map((line) => <Option key={line.id} value={line.id}>{line.name}</Option>) 
-                            }                            
+                                categories
+                                .sort(function (a, b){
+                                    return a.displayName > b.displayName;
+                                })
+                                .map((category) => 
+                                    <Option key={category.id} value={category.id}>
+                                        {category.displayName}
+                                    </Option>
+                                )
+                            }
                         </Select>    
                     </div>
                     <div className={"form-section"}>
                         <Select 
+                            placeholder="Ligne"
+                            value={entry.lineId} 
+                            onChange={(id) => setEntry({...entry, lineId: id})}>
+                            { 
+                                lines.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                }).map((line) => <Option key={line.id} value={line.id}>{line.displayName}</Option>) 
+                            }
+                        </Select>
+                    </div>
+                    <div className={"form-section"}>
+                        <Select 
+                            placeholder="Membre"
                             size="large"
                             value={entry.memberId} 
-                            onChange={(id) => setEntry({...entry, memberId: id})}>
+                            onChange={(id) => setEntry({...entry, memberId: id})}
+                            allowClear>
                             { 
                                 members.map((member) => <Option key={member.id} value={member.id}>{member.name + " " + member.code + " " + member.email}</Option>) 
                             }                            
@@ -202,6 +217,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     </div>
                     <div className="form-section">                
                         <DatePicker 
+                            allowClear={false}
                             value={moment(entry.date)}
                             onChange={(value) => setEntry({...entry, date: value})} />
                     </div>

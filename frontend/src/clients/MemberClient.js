@@ -14,7 +14,6 @@ export class MemberClient {
     create = async (token, name, code, email) => {
         const apiClient = new ApiClient();
         var params = { name, code, email };
-        console.log(params)
         return await apiClient.post('/member', params, token);
     }
 

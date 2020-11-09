@@ -6,15 +6,15 @@ export class LineClient {
         return await apiClient.get(`/category/${categoryId}/line`, token);
     }
 
-    create = async (token, name, description, estimate, categoryId) => {
+    create = async (token, name, description, orderNumber, estimate, categoryId) => {
         const apiClient = new ApiClient();
-        var params = { name, description, estimate, categoryId };
+        var params = { name, description, orderNumber, estimate, categoryId };
         return await apiClient.post('/line', params, token);
     }
 
-    update = async (token, id, name, description, estimate, categoryId) => {
+    update = async (token, id, name, description, orderNumber, estimate, categoryId) => {
         const apiClient = new ApiClient();
-        var params = { name, description, estimate, categoryId };
+        var params = { name, description, orderNumber, estimate, categoryId };
         return await apiClient.put(`/line/${id}`, params, token);
     }
 

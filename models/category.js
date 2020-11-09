@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: 'compositeUnique'
         },
+        orderNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: '99'
+        },
         budgetId: {
             type: DataTypes.UUID,
             allowNull: false,

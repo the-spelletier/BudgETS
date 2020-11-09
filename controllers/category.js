@@ -50,7 +50,8 @@ function update(req, res) {
     if (req.params.categoryId && req.body.name) {
         categoryService.updateCategory({
             id: req.params.categoryId,
-            name: req.body.name
+            name: req.body.name,
+            orderNumber: req.body.orderNumber
         }).then(c => {
             sendCategory(c, res);
         }).catch(err => {

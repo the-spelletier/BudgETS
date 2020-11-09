@@ -64,7 +64,7 @@ const Categories = () => {
             }
         };
 
-        if (!category.Lines || category.Lines.length === 0) {
+        if (!category.lines || category.lines.length === 0) {
             deleteCategory();
 
             var newCategories = categories.filter((c) => c.id !== category.id);
@@ -130,7 +130,6 @@ const Categories = () => {
 
     // General usage
     const [categories, setCategories] = useState(null);
-    const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
     const getCategories = async() => {
         var response = await categoryClient.getList(user.token, budget.id);
@@ -155,7 +154,7 @@ const Categories = () => {
                 render: () => ""
             },
             { 
-                title: category.id,
+                title: category.orderNumber.toString().padStart(3, "0"),
                 align: 'left',
                 colSpan: 2,
                 width: 50,
@@ -165,7 +164,7 @@ const Categories = () => {
                 title: "",
                 colSpan: 0,
                 width: 'auto',
-                render: (line) => line.id
+                render: (line) => line.orderNumber.toString().padStart(3, "0")
             },
             {
                 title: category.name,
@@ -176,14 +175,12 @@ const Categories = () => {
                 render: (line) => line.description
             },
             {
-                title: totalEstimate.toFixed(2),
+                title: category.type === "revenue" ? 
+                    Number(totalEstimate).toFixed(2) : 
+                    "( " + Number(totalEstimate).toFixed(2) + " )",
                 render: (line) => category.type === "revenue" ? 
                     Number(line.estimate).toFixed(2) : 
                     "( " + Number(line.estimate).toFixed(2) + " )"
-            },
-            {
-                title: "0", 
-                render: () => 0
             }
         ]
     };
@@ -206,49 +203,59 @@ const Categories = () => {
         {
             title: "",
             render: () => ""
-        },
-        {
-            title: "",
-            render: (val) => val.total
-        },
-        {
-            title: "Prévisions",
-            render: (val) => val.estimateTotal
-        },
-        {
-            title: "Réel",
-            render: (val) => val.realTotal
         }
     ];
+
+    const renderCategories = (categories, type, title) => {
+        return <Card title={ <h2>{title}</h2>} >
+                    {
+                    categories
+                    .filter(cat => cat.type === type)
+                    .sort(function (a, b){
+                        return a.orderNumber > b.orderNumber;
+                    })
+                    .map((category) => 
+                        <Fragment key={category.id}>
+                            {  
+                                category.lines && 
+                                <Table tableLayout="fixed" 
+                                    className="no-paging" 
+                                    size="small" 
+                                    key={category.id} 
+                                    columns={buildColumns(category)} 
+                                    dataSource={category.lines.sort(function (a,b){
+                                        return a.orderNumber > b.orderNumber;
+                                    })}/> 
+                            }
+                            { 
+                                category.lines && 
+                                <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
+                            }
+                        </Fragment>
+                    )                        
+                    }    
+                    <footer>
+                    <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
+                    </footer>
+                </Card>
+        
+    }
 
     return (
         <Fragment>
             <BudgetHeader />
+            <h1 className="logo">Lignes et catégories</h1>
             {
                 categories &&
                 <Fragment>
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
-                    <Card>
-                        <Table columns={headerColumns} tableLayout="fixed" dataSource={[headerData]} className="no-paging"/>
-                        {
-                            categories.map((category) => 
-                                <Fragment key={category.id}>
-                                    {  
-                                        category.lines && 
-                                        <Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/> 
-                                    }
-                                    { 
-                                        category.lines && 
-                                        <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                                    }
-                                </Fragment>
-                            )
-                        }    
-                        <footer>
-                        <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
-                        </footer>
-                    </Card>
+                    {
+                        renderCategories(categories, "expense", "Dépenses")
+                    } 
+                    {
+                        renderCategories(categories, "revenue", "Revenus")
+                    } 
                 </Fragment>
             }
         </Fragment>
