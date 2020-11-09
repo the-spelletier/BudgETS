@@ -9,10 +9,12 @@ instance.interceptors.response.use(response => {
   return response;
 }, error => {
   if (error.response.status === 401) {
+    if (localStorage.getItem('token')){
       localStorage.removeItem('token');
-      history.push("/login");
+      history.push("/auth");
+    }
   }
-  return error;
+  return error.response;
 });
 
 export default instance;

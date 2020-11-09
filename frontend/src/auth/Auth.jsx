@@ -23,17 +23,30 @@ const Auth = () => {
         const login = async() => {
             try {
                 var loggedUser = await authClient.login(username, password);
+                if (loggedUser.data.message == "Authentication failed") {
+                    throw loggedUser.data;
+                }
                 localStorage.setItem('token', loggedUser.data.token);
                 setCurrentUser({username: username, token: loggedUser.data.token});
                 return history.push("/budget/summary");
             }
             catch (e) { 
-                notification.open({
-                message: "Erreur",
-                icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
-                description:
-                  "Il est impossible de se connecter à l'application",
-                })
+                if(e.message = "Authentication failed") {
+                    notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Les informations fournies ne sont pas valides",
+                    })
+                }
+                else {
+                    notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Il est impossible de se connecter à l'application",
+                    })
+                }
             }
         };
 
