@@ -139,6 +139,7 @@ const Summary = () => {
                     {
                         formattedSummary && formattedSummary.columnsNames.length > 0 &&
                         <Fragment>
+                            <h1 className="logo">Sommaire</h1>
                             <Card>
                                 <Table columns={buildColumns()} 
                                     className="no-paging"

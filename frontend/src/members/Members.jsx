@@ -91,6 +91,7 @@ const Members = () => {
 
     return (
         <Fragment>
+            <h1 className="logo">Membres</h1>
             <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={members} className="no-paging" />

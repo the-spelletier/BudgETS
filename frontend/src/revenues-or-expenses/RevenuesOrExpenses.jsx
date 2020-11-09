@@ -61,14 +61,21 @@ const RevenuesOrExpenses = ({type}) => {
             colSpan: 1,
             render: (val) => type === "revenue" ?
                 <div className="right-text">{val.estimateTotal.toFixed(2)}</div> : 
-                <div className="right-text">({val.estimateTotal.toFixed(2)})</div>
+                <div className="right-text">{val.estimateTotal.toFixed(2)}</div>
         },
         {
             title: <div className="right-text">Réel</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
                 <div className="right-text">{val.realTotal.toFixed(2)}</div> : 
-                <div className="right-text">({val.realTotal.toFixed(2)})</div>
+                <div className="right-text">{val.realTotal.toFixed(2)}</div>
+        },
+        {
+            title: <div className="right-text">Reste</div>,
+            colSpan: 1,
+            render: (val) => type === "revenue" ?
+                <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div> : 
+                <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div>
         }
     ];
 
@@ -82,7 +89,7 @@ const RevenuesOrExpenses = ({type}) => {
 
         return [
             { 
-                title: category.id,
+                title: category.orderNumber.toString().padStart(3, "0"),
                 render: ""
             },
             {
@@ -90,7 +97,7 @@ const RevenuesOrExpenses = ({type}) => {
                 colSpan: 2,
                 render: (line) => {
                     return {
-                        children: <span className="line-id">{line.id}</span>,
+                        children: <span className="line-id">{line.orderNumber.toString().padStart(3, "0")}</span>,
                         props: {
                           colSpan: 1,
                         }
@@ -125,13 +132,19 @@ const RevenuesOrExpenses = ({type}) => {
                 title: <div className="right-text">{estimateTotal.toFixed(2)}</div>,
                 render: (line) => type === "revenue" ? 
                     <div className="right-text">{Number(line.estimate).toFixed(2)}</div> : 
-                    <div className="right-text">({Number(line.estimate).toFixed(2)})</div>
+                    <div className="right-text">{Number(line.estimate).toFixed(2)}</div>
             },
             {
                 title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
                 render: (line) =>  type === "revenue" ? 
                     <div className="right-text">{Number(line.real).toFixed(2)}</div> : 
-                    <div className="right-text">({Number(line.real).toFixed(2)})</div>
+                    <div className="right-text">{Number(line.real).toFixed(2)}</div>
+            },
+            {
+                title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
+                render: (line) =>  type === "revenue" ? 
+                    <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div> : 
+                    <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div>
             }
         ]
     };
@@ -172,15 +185,19 @@ const RevenuesOrExpenses = ({type}) => {
     return (
         <Fragment>
             <BudgetHeader/>
+            <h1 className="logo">{ type === "revenue" ? "Revenus" : "Dépenses"}</h1>
             <Spin tip="Chargement..." spinning={!revenuesOrExpenses}>
                 <Card>
-                    <h1>{ type === "revenue" ? "Revenus" : "Dépenses"}</h1>
                     {
                         revenuesOrExpenses &&
                         <Fragment>
                             <Table columns={headerColumns} tableLayout="fixed" dataSource={[headerData]} className="no-paging"/>
                             {
-                                revenuesOrExpenses.map((category) =><Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines}/>)
+                                revenuesOrExpenses.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                }).map((category) =><Table tableLayout="fixed" className="no-paging" size="small" key={category.id} columns={buildColumns(category)} dataSource={category.lines.sort(function (a, b){
+                                    return a.orderNumber > b.orderNumber;
+                                })}/>)
                             }
                         </Fragment>
                     }

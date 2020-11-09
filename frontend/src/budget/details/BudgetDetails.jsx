@@ -63,6 +63,7 @@ const BudgetDetails = () => {
     return (
         <Fragment>
             <BudgetHeader />
+            <h1 className="logo">Détails</h1>
             <Card className="budget-details-card">
                 <div className={error.name === false ? "form-section" : "form-section error"}>
                     <Input className="form-input" 

@@ -1,9 +1,9 @@
 import { ApiClient } from './ApiClient';
 
 export class CategoryClient {
-    create = async (token, budgetId, name, type) => {
+    create = async (token, budgetId, name, type, orderNumber) => {
         const apiClient = new ApiClient();
-        var params = {budgetId, name, type};
+        var params = {budgetId, name, type, orderNumber};
         return await apiClient.post('/category', params, token);
     }
 
@@ -27,9 +27,9 @@ export class CategoryClient {
         return await apiClient.get(`/category/${id}`, token);
     }
 
-    update = async (token, budgetId, id, name, type) => {
+    update = async (token, budgetId, id, name, type, orderNumber) => {
         const apiClient = new ApiClient();
-        var params = {budgetId, name, type};
+        var params = {budgetId, name, type, orderNumber};
         return await apiClient.put(`/category/${id}`, params, token);
     }
 

@@ -14,7 +14,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const {user} = useContext(UserContext);
 
     //Form info
-    const defaultLine = {name: "", description: "", estimate: 0};
+    const defaultLine = {name: "", description: "", estimate: 0, orderNumber: 1};
     const [line, setLine] = useState(defaultLine);
 
     //Validation
@@ -38,7 +38,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const addLine = () => {
         const save = async () => {
             try {
-                await lineClient.create(user.token, line.name, line.description, line.estimate, categoryId);
+                await lineClient.create(user.token, line.name, line.description, line.orderNumber, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -68,7 +68,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const editLine = () => {
         const save = async () => {
             try {
-                await lineClient.update(user.token, line.id, line.name, line.description, line.estimate, categoryId);
+                await lineClient.update(user.token, line.id, line.name, line.description, line.orderNumber, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -122,6 +122,15 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                         placeholder="Estimé"
                         value={line.estimate}
                         onChange={(value) => setLine({...line, estimate: value})} />
+                </div>
+                <div className="form-section">
+                    <span className="label">Ordre : </span>
+                    <InputNumber size="large"
+                        min={1}
+                        max={99}
+                        placeholder="Ordre"
+                        value={line.orderNumber}
+                        onChange={(value) => setLine({...line, orderNumber: value})} />
                 </div>
         </Modal>
     );

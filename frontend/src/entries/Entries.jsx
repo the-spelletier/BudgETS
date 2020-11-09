@@ -21,14 +21,16 @@ const Entries = () => {
 
     const getEntries = async() => {
         var response = await entryClient.getList(user.token, budget.id);
-        setEntries(response.data);
-    };
+        setEntries(response.data.sort(function (a, b){
+            return a.date < b.date;
+        }));
+    }
 
     useEffect(() => {
         if (user.token && budget.id) {
             getEntries();
         }
-    }, [createModalIsVisible]);
+    }, [createModalIsVisible, budget.id]);
 
     const onCreateOrEditEntry = (entryId) =>{
         setCurrentEntryId(entryId);
@@ -74,41 +76,51 @@ const Entries = () => {
         },
         {
             title: "# Facture",
-            render: (entry) => entry.receiptCode
+            render: (entry) => entry.receiptCode,
+            sorter: (a, b) => a.receiptCode.localeCompare(b.receiptCode)
         },
         {
             title: "Categorie",
-            render: (entry) => entry.categoryName
+            render: (entry) => entry.categoryName,
+            sorter: (a, b) => a.categoryName.localeCompare(b.categoryName)
         },
         {
             title: "Ligne",
-            render: (entry) => entry.lineName
+            render: (entry) => entry.lineName,
+            sorter: (a, b) => a.lineName.localeCompare(b.lineName)
         },
         {
             title: "Description",
-            render: (entry) => entry.description 
+            render: (entry) => entry.description ,
+            sorter: (a, b) => a.description.localeCompare(b.description)
         },
         {
             title: "Membre",
-            render: (entry) => entry.memberName 
+            render: (entry) => entry.memberName ,
+            sorter: (a, b) => a.memberName.localeCompare(b.memberName)
         },
         {
             title: "Montant",
-            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : ""
+            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : "",
+            sorter: (a, b) => a.amount - b.amount
         },
         {
             title: "Date",
-            render: (entry) => moment(entry.date).format("YYYY-MM-DD") 
+            render: (entry) => moment(entry.date).format("YYYY-MM-DD"),
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix()
         },
         {
             title: "Status",
-            render: (entry) => entry.entryStatusName 
+            render: (entry) => entry.entryStatusName ,
+            sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
         }
     ];
 
     return (
         <Fragment>
             <BudgetHeader />
+            <h1 className="logo">Entrées</h1>
             <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
                 <Table columns={columns} dataSource={entries} className="no-paging" />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { Modal, notification, Input, Radio } from "antd";
+import { Modal, notification, Input, Radio, InputNumber } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 import BudgetContext from "../../contexts/budget/BudgetContext";
@@ -14,7 +14,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
     const {user} = useContext(UserContext);
 
     //Form info
-    const defaultCategory = {name : "", type: "expense"};
+    const defaultCategory = {name : "", type: "expense", orderNumber: 99};
     const [category, setCategory] = useState(defaultCategory);
     
     //Validation
@@ -39,7 +39,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
     const addCategory = () => {
         const save = async () => {
             try {
-                await categoryClient.create(user.token, budget.id, category.name, category.type);
+                await categoryClient.create(user.token, budget.id, category.name, category.type, category.orderNumber);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -70,7 +70,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
     const editCategory = () => {
         const save = async () => {
             try {
-                await categoryClient.update(user.token, budget.id, category.id, category.name, category.type);
+                await categoryClient.update(user.token, budget.id, category.id, category.name, category.type, category.orderNumber);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -116,6 +116,15 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
                     <Radio value="expense">Dépense</Radio>
                     <Radio value="revenue">Revenu</Radio>
                 </Radio.Group>
+            </div>
+            <div className="form-section">
+                <span className="label">Ordre : </span>
+                <InputNumber size="large"
+                    min={1}
+                    max={99}
+                    placeholder="Ordre"
+                    value={category.orderNumber}
+                    onChange={(value) => setCategory({...category, orderNumber: value})} />
             </div>
         </Modal>
     );
