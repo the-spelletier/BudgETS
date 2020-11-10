@@ -5,7 +5,6 @@ function get(req, res) {
     entryService.getEntry({ id: req.params.entryId }).then(entry => {
         sendEntry(entry, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -14,7 +13,6 @@ function getAll(req, res) {
     entryService.getEntries(req.params.budgetId).then(entries => {
         sendEntry(entries, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }

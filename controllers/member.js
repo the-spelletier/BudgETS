@@ -7,7 +7,6 @@ function get(req, res) {
         member.userId = req.user.id;
         sendMember(member, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -16,7 +15,6 @@ function getAll(req, res) {
     memberService.getMembers(req.user.id).then(members => {
         sendMember(members, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -44,7 +42,6 @@ function update(req, res) {
         memberService.updateMember(member).then(m => {
             sendMember(m, res);
         }).catch(err => {
-            console.log(err);
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
