@@ -153,7 +153,6 @@ function clone(req, res) {
                         });
                     });
                     message = 'Le budget ' + newB.name + ' a ete ajoute! ' + message;
-                    console.log(message);
                     res.statusMessage = message;
                     sendBudget(newB, res);
 
