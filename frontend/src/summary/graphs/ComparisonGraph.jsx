@@ -2,6 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import '../../../node_modules/react-vis/dist/style.css';
 import {XYPlot, XAxis, YAxis, VerticalBarSeries} from 'react-vis';
 import DiscreteColorLegend from 'react-vis/dist/legends/discrete-color-legend';
+import { Colors } from "./colors";
 
 const ComparisonGraph = ({expenses, revenues, columnNames}) => {
     const [dataExpenses, setDataExpenses] = useState(null);
@@ -30,8 +31,8 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
         <Fragment>
             {
                 dataExpenses && dataRevenues &&
-                <Fragment>
-                    <XYPlot height={300} width= {500} xType="ordinal">
+                <div className="flex">
+                    <XYPlot height={300} width={500} xType="ordinal">
                         <XAxis
                             attr="x"
                             attrAxis="y"
@@ -42,18 +43,18 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
                             attrAxis="x"
                             orientation="left"
                         />
-                        <VerticalBarSeries data={dataExpenses} color='#348c90'/>
-                        <VerticalBarSeries data={dataRevenues} color='#0e6569'/>
+                        <VerticalBarSeries data={dataExpenses} color={Colors[0]}/>
+                        <VerticalBarSeries data={dataRevenues} color={Colors[1]}/>
                     </XYPlot>
                     <DiscreteColorLegend
-                    height={80}
-                    width={300}
-                    items={[
-                        { title: 'Dépenses', color: '#348c90', stroke: '#fff', strokeWidth: '2' },
-                        { title: 'Revenus', color: '#0e6569', stroke: '#fff', strokeWidth: '2' }
-                    ]}
+                        height={80}
+                        width={300}
+                        items={[
+                            { title: 'Dépenses', color: Colors[0], stroke: '#fff', strokeWidth: '2' },
+                            { title: 'Revenus', color: Colors[0], stroke: '#fff', strokeWidth: '2' }
+                        ]}
                     />
-                </Fragment>
+                </div>
             }
         </Fragment>
     );

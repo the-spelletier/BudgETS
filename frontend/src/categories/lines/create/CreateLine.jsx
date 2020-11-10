@@ -35,6 +35,11 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
         }
     }, [line.name]);
 
+    const cancel = () => {
+        setLine(defaultLine);
+        onCancel();
+    }
+
     const addLine = () => {
         const save = async () => {
             try {
@@ -45,7 +50,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                     description:
                       "La ligne a été créé avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -75,7 +80,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                     description:
                       "La ligne a été modifée avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -100,7 +105,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
             title={line.id ? "Modifier une ligne" : "Ajouter une ligne"}
             visible={visible}
             onOk={line.id ? editLine : addLine}
-            onCancel={onCancel}>
+            onCancel={cancel}>
                 <Alert showIcon type="warning" message="Attention! L'estimé est toujours une valeur positive. La catégorie détermine s'il s'agit d'une entrée ou d'une sortie." />
                 <div className={error.name === false ? "form-section" : "form-section error"}>
                 <Input size="large"
