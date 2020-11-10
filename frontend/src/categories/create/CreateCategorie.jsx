@@ -36,6 +36,11 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
         }
     }, [category.name]);
 
+    const cancel = () => {
+        setCategory(defaultCategory);
+        onCancel();
+    }
+
     const addCategory = () => {
         const save = async () => {
             try {
@@ -46,7 +51,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
                     description:
                       "La catégorie a été créée avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -77,7 +82,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
                     description:
                       "La catégorie a été modifiée avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -103,7 +108,7 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
             title={category.id ? "Modifier la catégorie" : "Ajouter une catégorie"}
             visible={visible}
             onOk={category.id ? editCategory : addCategory}
-            onCancel={onCancel} >
+            onCancel={cancel} >
             <div className={error.name === false ? "form-section" : "form-section error"}>
                 <div className="label">Nom de la catégorie: </div>
                 <Input size="large"

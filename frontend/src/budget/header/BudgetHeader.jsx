@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from "react";
 import { Link } from 'react-router-dom';
 import { Select, Button, notification } from "antd";
-import { PlusOutlined, CloseCircleTwoTone } from '@ant-design/icons';
+import { PlusOutlined, CloseCircleTwoTone, CopyOutlined } from '@ant-design/icons';
 
 import { BudgetClient } from "../../clients/BudgetClient";
 
@@ -82,7 +82,7 @@ const BudgetHeader = () => {
                 size="large" 
                 type="primary" 
                 onClick={() => {return null}}>
-                    <Link to="/budget/clone"><PlusOutlined /> Clôner</Link>
+                    <Link to="/budget/clone"><CopyOutlined /> Clôner</Link>
             </Button>
             <Button className="new-budget-button"
                 size="large" 

@@ -326,8 +326,12 @@ describe('2.0 - Budget', () => {
                 .expect(200)
                 .then((response) => {
                     expect(response.body.length).toEqual(4);
+                    response.body.sort((a,b) => (a.id < b.id) ? -1 : 1);
                     for (let i = 0; i < response.body.length; ++i) {
                         const active = (i == 0);
+                        delete response.body[i].endDate;
+                        delete response.body[i].startDate;
+                        delete response.body[i].shortName;
                         expect(response.body).toContainEqual({
                                 id: (5 + i).toString(),
                                 name: 'budgetTest002' + ("0" + (i + 1)).slice(-2),

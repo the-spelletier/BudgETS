@@ -13,7 +13,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
                 "Votre session a expiré",
         })
         return <Redirect to={{
-            pathname: "/login",
+            pathname: "/auth",
             error: { message: "Vous avez été déconnecté" }
         }} />
     }
