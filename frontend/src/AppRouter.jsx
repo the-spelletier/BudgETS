@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import Auth from "./auth/Auth";
 import BudgetContainer from "./budget/BudgetContainer";
@@ -18,7 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const AppRouter = () => {
     return (
         <Switch>
-            <ProtectedRoute exact path="/"><EmptyState /></ProtectedRoute>
+            <ProtectedRoute exact path="/"><Redirect to="/budget/summary"/></ProtectedRoute>
             <ProtectedRoute path="/budget/create"><BudgetCreate clone={ false } /></ProtectedRoute>
             <ProtectedRoute path="/budget">
                 <BudgetContainer>
