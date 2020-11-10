@@ -105,20 +105,21 @@ const CreateCategory = ({visible, onCancel, initialCategory}) => {
             onOk={category.id ? editCategory : addCategory}
             onCancel={onCancel} >
             <div className={error.name === false ? "form-section" : "form-section error"}>
+                <div className="label">Nom de la catégorie: </div>
                 <Input size="large"
                     placeholder="Nom de la catégorie"
                     value={category.name}
                     onChange={(event) => setCategory({...category, name: event.target.value})} />
             </div>
             <div className="form-section">
-                <div>Type de catégorie: </div>
+                <div className="label">Type de catégorie: </div>
                 <Radio.Group value={category.type} onChange={(event) => setCategory({...category, type: event.target.value})}>
                     <Radio value="expense">Dépense</Radio>
                     <Radio value="revenue">Revenu</Radio>
                 </Radio.Group>
             </div>
             <div className="form-section">
-                <span className="label">Ordre : </span>
+                <div className="label">Ordre: </div>
                 <InputNumber size="large"
                     min={1}
                     max={99}

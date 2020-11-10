@@ -103,12 +103,14 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
             onCancel={onCancel}>
                 <Alert showIcon type="warning" message="Attention! L'estimé est toujours une valeur positive. La catégorie détermine s'il s'agit d'une entrée ou d'une sortie." />
                 <div className={error.name === false ? "form-section" : "form-section error"}>
-                <Input size="large"
-                    placeholder="Nom de la ligne"
-                    value={line.name}
-                    onChange={(event) => setLine({...line, name: event.target.value})} />
+                    <div className="label">Nom de la ligne: </div>
+                    <Input size="large"
+                        placeholder="Nom de la ligne"
+                        value={line.name}
+                        onChange={(event) => setLine({...line, name: event.target.value})} />
                 </div>
                 <div className="form-section">
+                    <div className="label">Description: </div>
                     <TextArea size="large"
                         placeholder="Description"
                         rows={3}
@@ -116,7 +118,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                         onChange={(event) => setLine({...line, description: event.target.value})} />
                 </div>
                 <div className="form-section">
-                    <span className="label">Estimé : </span>
+                    <div className="label">Estimé: </div>
                     <InputNumber size="large"
                         min={0}
                         placeholder="Estimé"
@@ -124,7 +126,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                         onChange={(value) => setLine({...line, estimate: value})} />
                 </div>
                 <div className="form-section">
-                    <span className="label">Ordre : </span>
+                    <div className="label">Ordre: </div>
                     <InputNumber size="large"
                         min={1}
                         max={99}

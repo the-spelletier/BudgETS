@@ -27,6 +27,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     }, [memberId]);
 
     const onCancel = () => {
+        setMember({});
         onCancelParent();
     };
 
@@ -89,18 +90,21 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
             { 
                 <Fragment>
                     <div className={"form-section"}>
+                        <div className="label">Nom du membre: </div>
                         <Input size="large"
                             placeholder="Nom du membre"
                             value={member.name}
                             onChange={(event) => setMember({...member, name: event.target.value})} />
                     </div>
                     <div className="form-section">
+                        <div className="label">Code: </div>
                         <Input size="large"
                             placeholder="Code"
                             value={member.code}
                             onChange={(event) => setMember({...member, code: event.target.value})} />
                     </div>
                     <div className="form-section">
+                        <div className="label">Adresse courriel: </div>
                         <Input size="large"
                             type="email"
                             placeholder="E-mail"

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Table, notification, Button } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateMember from "./create/CreateMember";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -73,6 +73,7 @@ const Members = () => {
     const columns = [
         {
             title: "",
+            width: 50,
             render: (member) => <EditMenu key={member.id} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
         },
         {
@@ -86,6 +87,10 @@ const Members = () => {
         {
             title: "E-mail",
             render: (member) => member.email
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/>,
+            width: 50
         }
     ]
 
@@ -94,11 +99,7 @@ const Members = () => {
             <h1 className="logo">Membres</h1>
             <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
             <Card>
-                <Table columns={columns} dataSource={members} className="no-paging" />
-                { 
-                members && 
-                <Button onClick={() => {onCreateMember()}}>Ajouter un membre</Button>
-                }
+                <Table columns={columns} dataSource={members} className="no-paging"/>
             </Card>
         </Fragment>
     );
