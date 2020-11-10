@@ -201,6 +201,19 @@ describe('4.0 - Sommaire', () => {
                     expect(response.body.previousBudgets).not.toBeUndefined();
                     expect(response.body.previousBudgets.length).toEqual(3);
                     response.body.previousBudgets.sort((a,b) => (a.id < b.id) ? -1 : ((a.id > b.id) ? 1 : 0));
+
+                    // Havn't found a way to properly test date format string
+                    delete response.body.currentBudget.endDate;
+                    delete response.body.currentBudget.startDate;
+                    delete response.body.currentBudget.shortName;
+                    for (let i = 0; i < 5; ++i) {
+                        if (response.body.previousBudgets[i]) {
+                            delete response.body.previousBudgets[i].endDate;
+                            delete response.body.previousBudgets[i].startDate;
+                            delete response.body.previousBudgets[i].shortName;
+                        }
+                    }
+
                     expect(response.body).toEqual({
                         currentBudget: {
                             id: '1',
