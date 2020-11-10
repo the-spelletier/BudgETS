@@ -5,6 +5,10 @@
     height: 100%;
 }
 
+.flex{
+    display: flex;
+}
+
 .sidebar, .menu {
     background-color: $neutral;
 
@@ -130,4 +134,8 @@ h2 {
 
 .right-text{
     text-align: right;
+}
+
+.rv-discrete-color-legend-item__color{
+    height: 10px !important;
 }

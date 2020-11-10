@@ -27,6 +27,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     }, [memberId]);
 
     const onCancel = () => {
+        setMember({});
         onCancelParent();
     };
 

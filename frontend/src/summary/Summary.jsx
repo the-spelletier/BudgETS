@@ -8,6 +8,7 @@ import { BudgetClient } from "../clients/BudgetClient";
 import { Table, Card } from "antd";
 import ComparisonGraph from "./graphs/ComparisonGraph";
 import PieChart from "./graphs/PieChart";
+import { Colors } from "./graphs/colors";
 
 const Summary = () => {
     const budgetClient = new BudgetClient();
@@ -45,8 +46,11 @@ const Summary = () => {
     useEffect(() => {
         const format = () => {
             var formatted = [];
+            var i = 0;
             revenueCategories.forEach((category) => {
-                formatted = [...formatted, {label: category.name, angle: category.real}]
+                formatted = [...formatted, {label: category.name, angle: category.real, color: Colors[i]}];
+                //We have 16 colors. 
+                i < Colors.length ? i++ : i = 0;
             });
             setFormattedRevenueCategories(formatted);
         }
@@ -58,8 +62,11 @@ const Summary = () => {
     useEffect(() => {
         const format = () => {
             var formatted = [];
+            var i = 0;
             expensesCategories.forEach((category) => {
-                formatted = [...formatted, {label: category.name, angle: category.real}]
+                formatted = [...formatted, {label: category.name, angle: category.real, color: Colors[i]}];
+                //We have 16 colors. 
+                i < Colors.length ? i++ : i = 0;
             });
             setFormattedExpenseCategories(formatted);
         }

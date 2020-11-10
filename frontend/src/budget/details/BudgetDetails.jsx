@@ -20,11 +20,16 @@ const BudgetDetails = () => {
 
     const {budget, setCurrentBudget} = useContext(BudgetContext);
     const {user, setCurrentUser} = useContext(UserContext);
+    const [initialBudget, setInitialBudget] = useState(null);
 
     const budgetClient = new BudgetClient();
 
     //Validation
     const [error, setError] = useState({name: false})
+
+    useEffect(() => {
+        setInitialBudget(budget);
+    }, []);
 
     const submit = () => {
         const save = async() => {
@@ -63,30 +68,41 @@ const BudgetDetails = () => {
     return (
         <Fragment>
             <BudgetHeader />
-            <h1 className="logo">Détails</h1>
-            <Card className="budget-details-card">
-                <div className={error.name === false ? "form-section" : "form-section error"}>
-                    <Input className="form-input" 
-                        size="large" 
-                        value={budget.name}
-                        placeholder="Nom du budget"
-                        onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }/>  
-                </div>
-                <div className="form-section">
-                    <RangePicker className="form-input" 
-                        size="large" 
-                        placeholder={["Date de début", "Date de fin"]}
-                        value={[moment(budget.startDate), moment(budget.endDate)]}
-                        onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}/>
-                </div>
-                <div className="form-section submit">
-                    <Button size="large"
-                        type="primary"
-                        onClick={submit}>
-                            Modifier
-                    </Button>
-                </div>
-            </Card>
+            { budget && initialBudget &&
+                <Fragment>
+                <h1 className="logo">Détails</h1>
+                <Card className="budget-details-card">
+                    <div className={error.name === false ? "form-section" : "form-section error"}>
+                        <Input className="form-input" 
+                            size="large" 
+                            value={budget.name}
+                            placeholder="Nom du budget"
+                            onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }/>  
+                    </div>
+                    <div className="form-section">
+                        <RangePicker className="form-input" 
+                            size="large" 
+                            placeholder={["Date de début", "Date de fin"]}
+                            value={[moment(budget.startDate), moment(budget.endDate)]}
+                            onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}/>
+                    </div>
+                    <div className="form-section submit">
+                        <Button size="large"
+                            type="primary"
+                            disabled={budget.endDate == initialBudget.endDate 
+                                && budget.startDate == initialBudget.startDate 
+                                && budget.name == initialBudget.name}
+                            onClick={submit}>
+                                Modifier
+                        </Button>
+                    </div>
+                </Card>
+                </Fragment>
+            }
+            {
+                !budget &&
+                <p>Il n'y a pas de budget. Veuillez en créer un.</p>
+            }
         </Fragment>
     )
 };
