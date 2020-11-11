@@ -33,10 +33,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            unique: 'compositeUnique'
         },
         userId: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
+            unique: 'compositeUnique'
         },
         startDate: {
             type: DataTypes.DATE,

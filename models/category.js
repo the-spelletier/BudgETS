@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'categoryId',
                 onDelete: 'RESTRICT'
             });
+            Category.hasMany(models.Cashflow, {
+                foreignKey: 'categoryId',
+                onDelete: 'RESTRICT'
+            });
         }
     };
 

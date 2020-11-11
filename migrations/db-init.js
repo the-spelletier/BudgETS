@@ -7,7 +7,8 @@ const {
     EntryStatus,
     Entry,
     Member,
-    Access
+    Access,
+    Cashflow
 } = require('../models');
 
 module.exports = {
@@ -21,6 +22,7 @@ module.exports = {
         await User.sync();
         await Budget.sync();
         await Category.sync();
+        await Cashflow.sync();
         await Line.sync();
         await EntryStatus.sync();
         await Member.sync();
@@ -34,6 +36,7 @@ module.exports = {
         await Member.drop();
         await EntryStatus.drop();
         await Line.drop();
+        await Cashflow.drop();
         await Category.drop();
         await Budget.drop();
         await User.drop();
