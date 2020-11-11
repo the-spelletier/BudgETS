@@ -70,6 +70,12 @@ const categoryDTO = (category, c = {}) => {
       c.lines.push(lineDTO(l));
     });
   }
+  if (typeof category.Cashflows != 'undefined') {
+    c.cashflows = [];
+    category.Cashflows.forEach(cf => {
+      c.cashflows.push(cashflowDTO(cf));
+    });
+  }
   return c;
 };
 
@@ -179,11 +185,31 @@ const memberDTO = (member, m = {}) => {
   return m;
 };
 
+const cashflowDTO = (cashflow, c = {}) => {
+  if (typeof cashflow.id != 'undefined') {
+    c.id = cashflow.id;
+  }
+  if (typeof cashflow.year != 'undefined') {
+    c.year = cashflow.year;
+  }
+  if (typeof cashflow.month != 'undefined') {
+    c.month = cashflow.month;
+  }
+  if (typeof cashflow.estimate != 'undefined') {
+    c.estimate = cashflow.estimate;
+  }
+  if (typeof cashflow.real != 'undefined') {
+    c.real = cashflow.real;
+  }
+  return c;
+}
+
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
   lineDTO,
   entryDTO,
-  memberDTO
+  memberDTO,
+  cashflowDTO,
 }
