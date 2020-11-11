@@ -74,8 +74,8 @@ function sendLine(line, res) {
     if (line) {
         let lineRes;
         if (Array.isArray(line)) {
-            line.forEach((b, i, arr) => {
-                arr[i] = lineDTO(b);
+            line.forEach((l, i, arr) => {
+                arr[i] = lineDTO(l);
                 delete arr[i].description;
                 delete arr[i].estimate;
                 delete arr[i].categoryId;

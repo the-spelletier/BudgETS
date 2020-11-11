@@ -32,6 +32,26 @@ function getSummary(req, res) {
     });
 }
 
+function getEstimateCashflows(req, res) {
+    categoryService.getCategoriesEstimateCashflows(req.params.budgetId).then(c => {
+        console.log(c);
+        sendCategory(c, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
+function getRealCashflows(req, res) {
+    categoryService.getCategoriesRealCashflows(req.params.budgetId).then(c => {
+        let categories = sortCashflowsByCategory(c);
+        sendCategory(categories, res);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
 function create(req, res) {
     let category = categoryDTO(req.body);
     if (category.name && category.type && category.budgetId) { 
@@ -84,8 +104,8 @@ function sendCategory(category, res) {
     if (category) {
         let categoryRes;
         if (Array.isArray(category)) {
-            category.forEach((b, i, arr) => {
-                arr[i] = categoryDTO(b);
+            category.forEach((c, i, arr) => {
+                arr[i] = categoryDTO(c);
             });
             categoryRes = category;
         } else {
@@ -97,11 +117,35 @@ function sendCategory(category, res) {
     }
 }
 
+function sortCashflowsByCategory(cashflows) {
+    let categories = [];
+    cashflows.forEach((cat, i, arr) => {
+        let cashflowObj = {
+            month: cat.month,
+            year: cat.year,
+            real: cat.real
+        };
+        let index = categories.findIndex(c => c.id == cat.id);
+        if (index < 0) {
+            categories.push({
+                id: cat.id,
+                name: cat.name,
+                Cashflows: [cashflowObj]
+            });
+        } else {
+            categories[index].Cashflows.push(cashflowObj);
+        }
+    });
+    return categories;
+}
+
 module.exports = {
     get,
     getAll,
     create,
     update,
     deleteOne,
-    getSummary
+    getSummary,
+    getEstimateCashflows,
+    getRealCashflows,
 };
