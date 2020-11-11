@@ -5,6 +5,7 @@ const entryController = require('./controllers/entry');
 const lineController = require('./controllers/line');
 const userController = require('./controllers/user');
 const memberController = require('./controllers/member');
+const cashflowController = require('./controllers/cashflow');
 
 const authMiddleware = require('./middlewares/auth');
 const accessMiddleware = require('./middlewares/access');
@@ -156,6 +157,30 @@ module.exports.set = app => {
         // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         categoryController.getSummary
+    );
+
+    // BUDGET : GET
+    // Get a summary of the specified budget, grouped by categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/category/cashflow/estimate',
+        // authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
+        categoryController.getEstimateCashflows
+    );
+
+    // BUDGET : GET
+    // Get a summary of the specified budget, grouped by categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/category/cashflow/real',
+        // authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
+        categoryController.getRealCashflows
     );
 
     // CATEGORY : POST
