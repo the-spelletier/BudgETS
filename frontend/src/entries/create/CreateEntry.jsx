@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import moment from "moment";
-import {Modal, notification, Input, DatePicker, InputNumber, Select} from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import {Modal, notification, Input, DatePicker, InputNumber, Select, Tooltip} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, WarningOutlined } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import { CategoryClient } from "../../clients/CategoryClient";
@@ -217,10 +217,15 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     <div className="form-section">
                         <div className="label">Montant: </div>
                         <InputNumber size="large"
-                            min={0}
                             placeholder="Montant"
                             value={entry.amount}
                             onChange={(value) => setEntry({...entry, amount: value})} />
+                        {
+                            entry.amount < 0 &&
+                            <Tooltip placement="topLeft" title="Un montant négatif représente un remboursement de dépense/revenu. Entrez un montant positif pour une dépense/revenu normal.">
+                                <WarningOutlined className="input-tootip" />
+                            </Tooltip>
+                        }
                     </div>
                     <div className="form-section">
                         <div className="label">Date: </div>
