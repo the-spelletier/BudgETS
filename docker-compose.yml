@@ -9,15 +9,15 @@ services:
             - "3000"
         ports:
              - "3000:3000"
-        entrypoint: ["/bin/bash", "./entrypoint.sh"]
+        entrypoint: ["/bin/bash", "./entrypoint2.sh"]
         environment:
           - MYSQL_PASSWORD=mysql
           - MYSQL_DATABASE=budgets_development
           - REACT_APP_SERVER_PORT=3000
-          - MYSQL_HOST_IP= mysql
+          - MYSQL_HOST_IP=mysql
         links:
             - mysql
-        command: npm run start
+        command: bash -c "npm install && npx sequelize db:create && npx sequelize db:migrate && npm run start" 
     mysql:
         image: "mysql:latest"
         restart: always
@@ -46,7 +46,7 @@ services:
         ports:
             - "5000:5000"
         volumes:
-            - ./frontend:/frontend
+            - ./frontend/src:/app/src
         links:
             - web
         command: yarn start
