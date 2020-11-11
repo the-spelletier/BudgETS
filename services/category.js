@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Category, Line, Entry, sequelize } = require('../models');
+const { Category, Line, Entry, Cashflow, sequelize } = require('../models');
 const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
@@ -57,6 +57,54 @@ const getCategoriesSummary = (budgetId, light, type) => {
     });
 }
 
+// Retourne tous les cashflows des catégories selon l'identifiant de budget
+const getCategoriesEstimateCashflows = budgetId => {
+    let options = {
+        attributes: ['id', 'name'],
+        where: {
+            budgetId: budgetId
+        },
+        include: {
+            model: Cashflow
+        }
+    };
+    return Category.findAll(options);
+}
+
+// Retourne tous les cashflows des catégories selon l'identifiant de budget
+const getCategoriesRealCashflows = budgetId => {
+    let options = {
+        attributes: [
+            'id', 
+            'name',
+            [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
+            [sequelize.fn('MONTH', sequelize.col('date')), 'month'],
+            [sequelize.fn('SUM', sequelize.col('amount')), 'real']
+        ],
+        include: {
+            model: Line,
+            required: true,
+            attributes: [],
+            include: {
+                model: Entry,
+                required: true,
+                attributes: []
+            },
+        },
+        where: {
+            budgetId: budgetId
+        },
+        group: [
+            'Category.id',
+            [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
+            [sequelize.fn('MONTH', sequelize.col('date')), 'month']
+        ],
+        raw: true
+    };
+
+    return Category.findAll(options);
+}
+
 // Ajout d'une catégorie
 const addCategory = category => {
     return Category.create(category);
@@ -92,5 +140,7 @@ module.exports = {
     addCategory,
     updateCategory,
     deleteCategory,
-    getCategoriesSummary
+    getCategoriesSummary,
+    getCategoriesEstimateCashflows,
+    getCategoriesRealCashflows,
 };
