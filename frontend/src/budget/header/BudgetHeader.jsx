@@ -67,7 +67,7 @@ const BudgetHeader = () => {
         <div className="header">
             {
                 budgets &&
-                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)}>
+                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)} dropdownMatchSelectWidth={false}>
                     {budgets
                     .sort(function(a, b){
                         return a.startDate < b.startDate;
