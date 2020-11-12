@@ -6,7 +6,6 @@ function get(req, res) {
     lineService.getLine({ id: req.params.lineId }).then(line => {
         sendLine(line, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -15,7 +14,6 @@ function getAll(req, res) {
     lineService.getLines(req.params.categoryId).then(lines => {
         sendLine(lines, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
