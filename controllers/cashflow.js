@@ -14,17 +14,22 @@ function get(req, res) {
 function create(req, res) {
     // Validate year and month between start and end dates of budget
     if (req.body.categoryId && req.body.year && req.body.month && typeof req.body.estimate != 'undefined') { 
-        cashflowService.addCashflow({
-            categoryId: req.body.categoryId,
-            year: req.body.year,
-            month: req.body.month,
-            estimate: req.body.estimate,
-        }).then(c => {
-            res.status(201);
-            sendCashflow(c, res);
-        }).catch(err => {
+        let cDate = new Date(req.body.year, parseInt(req.body.month) - 1);
+        if (cDate >= new Date(req.budget.startDate) && cDate <= new Date(req.budget.endDate)) {
+            cashflowService.addCashflow({
+                categoryId: req.body.categoryId,
+                year: req.body.year,
+                month: req.body.month,
+                estimate: req.body.estimate,
+            }).then(c => {
+                res.status(201);
+                sendCashflow(c, res);
+            }).catch(err => {
+                res.status(403).send({ message: 'Validation error' });
+            });
+        } else {
             res.status(403).send({ message: 'Validation error' });
-        });
+        }
     } else {
         res.status(400).send({ message: 'Invalid parameters' });
     }
