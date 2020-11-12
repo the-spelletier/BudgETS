@@ -11,15 +11,15 @@ export class MemberClient {
         return await apiClient.get(`/members`, token);
     }
 
-    create = async (token, name, code, email, active) => {
+    create = async (token, name, code, email, active, notify) => {
         const apiClient = new ApiClient();
-        var params = { name, code, email, active };
+        var params = { name, code, email, active, notify };
         return await apiClient.post('/member', params, token);
     }
 
-    update = async (token, id, name, code, email, active) => {
+    update = async (token, id, name, code, email, active, notify) => {
         const apiClient = new ApiClient();
-        var params = { name, code, email, active };
+        var params = { name, code, email, active, notify };
         return await apiClient.put(`/member/${id}`, params, token);
     }
 

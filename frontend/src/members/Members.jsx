@@ -91,12 +91,16 @@ const Members = () => {
             title: "E-mail",
             render: (member) => member.email,
             sorter: (a, b) => a.email.localeCompare(b.email)
+        },
+        {
+            title: "Notifer?",
+            render: (member) => member.notify ? "Oui" : "Non"
         }
     ]
 
     const renderMembers = (members, title, active) => {
         members = members.filter(mem => mem.active === active);
-        return members.length > 0 && 
+        return (members.length > 0 || active) && 
                 <Card title={ <h2>{title}</h2> } extra={active && <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/> } >
                     <Table columns={columns} dataSource={members} className="no-paging"/>
                 </Card>

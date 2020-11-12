@@ -34,7 +34,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await memberClient.create(user.token, member.name, member.code, member.email, member.active);
+                await memberClient.create(user.token, member.name, member.code, member.email, member.active, member.notify);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -59,7 +59,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     const editMember = () => {
         const save = async () => {
             try {
-                await memberClient.update(user.token, member.id, member.name, member.code, member.email, member.active);
+                await memberClient.update(user.token, member.id, member.name, member.code, member.email, member.active, member.notify);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -117,6 +117,14 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                                 className="check-box"
                                 checked={member.active}
                                 onChange={(event) => setMember({...member, active: event})} />
+                        </div>
+                    </div>
+                    <div className="form-section">
+                        <div className="label">Notifer: 
+                            <Switch  size="large"
+                                className="check-box"
+                                checked={member.notify}
+                                onChange={(event) => setMember({...member, notify: event})} />
                         </div>
                     </div>
                 </Fragment>
