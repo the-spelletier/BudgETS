@@ -49,7 +49,12 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
 
         const fetchMembers = async() => {
             var response = await memberClient.getAll(user.token);
-            setMembers(response.data);
+            var members = response.data.sort( function(a, b){
+                return a.name > b.name;
+            }).sort( function(a, b){
+                return a.active < b.active;
+            });
+            setMembers(members);
         };
 
         const fetchStatuses = async() => {
