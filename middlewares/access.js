@@ -6,7 +6,6 @@ const entryService = require('../services/entry');
 
 const validateBudget = (budgetId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
-    console.log(budgetId);
     return budgetService.getBudget({
         id: budgetId
     }).then(budget => {
@@ -38,7 +37,6 @@ const validateBudget = (budgetId, req, res, next, checkOwner) => {
             });
         }
     }).catch(err => {
-        console.log(err);
         return res.status(404).send({
             message: 'An unexpected error occurred'
         });
