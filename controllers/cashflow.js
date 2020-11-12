@@ -12,10 +12,14 @@ function get(req, res) {
 }
 
 function create(req, res) {
-    let cashflow = cashflowDTO(req.body);
     // Validate year and month between start and end dates of budget
-    if (cashflow.categoryId && cashflow.year && cashflow.month && typeof cashflow.estimate != 'undefined') { 
-        cashflowService.addCashflow(cashflow).then(c => {
+    if (req.body.categoryId && req.body.year && req.body.month && typeof req.body.estimate != 'undefined') { 
+        cashflowService.addCashflow({
+            categoryId: req.body.categoryId,
+            year: req.body.year,
+            month: req.body.month,
+            estimate: req.body.estimate,
+        }).then(c => {
             res.status(201);
             sendCashflow(c, res);
         }).catch(err => {

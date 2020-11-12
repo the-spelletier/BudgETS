@@ -34,7 +34,6 @@ function getSummary(req, res) {
 
 function getEstimateCashflows(req, res) {
     categoryService.getCategoriesEstimateCashflows(req.params.budgetId).then(c => {
-        console.log(c);
         sendCategory(c, res);
     }).catch(err => {
         console.log(err);
