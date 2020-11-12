@@ -4,13 +4,15 @@ const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const entryService = require('../services/entry');
 
-const validateBudget = (budgetId, reqUserId, res, next, checkOwner) => {
+const validateBudget = (budgetId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
+    console.log(budgetId);
     return budgetService.getBudget({
         id: budgetId
     }).then(budget => {
         if (budget) {
-            if (budget.userId === reqUserId) {
+            req.budget = budget;
+            if (budget.userId === req.user.id) {
                 return next();
             }
             if (checkOwner) {
@@ -22,7 +24,7 @@ const validateBudget = (budgetId, reqUserId, res, next, checkOwner) => {
             return accessService.getAccesses({
                 budgetId: budgetId
             }).then(accesses => {
-                if (accesses && accesses.find(({ userId }) => userId === reqUserId)) {
+                if (accesses && accesses.find(({ userId }) => userId === req.user.id)) {
                     return next();
                 } else {
                     return res.status(404).send({
@@ -36,19 +38,20 @@ const validateBudget = (budgetId, reqUserId, res, next, checkOwner) => {
             });
         }
     }).catch(err => {
+        console.log(err);
         return res.status(404).send({
             message: 'An unexpected error occurred'
         });
     });
 }
 
-const validateCategory = (categoryId, reqUserId, res, next, checkOwner) => {
+const validateCategory = (categoryId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
     return categoryService.getCategory({
         id: categoryId
     }).then(category => {
         if (category) {
-            return validateBudget(category.budgetId, reqUserId, res, next, checkOwner);
+            return validateBudget(category.budgetId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid category'
@@ -61,13 +64,13 @@ const validateCategory = (categoryId, reqUserId, res, next, checkOwner) => {
     });
 }
 
-const validateLine = (lineId, reqUserId, res, next, checkOwner) => {
+const validateLine = (lineId, req, res, next, checkOwner) => {
     // Obtenir le categoryId à partir de la ligne
     lineService.getLine({
         id: lineId
     }).then(line => {
         if (line) {
-            return validateCategory(line.categoryId, reqUserId, res, next, checkOwner);
+            return validateCategory(line.categoryId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid line'
@@ -80,13 +83,13 @@ const validateLine = (lineId, reqUserId, res, next, checkOwner) => {
     });
 }
 
-const validateEntry = (entryId, reqUserId, res, next, checkOwner) => {
+const validateEntry = (entryId, req, res, next, checkOwner) => {
     // Obtenir le lineId à partir de l'entrée
     entryService.getEntry({
         id: entryId
     }).then(entry => {
         if (entry) {
-            return validateLine(entry.lineId, reqUserId, res, next, checkOwner);
+            return validateLine(entry.lineId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid entry'
@@ -106,7 +109,7 @@ const hasBudgetAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateBudget(budgetId, req.user.id, res, next, checkOwner);
+    return validateBudget(budgetId, req, res, next, checkOwner);
 };
 
 const isBudgetOwner = (req, res, next) => {
@@ -120,7 +123,7 @@ const hasCategoryAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateCategory(categoryId, req.user.id, res, next, checkOwner);
+    return validateCategory(categoryId, req, res, next, checkOwner);
 };
 
 const isCategoryOwner = (req, res, next) => {
@@ -134,7 +137,7 @@ const hasLineAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateLine(lineId, req.user.id, res, next, checkOwner);
+    return validateLine(lineId, req, res, next, checkOwner);
 };
 
 const isLineOwner = (req, res, next) => {
@@ -148,7 +151,7 @@ const hasEntryAccess = (req, res, next, checkOwner = false) => {
         return res.sendStatus(400);
     }
 
-    return validateEntry(entryId, req.user.id, res, next, checkOwner);
+    return validateEntry(entryId, req, res, next, checkOwner);
 };
 
 const isEntryOwner = (req, res, next) => {
