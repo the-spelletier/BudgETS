@@ -176,6 +176,9 @@ const memberDTO = (member, m = {}) => {
   if (typeof member.email != 'undefined') {
     m.email = member.email;
   }
+  if (typeof member.active != 'undefined') {
+    m.active = member.active;
+  }
   return m;
 };
 

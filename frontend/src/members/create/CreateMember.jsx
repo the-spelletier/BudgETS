@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import moment from "moment";
-import { Modal, notification, Input, InputNumber, Select } from "antd";
+import { Modal, notification, Input, InputNumber, Select, Switch  } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import { MemberClient } from "../../clients/MemberClient";
@@ -34,7 +34,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await memberClient.create(user.token, member.name, member.code, member.email);
+                await memberClient.create(user.token, member.name, member.code, member.email, member.active);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -59,7 +59,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
     const editMember = () => {
         const save = async () => {
             try {
-                await memberClient.update(user.token, member.id, member.name, member.code, member.email);
+                await memberClient.update(user.token, member.id, member.name, member.code, member.email, member.active);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -110,6 +110,14 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                             placeholder="E-mail"
                             value={member.email}
                             onChange={(event) => setMember({...member, email: event.target.value})} />
+                    </div>
+                    <div className="form-section">
+                        <div className="label">Actif: 
+                            <Switch  size="large"
+                                className="check-box"
+                                checked={member.active}
+                                onChange={(event) => setMember({...member, active: event})} />
+                        </div>
                     </div>
                 </Fragment>
             }

@@ -44,7 +44,6 @@ function update(req, res) {
         memberService.updateMember(member).then(m => {
             sendMember(m, res);
         }).catch(err => {
-            console.log(err);
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
