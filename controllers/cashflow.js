@@ -6,7 +6,6 @@ function get(req, res) {
     cashflowService.getCashflow({ id: req.params.cashflowId }).then(cashflow => {
         sendCashflow(cashflow, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }

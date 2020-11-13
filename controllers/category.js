@@ -6,7 +6,6 @@ function get(req, res) {
     categoryService.getCategory({ id: req.params.categoryId }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -17,7 +16,6 @@ function getAll(req, res) {
     categoryService.getCategories(req.params.budgetId, light, type).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -27,7 +25,6 @@ function getSummary(req, res) {
     categoryService.getCategoriesSummary(req.params.budgetId, type).then(c => {
         sendCategory(c, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -36,7 +33,6 @@ function getEstimateCashflows(req, res) {
     categoryService.getCategoriesEstimateCashflows(req.params.budgetId).then(c => {
         sendCategory(c, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -46,7 +42,6 @@ function getRealCashflows(req, res) {
         let categories = sortCashflowsByCategory(c);
         sendCategory(categories, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
