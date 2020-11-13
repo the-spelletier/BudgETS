@@ -5,14 +5,20 @@ import DiscreteColorLegend from 'react-vis/dist/legends/discrete-color-legend';
 
 const PieChart = ({values}) => {
     const [isValid, setIsValid] = useState(null);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         if (values){
+            var totalValue = 0;
             var noOfValues = 0;
             values.forEach((val) => {
                 if (val.angle != 0)
+                {
                     noOfValues = noOfValues + 1;
+                    totalValue += Number(val.angle);
+                }
             });
+            setTotal(totalValue);
             setIsValid(noOfValues !== 0);
         }
     }, [values]);
@@ -29,7 +35,7 @@ const PieChart = ({values}) => {
                 <RadialChart
                     width={500}
                     height={350}
-                    data={values}
+                    data={values.filter(v => v.angle != 0)}
                     colorType="literal"
                     />
                 <DiscreteColorLegend
@@ -37,7 +43,7 @@ const PieChart = ({values}) => {
                     width={300}
                     items={
                         values.filter(v => v.angle != 0)
-                            .map((val) => {return {title: val.label + " (" + Number(val.angle).toFixed(2) + "%)", color: val.color, stroke: '#fff', strokeWidth: '10'}})
+                            .map((val) => {return {title: val.label + " (" + Number(100 * val.angle / (total == 0? 1 : total)).toFixed(2) + "%)", color: val.color, stroke: '#fff', strokeWidth: '10'}})
                         }
                     />
                 </div>

@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import { Table, Card, notification, Button } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import EditMenu from "../components/edit-menu/EditMenu";
 import BudgetHeader from "../budget/header/BudgetHeader";
@@ -33,7 +33,8 @@ const Categories = () => {
         setOrEditCreateCategoryModalIsVisible(true);
     }
 
-    const onCreateCategory = () => {
+    const onCreateCategory = (type) => {
+        setCurrentCategory({name : "", type: type, orderNumber: 99});
         setOrEditCreateCategoryModalIsVisible(true);
     };
 
@@ -149,7 +150,7 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                title: <EditMenu onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
                 width: 50,
                 render: () => ""
             },
@@ -158,56 +159,47 @@ const Categories = () => {
                 align: 'left',
                 colSpan: 2,
                 width: 50,
-                render: (line) =>(<EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
+                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
             },
             {
                 title: "",
                 colSpan: 0,
-                width: 'auto',
+                width: '20%',
                 render: (line) => line.orderNumber.toString().padStart(3, "0")
             },
             {
                 title: category.name,
+                align: 'left',
+                width: '30%',
                 render: (line) => line.name
             },
             {
                 title: "",
+                width: '30%',
                 render: (line) => line.description
             },
             {
                 title: category.type === "revenue" ? 
                     Number(totalEstimate).toFixed(2) : 
                     "( " + Number(totalEstimate).toFixed(2) + " )",
+                width: '20%',
                 render: (line) => category.type === "revenue" ? 
                     Number(line.estimate).toFixed(2) : 
                     "( " + Number(line.estimate).toFixed(2) + " )"
+            },
+            {
+                title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateLine(category.id)}}/>,
+                width: 50,
+                render:() => ""
             }
         ]
     };
 
-    const headerColumns = [
-        {
-            title: "",
-            width: 50,
-            render: () => ""
-        },
-        {
-            title: "",
-            width: 50,
-            render: () => ""
-        },
-        {
-            title: "",
-            render: () => ""
-        },
-        {
-            title: "",
-            render: () => ""
-        }
-    ];
+
 
     const renderCategories = (categories, type, title) => {
-        return <Card title={ <h2>{title}</h2>} >
+        return <Card title={ <h2>{title}</h2> } 
+            extra={<Button icon={<PlusOutlined/>} onClick={() => {onCreateCategory(type)}}/>}>
                     {
                     categories
                     .filter(cat => cat.type === type)
@@ -227,18 +219,10 @@ const Categories = () => {
                                         return a.orderNumber > b.orderNumber;
                                     })}/> 
                             }
-                            { 
-                                category.lines && 
-                                <Button style={{left: 50}} onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                            }
                         </Fragment>
                     )                        
                     }    
-                    <footer>
-                    <Button onClick={() => {onCreateCategory()}}>Ajouter une catégorie</Button>
-                    </footer>
                 </Card>
-        
     }
 
     return (

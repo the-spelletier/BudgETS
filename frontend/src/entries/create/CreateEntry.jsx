@@ -159,8 +159,10 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 (categories && categories.length > 0 && lines && lines.length > 0 && statuses && members &&
                 <Fragment>
                     <div className={"form-section"}>
+                        <div className="label">Catégorie: </div>
                         <Select 
                             placeholder="Catégorie"
+                            dropdownMatchSelectWidth={false}
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
@@ -177,8 +179,10 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         </Select>    
                     </div>
                     <div className={"form-section"}>
+                        <div className="label">Ligne: </div>
                         <Select 
                             placeholder="Ligne"
+                            dropdownMatchSelectWidth={false}
                             value={entry.lineId} 
                             onChange={(id) => setEntry({...entry, lineId: id})}>
                             { 
@@ -189,9 +193,11 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         </Select>
                     </div>
                     <div className={"form-section"}>
+                        <div className="label">Membre: </div>
                         <Select 
                             placeholder="Membre"
                             size="large"
+                            dropdownMatchSelectWidth={false}
                             value={entry.memberId} 
                             onChange={(id) => setEntry({...entry, memberId: id})}
                             allowClear>
@@ -201,6 +207,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                         </Select>    
                     </div>
                     <div className="form-section">
+                        <div className="label">Description: </div>
                         <TextArea size="large"
                             placeholder="Description"
                             rows={3}
@@ -208,21 +215,23 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             onChange={(event) => setEntry({...entry, description: event.target.value})} />
                     </div>
                     <div className="form-section">
-                        <span className="label">Montant : </span>
+                        <div className="label">Montant: </div>
                         <InputNumber size="large"
                             min={0}
                             placeholder="Montant"
                             value={entry.amount}
                             onChange={(value) => setEntry({...entry, amount: value})} />
                     </div>
-                    <div className="form-section">                
+                    <div className="form-section">
+                        <div className="label">Date: </div>
                         <DatePicker 
                             allowClear={false}
                             value={moment(entry.date)}
                             onChange={(value) => setEntry({...entry, date: value})} />
                     </div>
                     <div className="form-section">
-                        <Select value={1}>
+                        <div className="label">Statut: </div>
+                        <Select value={1} dropdownMatchSelectWidth={false}>
                             {
                                 statuses.map((status) => <Option key={status.id} value={status.id}>{status.name}</Option>) 
                             }
@@ -232,19 +241,30 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 ) || (categories && categories.length > 0 && (lines == null || lines.length === 0) &&
                     <Fragment>
                     <div className={"form-section"}>
+                        <div className="label">Catégorie: </div>
                         <Select 
+                            placeholder="Catégorie"
+                            dropdownMatchSelectWidth={false}
                             value={entry.categoryId ? entry.categoryId : categories[0].id} 
                             onChange={(id) => setEntry({...entry, categoryId: id})}>
                             { 
-                                categories.map((category) => <Option key={category.id} value={category.id}>{category.name}</Option>) 
-                            }                            
+                                categories
+                                .sort(function (a, b){
+                                    return a.displayName > b.displayName;
+                                })
+                                .map((category) => 
+                                    <Option key={category.id} value={category.id}>
+                                        {category.displayName}
+                                    </Option>
+                                )
+                            }
                         </Select>    
                     </div>
-                    <span className="label">La catégorie ne contient aucune ligne.</span>
+                    <div className="label">La catégorie ne contient aucune ligne.</div>
                     </Fragment>
                 ) || ((categories == null || categories.length === 0) &&
                     <Fragment>
-                    <span className="label">Le budget ne contient aucune catégorie.</span>
+                    <div className="label">Le budget ne contient aucune catégorie.</div>
                     </Fragment>
                 )
             }

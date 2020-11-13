@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Table, Button, notification } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateEntry from "./create/CreateEntry";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -72,7 +72,7 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => onCreateOrEditEntry(null)} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",
@@ -114,6 +114,10 @@ const Entries = () => {
             title: "Status",
             render: (entry) => entry.entryStatusName ,
             sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {setCreateModalIsVisible(true)}}/>,
+            width: 50
         }
     ];
 
@@ -123,11 +127,7 @@ const Entries = () => {
             <h1 className="logo">Entrées</h1>
             <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
-                <Table columns={columns} dataSource={entries} className="no-paging" />
-                {
-                    entries && entries.length === 0 &&
-                    <Button onClick={() => {setCreateModalIsVisible(true)}}>Ajouter une entrée</Button>
-                }
+                <Table columns={columns} dataSource={entries} className="no-paging"/>
             </Card>
         </Fragment>
     );

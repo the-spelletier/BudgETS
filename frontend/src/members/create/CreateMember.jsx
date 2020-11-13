@@ -39,7 +39,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le membre a été créée avec succès",
+                      "Le membre a été créé avec succès",
                     });
                 onCancel(); // Closes modal
             }
@@ -64,7 +64,7 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le membre a été modifiée avec succès",
+                      "Le membre a été modifié avec succès",
                     });
                 onCancel(); // Closes modal
             }
@@ -90,18 +90,21 @@ const CreateMember = ({memberId, visible, onCancelParent}) => {
             { 
                 <Fragment>
                     <div className={"form-section"}>
+                        <div className="label">Nom du membre: </div>
                         <Input size="large"
                             placeholder="Nom du membre"
                             value={member.name}
                             onChange={(event) => setMember({...member, name: event.target.value})} />
                     </div>
                     <div className="form-section">
+                        <div className="label">Code: </div>
                         <Input size="large"
                             placeholder="Code"
                             value={member.code}
                             onChange={(event) => setMember({...member, code: event.target.value})} />
                     </div>
                     <div className="form-section">
+                        <div className="label">Adresse courriel: </div>
                         <Input size="large"
                             type="email"
                             placeholder="E-mail"

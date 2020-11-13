@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Table, notification, Button } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateMember from "./create/CreateMember";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -51,7 +51,7 @@ const Members = () => {
                 message: "Succès",
                 icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                 description:
-                  "Le membre a été supprimée avec succès",
+                  "Le membre a été supprimé avec succès",
                 });
                 
                 // Removes from our list
@@ -73,7 +73,8 @@ const Members = () => {
     const columns = [
         {
             title: "",
-            render: (member) => <EditMenu key={member.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
+            width: 50,
+            render: (member) => <EditMenu key={member.id} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
         },
         {
             title: "Nom",
@@ -86,6 +87,10 @@ const Members = () => {
         {
             title: "E-mail",
             render: (member) => member.email
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/>,
+            width: 50
         }
     ]
 
@@ -94,12 +99,8 @@ const Members = () => {
             <h1 className="logo">Membres</h1>
             <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
             <Card>
-                <Table columns={columns} dataSource={members} className="no-paging" />
+                <Table columns={columns} dataSource={members} className="no-paging"/>
             </Card>
-            { 
-                members && members.length === 0 && 
-                <Button onClick={() => {onCreateMember()}}>Ajouter un membre</Button>
-            }
         </Fragment>
     );
 };

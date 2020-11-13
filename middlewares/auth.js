@@ -20,7 +20,6 @@ const verifyAuth = (req, res, next) => {
     // Vérifier le contenu du token 
     jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, payload) => {
         if (err) {
-            //console.log(err);
             return res.status(401).send({ 
                 message: 'Token verification failed.' 
             });
@@ -39,7 +38,6 @@ const verifyAuth = (req, res, next) => {
                 });
             }
         }).catch(err => {
-            console.log(err)
             return res.status(401).send({
                 message: 'An unexpected error occurred'
             });
