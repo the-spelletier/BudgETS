@@ -5,38 +5,33 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Line extends Model {
+    class Cashflow extends Model {
         static associate(models) {
             // define association here
-            Line.belongsTo(models.Category, {
+            Cashflow.belongsTo(models.Category, {
                 foreignKey: 'categoryId'
-            });
-            Line.hasMany(models.Entry, {
-                foreignKey: 'lineId'
             });
         }
     };
 
-    Line.init({
+    Cashflow.init({
         id: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
             primaryKey: true
         },
-        name: {
-            type: DataTypes.STRING,
-            unique: 'compositeUnique'
-        },
-        description: {
-            type: DataTypes.STRING
-        },
-        orderNumber: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: '99'
-        },
         categoryId: {
             type: DataTypes.UUID,
+            allowNull: false,
+            unique: 'compositeUnique'
+        },
+        year: {
+            type: DataTypes.INTEGER(4),
+            allowNull: false,
+            unique: 'compositeUnique'
+        },
+        month: {
+            type: DataTypes.INTEGER(2),
             allowNull: false,
             unique: 'compositeUnique'
         },
@@ -47,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'Line',
+        modelName: 'Cashflow',
     });
-    return Line;
+    return Cashflow;
 };

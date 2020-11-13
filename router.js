@@ -5,6 +5,7 @@ const entryController = require('./controllers/entry');
 const lineController = require('./controllers/line');
 const userController = require('./controllers/user');
 const memberController = require('./controllers/member');
+const cashflowController = require('./controllers/cashflow');
 
 const authMiddleware = require('./middlewares/auth');
 const accessMiddleware = require('./middlewares/access');
@@ -99,7 +100,7 @@ module.exports.set = app => {
 
     // BUDGET : POST
     // Clone a budget
-    // Params : { startdate, enddate, name }
+    // Params : { budgetId, startDate, endDate, name }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
@@ -120,7 +121,7 @@ module.exports.set = app => {
     //     budgetController.delete
     // );
 
-    // BUDGET CATEGORY ENDPOINTS
+    // CATEGORY ENDPOINTS
 
     // CATEGORY : GET
     // Get the budget category from specified ID
@@ -146,7 +147,7 @@ module.exports.set = app => {
         categoryController.getAll
     );
 
-    // BUDGET : GET
+    // CATEGORY : GET
     // Get a summary of the specified budget, grouped by categories
     // Params : { budgetId }
     // Requires user to be authentified
@@ -160,11 +161,7 @@ module.exports.set = app => {
 
     // CATEGORY : POST
     // Create a budget category
-    // Params :
-    // {
-    //    budgetId,
-    //    category { name, type }
-    // }
+    // Params : { name, type, budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
@@ -176,11 +173,7 @@ module.exports.set = app => {
 
     // CATEGORY : PUT
     // Updates a budget category
-    // Params :
-    // {
-    //    budgetId,
-    //    category { name, type }
-    // }
+    // Params : { categoryId, name, type }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
@@ -192,7 +185,7 @@ module.exports.set = app => {
 
     // CATEGORY : DELETE
     // Deletes a budget category
-    // Params : { budgetId }
+    // Params : { categoryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
@@ -202,11 +195,63 @@ module.exports.set = app => {
         categoryController.deleteOne
     );
 
+    // CASHFLOW ENDPOINTS
+
+    // CASHFLOW : GET
+    // Get a summary of the specified budget, grouped by categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/category/cashflow/estimate',
+        // authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
+        categoryController.getEstimateCashflows
+    );
+
+    // CASHFLOW : GET
+    // Get a summary of the specified budget, grouped by categories
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/category/cashflow/real',
+        // authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
+        categoryController.getRealCashflows
+    );
+
+    // CASHFLOW : POST
+    // Create a cashflow estimate for a specified year & month
+    // Params : { categoryId, year, month, estimate }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/cashflow',
+        // authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.isCategoryOwner],
+        cashflowController.create
+    );
+
+    // CASHFLOW : PUT
+    // Updates a cashflow estimate
+    // Params : { cashflowId, , estimate }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.put(
+        '/api/cashflow/:cashflowId',
+        // authMiddleware.verifyAuth,
+        // TODO create isCashflowOwner
+        // [authMiddleware.verifyAuth, accessMiddleware.isCashflowOwner],
+        [authMiddleware.verifyAuth],
+        cashflowController.update
+    );
+
     // BUDGET LINE ENDPOINTS
 
     // LINE : GET
     // Get the budget line from specified ID
-    // Params : { budgetId }
+    // Params : { lineId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
@@ -231,11 +276,7 @@ module.exports.set = app => {
 
     // LINE : POST
     // Create a budget line
-    // Params :
-    // {
-    //      budgetId,
-    //      line { name, description, estimate, categoryId }
-    // }
+    // Params : { name, description, estimate, categoryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
@@ -247,11 +288,7 @@ module.exports.set = app => {
 
     // LINE : PUT
     // Updates a budget line
-    // Params :
-    // {
-    //      budgetId,
-    //      line { name, description, estimate, categoryId }
-    // }
+    // Params : { lineId, name, description, estimate, categoryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
@@ -263,7 +300,7 @@ module.exports.set = app => {
 
     // LINE : DELETE
     // Deletes a budget line
-    // Params : { budgetId }
+    // Params : { lineId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
@@ -301,11 +338,7 @@ module.exports.set = app => {
 
     // ENTRY : POST
     // Create a budget entry
-    // Params :
-    // {
-    //      budgetId,
-    //      entry { type, categoryId, lineId, receiptCode, member, description, date, status }
-    // }
+    // Params : { type, lineId, receiptCode, member, description, date, status }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
@@ -317,11 +350,7 @@ module.exports.set = app => {
 
     // ENTRY : PUT
     // Updates a budget entry
-    // Params :
-    // {
-    //      budgetId,
-    //      entry { type, categoryId, lineId, receiptId, member, description, date, status }
-    // }
+    // Params : { type, lineId, receiptId, member, description, date, status }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
@@ -333,7 +362,7 @@ module.exports.set = app => {
 
     // ENTRY : DELETE
     // Deletes a budget entry
-    // Params : { budgetId }
+    // Params : { entryId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.delete(
@@ -370,10 +399,7 @@ module.exports.set = app => {
 
     // MEMBER : POST
     // Create a user member
-    // Params :
-    // {
-    //      member { userId, name,  code, email }
-    // }
+    // Params : { userId, name,  code, email }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.post(
@@ -384,11 +410,7 @@ module.exports.set = app => {
 
     // MEMBER : PUT
     // Updates a user's member
-    // Params :
-    // {
-    //      memberId,
-    //      member { name, code, email }
-    // }
+    // Params : { memberId, name, code, email }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.put(
