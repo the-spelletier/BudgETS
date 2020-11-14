@@ -11,8 +11,8 @@ import Members from "./members/Members";
 import Summary from "./summary/Summary";
 import RevenuesOrExpenses from "./revenues-or-expenses/RevenuesOrExpenses";
 import Help from "./help/Help";
-import EmptyState from "./EmptyState";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Cashflow from "./cashflow/Cashflow";
 
 
 const AppRouter = () => {
@@ -29,6 +29,7 @@ const AppRouter = () => {
                     <ProtectedRoute path="/budget/revenues"><RevenuesOrExpenses type="revenue" /></ProtectedRoute>
                     <ProtectedRoute path="/budget/expenses"><RevenuesOrExpenses type="expense" /></ProtectedRoute>
                     <ProtectedRoute path="/budget/entries"><Entries /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/cashflows"><Cashflow /></ProtectedRoute>
                 </BudgetContainer>
             </ProtectedRoute>
             <ProtectedRoute path="/members"><Members /></ProtectedRoute>

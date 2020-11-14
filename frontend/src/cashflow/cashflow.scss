@@ -1,0 +1,15 @@
+@import "../styles/colors";
+
+.estimate-cashflow-cell {
+    padding: 0 !important;
+
+    .estimate-cashflow-cell-content {
+        padding: 16px 16px;
+
+        &:hover { 
+            transition: color 1s ease;
+            color: $success;
+            cursor: pointer;
+        }
+    }
+}
