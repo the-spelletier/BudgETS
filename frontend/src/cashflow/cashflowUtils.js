@@ -19,4 +19,6 @@ const dateRange = (startDate, endDate) => {
     return dates;
   }
 
-  export { dateRange };
+  const MONTHS = ["Janvier", "Février", "Mars", "Avril", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+  export { dateRange, MONTHS };

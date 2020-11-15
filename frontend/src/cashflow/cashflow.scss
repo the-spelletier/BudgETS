@@ -13,3 +13,25 @@
         }
     }
 }
+
+.ant-tabs-ink-bar {
+    background: $primary !important;
+}
+
+.ant-tabs-tab-active {
+    .ant-tabs-tab-btn{
+        color: $primary !important;
+    }
+}
+
+.ant-tabs-tab{
+    &:hover {
+        color: $primary-dark !important;
+    }
+
+    .ant-tabs-tab-btn {
+        &:active {
+            color: $primary-dark !important;
+        }
+    }
+}
