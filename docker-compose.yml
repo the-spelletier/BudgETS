@@ -1,25 +1,8 @@
 version: '3'
 
 services:
-    web:
-        build: .
-        depends_on: 
-           - mysql
-        expose:
-            - "3000"
-        ports:
-             - "3000:3000"
-        entrypoint: ["/bin/bash", "./entrypoint2.sh"]
-        environment:
-          - MYSQL_PASSWORD=mysql
-          - MYSQL_DATABASE=budgets_development
-          - REACT_APP_SERVER_PORT=3000
-          - MYSQL_HOST_IP=mysql
-        links:
-            - mysql
-        command: bash -c "npm install && npx sequelize db:create && npx sequelize db:migrate && npm run start" 
     mysql:
-        image: "mysql:latest"
+        image: "mysql:5.7"
         restart: always
         hostname: mysql
         container_name: mysql
@@ -28,11 +11,38 @@ services:
           - MYSQL_ROOT_PASSWORD=mysql
           - MYSQL_DATABASE=budgets_development
           - REACT_APP_SERVER_PORT=3000
+        healthcheck:
+            test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+            timeout: 20s
+            retries: 10 
         cap_add:
             - SYS_NICE
-        command: --character-set-server=utf8
+        command: --default-authentication-plugin=mysql_native_password
         ports:
             - "3306:3306"
+        networks: 
+            - backend 
+    web:
+        build: .
+        depends_on: 
+            mysql:
+                condition: service_healthy
+        expose:
+            - "3000"
+        ports:
+             - "3000:3000"
+        entrypoint: ["/bin/bash", "./entrypoint2.sh"]
+        environment:
+          - MYSQL_PASSWORD=mysql
+          - MYSQL_ROOT_PASSWORD=mysql
+          - MYSQL_DATABASE=budgets_development
+          - REACT_APP_SERVER_PORT=3000
+          - MYSQL_HOST_IP=mysql
+        links:
+            - mysql
+        command: npm run start
+        networks: 
+            - backend  
     client:
         stdin_open: true
         build: ./frontend
@@ -50,6 +60,11 @@ services:
         links:
             - web
         command: yarn start
+        networks: 
+            - backend 
+
+networks: 
+    backend:       
     
         
     

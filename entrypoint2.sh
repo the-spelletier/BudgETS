@@ -1,5 +1,5 @@
 #entrypoint.sh
-
+bash wait-for-it.sh
 npm install
 npm run clean-dev
 
