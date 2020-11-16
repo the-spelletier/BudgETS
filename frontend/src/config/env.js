@@ -1,5 +1,5 @@
 const local = {
-    baseUrl: "http://web:3000/api/"
+    baseUrl: "http://localhost:3000/api/"
 };
 
 export { local };
