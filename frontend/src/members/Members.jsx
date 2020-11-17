@@ -81,29 +81,49 @@ const Members = () => {
         },
         {
             title: "Nom",
-            render: (member) => member.name
+            render: (member) => member.name,
+            defaultSortOrder: 'ascend',
+            sorter: (a, b) => a.name.localeCompare(b.name)
         },
         {
             title: "Code",
-            render: (member) => member.code
+            render: (member) => member.code,
+            sorter: (a, b) => a.code.localeCompare(b.code)
         },
         {
             title: "E-mail",
-            render: (member) => member.email
+            render: (member) => member.email,
+            sorter: (a, b) => a.email.localeCompare(b.email)
         },
         {
-            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/>,
-            width: 50
+            title: "Notifer?",
+            render: (member) => member.notify ? "Oui" : "Non"
         }
     ]
 
+    const renderMembers = (members, title, active) => {
+        members = members.filter(mem => mem.active === active);
+        return (members.length > 0 || active) && 
+                <Card title={ <h2>{title}</h2> } extra={active && <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/> } >
+                    <Table columns={columns} dataSource={members} className="no-paging"/>
+                </Card>
+    }
+
     return (
         <Fragment>
-            <h1 className="logo">Membres</h1>
-            <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
-            <Card>
-                <Table columns={columns} dataSource={members} className="no-paging"/>
-            </Card>
+        <h1 className="logo">Membres</h1>
+            {
+                members &&
+                <Fragment>
+                    <CreateMember memberId={currentMember} visible={createModalIsVisible} onCancelParent={onCreateOrEditMemberModalCancel} />
+                    {
+                        renderMembers(members, "Actif", true)
+                    }
+                    {
+                        renderMembers(members, "Inactif", false)
+                    }
+                </Fragment>
+            }
         </Fragment>
     );
 };
