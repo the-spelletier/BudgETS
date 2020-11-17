@@ -105,7 +105,6 @@ const validateEntry = (entryId, req, res, next, checkOwner) => {
 }
 
 const validateMember = (memberId, req, res, next) => {
-    // Obtenir le lineId à partir du membre
     return memberService.getMember(memberId).then(member => {
         if (member) {
             if (member.userId === req.user.id) {

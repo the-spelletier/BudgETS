@@ -6,6 +6,7 @@ const lineController = require('./controllers/line');
 const userController = require('./controllers/user');
 const memberController = require('./controllers/member');
 const cashflowController = require('./controllers/cashflow');
+const accessController = require('./controllers/access');
 
 const authMiddleware = require('./middlewares/auth');
 const accessMiddleware = require('./middlewares/access');
@@ -450,5 +451,51 @@ module.exports.set = app => {
         '/api/user/:userId',
         [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
         userController.update
+    );
+
+    // ACCESS ENDPOINTS
+
+    // ACCESS : GET
+    // Get all the accesses of a user
+    // Params : None
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/user/access',
+        authMiddleware.verifyAuth,
+        accessController.getAllByUser
+    );
+
+    // ACCESS : GET
+    // Get all the accesses to a budget
+    // Params : { budgetId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/access',
+        [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
+        accessController.getAllByBudget
+    );
+
+    // ACCESS : POST
+    // Create an access to a budget
+    // Params : { userId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/budget/:budgetId/access',
+        [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
+        accessController.create
+    );
+
+    // ACCESS : DELETE
+    // Deletes an access to a budget
+    // Params : { budgetId, userId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.delete(
+        '/api/budget/:budgetId/access/:userId',
+        [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
+        accessController.deleteOne
     );
 };

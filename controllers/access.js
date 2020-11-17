@@ -13,7 +13,7 @@ function getAllByBudget(req, res) {
 
 function getAllByUser(req, res) {
     accessService.getAccesses({
-        userId: req.params.userId
+        userId: req.user.id
     }).then(accesses => {
         sendAccess(accesses, res);
     }).catch(err => {
