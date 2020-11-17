@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const { Category, Line, Entry, Cashflow, sequelize } = require('../models');
-const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
@@ -118,8 +117,7 @@ const updateCategory = category => {
         }
     }).then(c => {
         if (c) {
-            categoryDTO(category, c);
-            return c.save();
+            return c.update(category);
         }
         return c;
     });
