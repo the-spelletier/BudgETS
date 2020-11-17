@@ -84,7 +84,10 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} 
+                onEditClick={() => onCreateOrEditEntry(entry.id)} 
+                onDeleteClick={() => onDeleteEntry(entry)} 
+                onDeleteMessage="Voulez-vous vraiment supprimer l'entrée?"/>
         },
         {
             title: "# Facture",
