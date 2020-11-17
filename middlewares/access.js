@@ -107,9 +107,15 @@ const validateEntry = (entryId, req, res, next, checkOwner) => {
 const validateMember = (memberId, req, res, next) => {
     // Obtenir le lineId à partir du membre
     return memberService.getMember(memberId).then(member => {
-        if (member && member.userId === req.user.id) {
-            req.member = member;
-            return next();
+        if (member) {
+            if (member.userId === req.user.id) {
+                req.member = member;
+                return next();
+            } else {
+                return res.status(403).send({
+                    message: 'Invalid access'
+                });
+            }
         } else {
             return res.status(404).send({
                 message: 'Invalid member'
@@ -125,8 +131,10 @@ const validateMember = (memberId, req, res, next) => {
 const hasBudgetAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de budget
     const budgetId = req.params.budgetId || req.body.budgetId;
-    if (!req.user.id || typeof budgetId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof budgetId === 'undefined') {
+        return next();
     }
 
     return validateBudget(budgetId, req, res, next, checkOwner);
@@ -139,8 +147,10 @@ const isBudgetOwner = (req, res, next) => {
 const hasCategoryAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de catégorie
     const categoryId = req.params.categoryId || req.body.categoryId;
-    if (!req.user.id || typeof categoryId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof categoryId === 'undefined') {
+        return next();
     }
 
     return validateCategory(categoryId, req, res, next, checkOwner);
@@ -153,8 +163,10 @@ const isCategoryOwner = (req, res, next) => {
 const hasLineAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de ligne
     const lineId = req.params.lineId || req.body.lineId;
-    if (!req.user.id || typeof lineId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof lineId === 'undefined') {
+        return next();
     }
 
     return validateLine(lineId, req, res, next, checkOwner);
@@ -167,8 +179,10 @@ const isLineOwner = (req, res, next) => {
 const hasEntryAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant d'entrée
     const entryId = req.params.entryId || req.body.entryId;
-    if (!req.user.id || typeof entryId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof entryId === 'undefined') {
+        return next();
     }
 
     return validateEntry(entryId, req, res, next, checkOwner);
@@ -181,8 +195,10 @@ const isEntryOwner = (req, res, next) => {
 const isMemberOwner = (req, res, next) => {
     // Vérifier la présence de l'identifiant du membre
     const memberId = req.params.memberId || req.body.memberId;
-    if (!req.user.id || typeof memberId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof memberId === 'undefined') {
+        return next();
     }
 
     return validateMember(memberId, req, res, next);
