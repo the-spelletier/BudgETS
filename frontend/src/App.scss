@@ -5,6 +5,10 @@
     height: 100%;
 }
 
+.flex{
+    display: flex;
+}
+
 .sidebar, .menu {
     background-color: $neutral;
 
@@ -44,6 +48,13 @@
     text-align: center;
 }
 
+.main-title {
+    margin-top: 20px;
+    font-size: 2rem;
+    color: $primary;
+    text-align: center;
+}
+
 .error input, .error .ant-input-affix-wrapper {
     border-color: $primary;
 }
@@ -64,7 +75,7 @@
 
 .site-layout-background {
     margin: auto !important;
-    width: 60%;
+    width: 70%;
 }
 
 .content {
@@ -78,6 +89,10 @@ h2 {
 
 .ant-card-head {
     background-color: $neutral;
+}
+
+.ant-card {
+    margin-bottom: 2rem;
 }
 
 .form-section {
@@ -111,4 +126,16 @@ h2 {
 .ant-btn-primary:hover {
     background-color: $success-pale;
     border-color: $success-pale;
+}
+
+.ant-table-placeholder{
+    display: none;
+}
+
+.right-text{
+    text-align: right;
+}
+
+.rv-discrete-color-legend-item__color{
+    height: 10px !important;
 }

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/jsonConfig');
-const { User } = require('../models');
 const userService = require('../services/user');
 
 const verifyAuth = (req, res, next) => {
@@ -21,7 +20,6 @@ const verifyAuth = (req, res, next) => {
     // Vérifier le contenu du token 
     jwt.verify(authToken, config.jwtSecret, { algorithms: ['HS256'] }, (err, payload) => {
         if (err) {
-            //console.log(err);
             return res.status(401).send({ 
                 message: 'Token verification failed.' 
             });
@@ -32,16 +30,14 @@ const verifyAuth = (req, res, next) => {
             id: payload.id
         }).then(user => {
             if (user) {
-                req.user = User.build(user, {raw: true});
+                req.user = user;
                 next();
-            }
-            else {
+            } else {
                 return res.status(401).send({
                     message: 'Invalid user'
                 });
             }
         }).catch(err => {
-            console.log(err)
             return res.status(401).send({
                 message: 'An unexpected error occurred'
             });

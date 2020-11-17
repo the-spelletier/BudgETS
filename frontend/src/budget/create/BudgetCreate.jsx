@@ -32,12 +32,12 @@ const BudgetCreate = ({ clone }) => {
     const submit = () => {
         const save = async() => {
             try {
-                await budgetClient.create(user.token, name, startDate, endDate, false, clone, budget.id);
+                let res = await budgetClient.create(user.token, name, startDate, endDate, false, clone, budget.id);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "Le budget a été créé avec succès",
+                        clone ? res.request.statusText : "Le budget a été créé avec succès",
                     });
 
                 return history.push("/budget/summary");

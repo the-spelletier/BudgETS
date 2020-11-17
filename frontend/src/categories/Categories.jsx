@@ -1,8 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Table, Card, notification, Button} from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { Table, Card, notification, Button } from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
-import EditableTable from "../components/editable-table/EditableTable";
 import EditMenu from "../components/edit-menu/EditMenu";
 import BudgetHeader from "../budget/header/BudgetHeader";
 import CreateCategory from "./create/CreateCategorie";
@@ -34,7 +33,8 @@ const Categories = () => {
         setOrEditCreateCategoryModalIsVisible(true);
     }
 
-    const onCreateCategory = () => {
+    const onCreateCategory = (type) => {
+        setCurrentCategory({name : "", type: type, orderNumber: 99});
         setOrEditCreateCategoryModalIsVisible(true);
     };
 
@@ -47,7 +47,7 @@ const Categories = () => {
     const onDeleteCategory = (category) => {
         const deleteCategory = async() => {
             try {
-                await categoryClient.delete(user.token, budget.id, category.id);
+                await categoryClient.delete(user.token, category.id);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -65,7 +65,7 @@ const Categories = () => {
             }
         };
 
-        if (!category.Lines || category.Lines.length === 0) {
+        if (!category.lines || category.lines.length === 0) {
             deleteCategory();
 
             var newCategories = categories.filter((c) => c.id !== category.id);
@@ -131,7 +131,6 @@ const Categories = () => {
 
     // General usage
     const [categories, setCategories] = useState(null);
-    const [headerData, setHeaderData] = useState({total: "Total", estimateTotal: 0, realTotal: 0});
 
     const getCategories = async() => {
         var response = await categoryClient.getList(user.token, budget.id);
@@ -151,97 +150,96 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onNewClick={onCreateCategory} onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                title: <EditMenu onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                width: 50,
                 render: () => ""
             },
             { 
-                title: category.id,
-                render: (line) => <EditMenu onNewClick={() => {onCreateLine(category.id)}} onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> 
+                title: category.orderNumber.toString().padStart(3, "0"),
+                align: 'left',
+                colSpan: 2,
+                width: 50,
+                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
+            },
+            {
+                title: "",
+                colSpan: 0,
+                width: '20%',
+                render: (line) => line.orderNumber.toString().padStart(3, "0")
             },
             {
                 title: category.name,
-                render: () => ""
-            },
-            {
-                title: "",
-                render: (line) => line.id
-            },
-            {
-                title: "",
+                align: 'left',
+                width: '30%',
                 render: (line) => line.name
             },
             {
                 title: "",
+                width: '30%',
                 render: (line) => line.description
             },
             {
-                title: totalEstimate.toFixed(2),
+                title: category.type === "revenue" ? 
+                    Number(totalEstimate).toFixed(2) : 
+                    "( " + Number(totalEstimate).toFixed(2) + " )",
+                width: '20%',
                 render: (line) => category.type === "revenue" ? 
                     Number(line.estimate).toFixed(2) : 
                     "( " + Number(line.estimate).toFixed(2) + " )"
             },
             {
-                title: "0", 
-                render: () => 0
+                title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateLine(category.id)}}/>,
+                width: 50,
+                render:() => ""
             }
         ]
     };
 
-    const headerColumns = [
-        {
-            title: "",
-            render: () => ""
-        },
-        {
-            title: "",
-            render: () => ""
-        },
-        {
-            title: "",
-            render: () => ""
-        },
-        {
-            title: "",
-            render: () => ""
-        },
-        {
-            title: "",
-            render: (val) => val.total
-        },
-        {
-            title: "Prévisions",
-            render: (val) => val.estimateTotal
-        },
-        {
-            title: "Réel",
-            render: (val) => val.realTotal
-        }
-    ];
+
+
+    const renderCategories = (categories, type, title) => {
+        return <Card title={ <h2>{title}</h2> } 
+            extra={<Button icon={<PlusOutlined/>} onClick={() => {onCreateCategory(type)}}/>}>
+                    {
+                    categories
+                    .filter(cat => cat.type === type)
+                    .sort(function (a, b){
+                        return a.orderNumber > b.orderNumber;
+                    })
+                    .map((category) => 
+                        <Fragment key={category.id}>
+                            {  
+                                category.lines && 
+                                <Table tableLayout="fixed" 
+                                    className="no-paging" 
+                                    size="small" 
+                                    key={category.id} 
+                                    columns={buildColumns(category)} 
+                                    dataSource={category.lines.sort(function (a,b){
+                                        return a.orderNumber > b.orderNumber;
+                                    })}/> 
+                            }
+                        </Fragment>
+                    )                        
+                    }    
+                </Card>
+    }
 
     return (
         <Fragment>
             <BudgetHeader />
+            <h1 className="logo">Lignes et catégories</h1>
             {
                 categories &&
                 <Fragment>
                     <CreateCategory visible={createOrEditCategoryModalIsVisible} onCancel={onCreateOrEditCategoryModalCancel} initialCategory={currentCategory}/>
                     <CreateLine visible={createOrEditLineModalIsVisible} onCancel={onCreateOrEditLineModalCancel} initialLine={currentLine} categoryId={createOrEditLineAssociatedCategory} />
-                    <Card>
-                        <Table columns={headerColumns} dataSource={[headerData]} className="no-paging"/>
-                        {
-                            categories.map((category) => 
-                                <Fragment key={category.id}>
-                                    {  
-                                        category.lines && <EditableTable columns={buildColumns(category)} values={category.lines}/> 
-                                    }
-                                    { 
-                                        category.lines && category.lines.length === 0 && 
-                                        <Button onClick={() => {onCreateLine(category.id)}}>Ajouter une ligne</Button>
-                                    }
-                                </Fragment>
-                            )
-                        }    
-                    </Card>
+                    {
+                        renderCategories(categories, "expense", "Dépenses")
+                    } 
+                    {
+                        renderCategories(categories, "revenue", "Revenus")
+                    } 
                 </Fragment>
             }
         </Fragment>

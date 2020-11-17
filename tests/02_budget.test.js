@@ -1,6 +1,9 @@
 const request = require('supertest');
 const sinon = require('sinon');
+const budgetController = require('../controllers/budget');
+
 const auth = require('../middlewares/auth');
+const budgetService = require('../services/budget');
 
 const { User } = require('../models');
 const userService = require('../services/user');
@@ -8,9 +11,35 @@ const userService = require('../services/user');
 const originalAuth = auth.verifyAuth;
 const stubAuth = sinon.stub(auth, 'verifyAuth');
 
+const originalGetBudget = budgetService.getBudget;
+const stubGetBudget = sinon.stub(budgetService, 'getBudget');
+
+const originalGetBudgets = budgetService.getBudgets;
+const stubGetBudgets = sinon.stub(budgetService, 'getBudgets');
+
+const originalAddBudget = budgetService.addBudget;
+const stubAddBudget = sinon.stub(budgetService, 'addBudget');
+
+const originalUpdateUser = userService.updateUser;
+const stubUpdateUser = sinon.stub(userService, 'updateUser');
+
+const originalGetUserActiveBudget = userService.getUserActiveBudget;
+const stubGetUserActiveBudget = sinon.stub(userService, 'getUserActiveBudget');
+
+
 const app = require('../app.js');
 
 describe('2.0 - Budget', () => {
+    beforeEach(() => {
+        // Original functions
+        auth.verifyAuth.callsFake(originalAuth);
+        budgetService.getBudget.callsFake(originalGetBudget);
+        budgetService.getBudgets.callsFake(originalGetBudgets);
+        budgetService.addBudget.callsFake(originalAddBudget);
+        userService.updateUser.callsFake(originalUpdateUser);
+        userService.getUserActiveBudget.callsFake(originalGetUserActiveBudget);
+    });
+
     describe('2.1 - Créer un nouveau budget', () => {
         test("021001 - Création d'un nouveau budget", (done) => {
             // Stub the verifyAuth
@@ -41,7 +70,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest_create',
                             startDate: start,
                             endDate: end,
-                            isActive: false,
                             userId: '1'
                         })
                     );
@@ -51,9 +79,6 @@ describe('2.0 - Budget', () => {
         });
         
         test("021002 - Création sans authentification", (done) => {
-            // Original authentification service
-            auth.verifyAuth.callsFake(originalAuth);
-
             const start = new Date(2020, 0, 1).toJSON();
             const end = new Date(2020, 11, 31).toJSON();
 
@@ -157,8 +182,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: '',
                     startDate: start,
-                    endDate: end,
-                    isActive: true
+                    endDate: end
                 })
                 .expect(400, done);
         });
@@ -187,6 +211,39 @@ describe('2.0 - Budget', () => {
                 .expect(400, done);
             
         });
+    
+        test("021008 - Création d'un nouveau budget avec BD offline", (done) => {
+            // Stub the verifyAuth
+            auth.verifyAuth.callsFake((req, res, next) => {
+                userService.getUser({
+                    username: 'budgets_test001'
+                }).then(user => {
+                    req.user = User.build(user, {raw: true});
+                    next();
+                })
+            });
+
+            // Stub the addBudget service
+            budgetService.addBudget.callsFake(budget => {
+                return new Promise((resolve, reject) => {
+                    reject('DB down');
+                });
+            });
+
+            const start = new Date(2020, 0, 1).toJSON();
+            const end = new Date(2020, 11, 31).toJSON();
+
+            request(app)
+                .post('/api/budget')
+                .send({
+                    name: 'budgetTest_create8',
+                    startDate: start,
+                    endDate: end,
+                    isActive: true
+                })
+                .expect(403, done);
+        });
+
     });
 
     describe('2.2 - Consulter le dernier budget', () => {
@@ -211,7 +268,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest00201',
                             startDate: new Date(2020, 0, 1).toJSON(),
                             endDate: new Date(2020, 11, 31).toJSON(),
-                            isActive: true,
                             userId: '2'
                         })
                     );
@@ -221,14 +277,36 @@ describe('2.0 - Budget', () => {
         });
         
         test("022002 - Dernier budget sans authentification", (done) => {
-            // Original authentification service
-            auth.verifyAuth.callsFake(originalAuth);
-
             request(app)
                 .get('/api/budget/current')
                 .expect(401, done);
             
         });
+    
+        test("022003 - Consultation du dernier budget avec BD offline", (done) => {
+            // Stub the verifyAuth
+            auth.verifyAuth.callsFake((req, res, next) => {
+                userService.getUser({
+                    username: 'budgets_test002'
+                }).then(user => {
+                    req.user = User.build(user, {raw: true});
+                    next();
+                })
+            });
+
+            // Stub the getBudget service
+            userService.getUserActiveBudget.callsFake(budget => {
+                return new Promise((resolve, reject) => {
+                    reject('DB down');
+                });
+            });
+
+            request(app)
+                .get('/api/budget/current')
+                .expect(403, done);
+            
+        });
+
     });
 
     describe('2.3 - Consulter un budget', () => {
@@ -248,12 +326,15 @@ describe('2.0 - Budget', () => {
                 .expect(200)
                 .then((response) => {
                     expect(response.body.length).toEqual(4);
+                    response.body.sort((a,b) => (a.id < b.id) ? -1 : 1);
                     for (let i = 0; i < response.body.length; ++i) {
                         const active = (i == 0);
+                        delete response.body[i].endDate;
+                        delete response.body[i].startDate;
+                        delete response.body[i].shortName;
                         expect(response.body).toContainEqual({
                                 id: (5 + i).toString(),
                                 name: 'budgetTest002' + ("0" + (i + 1)).slice(-2),
-                                isActive: active,
                                 userId: '2'
                         });
                     }
@@ -293,7 +374,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest00102',
                             startDate: new Date(2019, 0, 1).toJSON(),
                             endDate: new Date(2019, 11, 31).toJSON(),
-                            isActive: true,
                             userId: '1'
                         })
                     );
@@ -345,6 +425,55 @@ describe('2.0 - Budget', () => {
                 .expect(404, done);
             
         });
+
+        test("023007 - Obtenir la liste de tous les budgets avec BD offline", (done) => {
+            // Stub the verifyAuth
+            auth.verifyAuth.callsFake((req, res, next) => {
+                userService.getUser({
+                    username: 'budgets_test001'
+                }).then(user => {
+                    req.user = User.build(user, {raw: true});
+                    next();
+                })
+            });
+
+            // Stub the getBudgets service
+            budgetService.getBudgets.callsFake(budget => {
+                return new Promise((resolve, reject) => {
+                    reject('DB down');
+                });
+            });
+
+            request(app)
+                .get('/api/budget/')
+                .expect(403, done);
+            
+        });
+
+        test("023008 - Obtenir un budget en particulier avec BD offline", (done) => {
+            // Stub the verifyAuth
+            auth.verifyAuth.callsFake((req, res, next) => {
+                userService.getUser({
+                    username: 'budgets_test001'
+                }).then(user => {
+                    req.user = User.build(user, {raw: true});
+                    next();
+                })
+            });
+
+            // Stub the resetGetActiveBudget service
+            userService.updateUser.callsFake(budget => {
+                return new Promise((resolve, reject) => {
+                    reject('DB down');
+                });
+            });
+
+            request(app)
+                .get('/api/budget/1')
+                .expect(403, done);
+            
+        });
+
     });
 
     describe('2.4 - Modifier un budget', () => {
@@ -368,8 +497,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated1',
                     startDate: start,
-                    endDate: end,
-                    isActive: true
+                    endDate: end
                 })
                 .expect(200)
                 .then((response) => {
@@ -379,7 +507,6 @@ describe('2.0 - Budget', () => {
                             name: 'budgetTest_updated1',
                             startDate: start,
                             endDate: end,
-                            isActive: true,
                             userId: '3'
                         })
                     );
@@ -407,8 +534,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated2',
                     startDate: end,
-                    endDate: start,
-                    isActive: false
+                    endDate: start
                 })
                 .expect(403, done);
             
@@ -426,8 +552,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated3',
                     startDate: start,
-                    endDate: end,
-                    isActive: false
+                    endDate: end
                 })
                 .expect(401, done);
             
@@ -452,8 +577,7 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated4',
                     startDate: start,
-                    endDate: end,
-                    isActive: false
+                    endDate: end
                 })
                 .expect(404, done);
             
@@ -478,10 +602,41 @@ describe('2.0 - Budget', () => {
                 .send({
                     name: 'budgetTest_updated5',
                     startDate: start,
+                    endDate: end
+                })
+                .expect(404, done);
+            
+        });
+
+        test("024006 - Mets à jour budget sans id", (done) => {
+            app.put(
+                '/api/budget/',
+                auth.verifyAuth,
+                budgetController.update
+            );
+
+            // Stub the verifyAuth
+            auth.verifyAuth.callsFake((req, res, next) => {
+                userService.getUser({
+                    username: 'budgets_test002'
+                }).then(user => {
+                    req.user = User.build(user, {raw: true});
+                    next();
+                })
+            });
+
+            const start = new Date(2020, 0, 2).toJSON();
+            const end = new Date(2020, 11, 30).toJSON();
+
+            request(app)
+                .put('/api/budget/')
+                .send({
+                    name: 'budgetTest_updated6',
+                    startDate: start,
                     endDate: end,
                     isActive: false
                 })
-                .expect(404, done);
+                .expect(400, done);
             
         });
     });

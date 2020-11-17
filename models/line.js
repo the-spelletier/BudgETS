@@ -24,14 +24,21 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            unique: 'compositeUnique'
         },
         description: {
             type: DataTypes.STRING
         },
+        orderNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: '99'
+        },
         categoryId: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
+            unique: 'compositeUnique'
         },
         estimate: {
             type: DataTypes.DECIMAL(10,2),

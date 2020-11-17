@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'categoryId',
                 onDelete: 'RESTRICT'
             });
+            Category.hasMany(models.Cashflow, {
+                foreignKey: 'categoryId',
+                onDelete: 'RESTRICT'
+            });
         }
     };
 
@@ -28,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: 'compositeUnique'
+        },
+        orderNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: '99'
         },
         budgetId: {
             type: DataTypes.UUID,

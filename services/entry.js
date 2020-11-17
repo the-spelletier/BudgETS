@@ -1,4 +1,4 @@
-const { Entry, EntryStatus, Line, Category } = require('../models');
+const { Entry, EntryStatus, Line, Category, Member } = require('../models');
 const { entryDTO } = require('../dto');
 
 /**
@@ -31,13 +31,17 @@ const getEntries = budgetId => {
                 attributes: ['name']
             },
             {
+                model: Member,
+                required: false
+            },
+            {
                 model: Line,
                 required: true,
-                attributes: ['name'],
+                attributes: ['name', 'orderNumber'],
                 include: {
                     model: Category,
                     required: true,
-                    attributes: ['name'],
+                    attributes: ['name', 'orderNumber', 'type'],
                     where: {
                       budgetId: budgetId
                     }

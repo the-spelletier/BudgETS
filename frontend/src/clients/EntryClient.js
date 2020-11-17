@@ -11,16 +11,16 @@ export class EntryClient {
         return await apiClient.get(`/budget/${budgetId}/entry`, token);
     }
 
-    create = async (token, lineId, member, description, date, amount, entryStatusId) => {
+    create = async (token, lineId, description, date, amount, entryStatusId, memberId) => {
         const apiClient = new ApiClient();
         //TODO : remove hard coded value
-        var params = { type: "revenue", lineId, member, description, date, amount, entryStatusId};
+        var params = { type: "revenue", lineId, description, date, amount, entryStatusId, memberId};
         return await apiClient.post('/entry', params, token);
     }
     
-    update = async (token, id, lineId, member, description, date, amount, entryStatusId) => {
+    update = async (token, id, lineId, description, date, amount, entryStatusId, memberId) => {
         const apiClient = new ApiClient();
-        var params = { lineId, member, description, date, amount, entryStatusId};
+        var params = { lineId, description, date, amount, entryStatusId, memberId};
         return await apiClient.put(`/entry/${id}`, params, token);
     }
 

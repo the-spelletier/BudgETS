@@ -18,7 +18,8 @@ module.exports = {
                         id: nbCategories,
                         name: 'categoryTest' + ("0" + j).slice(-2) + ("0" + k).slice(-2),
                         budgetId: budgetId,
-                        type: typeStr
+                        type: typeStr,
+                        orderNumber: 1
                     });
 
                 }
@@ -31,7 +32,8 @@ module.exports = {
             id: nbCategories,
             name: 'categoryDevTest',
             budgetId: 1,
-            type: 'revenue'
+            type: 'revenue',
+            orderNumber: 1
         });
 
         // Budget 03 (User 2)
@@ -41,14 +43,16 @@ module.exports = {
                 id: nbCategories,
                 name: 'categoryDev03' + ("0" + i).slice(-2),
                 budgetId: 3,
-                type: 'revenue'
+                type: 'revenue',
+                orderNumber: 1
             });
             nbCategories++;
             categories.push({
                 id: nbCategories,
                 name: 'categoryDev03' + (i + 10),
                 budgetId: 3,
-                type: 'expense'
+                type: 'expense',
+                orderNumber: 1
             });
         }
 
@@ -59,14 +63,16 @@ module.exports = {
                 id: nbCategories,
                 name: 'categoryDev04' + ("0" + i).slice(-2),
                 budgetId: 4,
-                type: 'revenue'
+                type: 'revenue',
+                orderNumber: 1
             });
             nbCategories++;
             categories.push({
                 id: nbCategories,
                 name: 'categoryDev04' + ("0" + (i + 10)).slice(-2),
                 budgetId: 4,
-                type: 'expense'
+                type: 'expense',
+                orderNumber: 1
             });
         }
 
@@ -77,14 +83,16 @@ module.exports = {
                 id: nbCategories,
                 name: 'categoryDev05' + ("0" + i).slice(-2),
                 budgetId: 5,
-                type: 'revenue'
+                type: 'revenue',
+                orderNumber: 1
             });
             nbCategories++;
             categories.push({
                 id: nbCategories,
                 name: 'categoryDev05' + ("0" + (i + 10)).slice(-2),
                 budgetId: 5,
-                type: 'expense'
+                type: 'expense',
+                orderNumber: 1
             });
         }
 
@@ -95,14 +103,59 @@ module.exports = {
                 id: nbCategories,
                 name: 'categoryDev06' + ("0" + i).slice(-2),
                 budgetId: 6,
-                type: 'revenue'
+                type: 'revenue',
+                orderNumber: 1
             });
             nbCategories++;
             categories.push({
                 id: nbCategories,
                 name: 'categoryDev06' + ("0" + (i + 10)).slice(-2),
                 budgetId: 6,
-                type: 'expense'
+                type: 'expense',
+                orderNumber: 1
+            });
+        }
+
+        for (let i = 8; i <= 9; ++i){
+            
+            categories.push({
+                id: i * 1000 + 1,
+                name: 'Locations',
+                budgetId: i,
+                type: 'expense',
+                orderNumber: 1
+            });
+
+            categories.push({
+                id: i * 1000 + 2,
+                name: 'Infra',
+                budgetId: i,
+                type: 'expense',
+                orderNumber: 2
+            });
+
+            categories.push({
+                id: i * 1000 + 3,
+                name: 'Forunitures',
+                budgetId: i,
+                type: 'expense',
+                orderNumber: 3
+            });
+
+            categories.push({
+                id: i * 1000 + 4,
+                name: 'Ventes',
+                budgetId: i,
+                type: 'revenue',
+                orderNumber: 1
+            });
+
+            categories.push({
+                id: i * 1000 + 5,
+                name: 'Sponsors',
+                budgetId: i,
+                type: 'revenue',
+                orderNumber: 2
             });
         }
     }

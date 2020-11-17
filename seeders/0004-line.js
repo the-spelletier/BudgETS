@@ -10,9 +10,9 @@ module.exports = {
         // Add test lines per category
         for (let i = 1; i <= settings.NB_TEST_USERS; ++i) {
             for (let j = 1; j <= settings.NB_TEST_BUDGET_WITH_CHILD_PER_USER; ++j) {
-                const budgetId = (i - 1) * settings.NB_TEST_BUDGET_WITH_CHILD_PER_USER + j
+                const budgetId = (i - 1) * settings.NB_TEST_BUDGET_PER_USER + j
                 for (let k = 1; k <= settings.NB_TEST_CATEGORY_WITH_CHILD_PER_BUDGET; ++k) {
-                    const categoryId = (budgetId - 1) * settings.NB_TEST_CATEGORY_PER_BUDGET + k;
+                    const categoryId = (budgetId + j - 2) * settings.NB_TEST_CATEGORY_WITH_CHILD_PER_BUDGET + k;
                     for (let l = 1; l <= settings.NB_TEST_LINE_PER_CATEGORY; ++l) {
                         nbLines++;
                         const sign = (l % 2) == 0 ? 1 : -1;
@@ -21,7 +21,8 @@ module.exports = {
                             name: 'lineTest' + ("0" + k).slice(-2) + ("0" + l).slice(-2),
                             description: 'descTest' + nbLines,
                             categoryId: categoryId,
-                            estimate: sign * i * j * k * l
+                            estimate: sign * i * j * k * l,
+                            orderNumber: 1
                         });   
                     }
                 }
@@ -35,7 +36,8 @@ module.exports = {
             name: 'lineDevTest',
             description: 'descTest',
             categoryId: 1,
-            estimate: 10
+            estimate: 10,
+            orderNumber: 1
         });
 
         // (Budget For User 2)
@@ -50,10 +52,113 @@ module.exports = {
                         name: 'lineDev' + ("00" + nbLines).slice(-3),
                         description: 'lineDesc' + ("00" + nbLines).slice(-3),
                         categoryId: categoryId,
-                        estimate: Math.random() * (500 - (-500)) + (-500)
+                        estimate: Math.random() * (500 - (-500)) + (-500),
+                        orderNumber: 1  
                     });
                 }
             }
+        }
+
+        for (let i = 8; i <= 9; i++){
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Camion',
+                description: 'Pour livraison et transport',
+                categoryId: i + '001',
+                estimate: 1500,
+                orderNumber: 1
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Transpalette',
+                description: 'Transport de marchandise',
+                categoryId: i + '001',
+                estimate: 300,
+                orderNumber: 2
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Câbles',
+                description: 'RJ45',
+                categoryId: i + '002',
+                estimate: 650,
+                orderNumber: 1
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Serveur',
+                description: 'Rack et autres',
+                categoryId: i + '002',
+                estimate: 1000,
+                orderNumber: 2
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Tape',
+                description: 'Gaffer',
+                categoryId: i + '003',
+                estimate: 1700,
+                orderNumber: 1
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Peinture',
+                description: 'Pour décorations',
+                categoryId: i + '003',
+                estimate: 250,
+                orderNumber: 2
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Paypal',
+                description: 'En ligne',
+                categoryId: i + '004',
+                estimate: 5000,
+                orderNumber: 1
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Stripe',
+                description: 'En ligne',
+                categoryId: i + '004',
+                estimate: 2500,
+                orderNumber: 2
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Cash',
+                description: 'Sur place',
+                categoryId: i + '004',
+                estimate: 500,
+                orderNumber: 3
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Big Money',
+                description: 'Sponsor principal',
+                categoryId: i + '005',
+                estimate: 10000,
+                orderNumber: 1
+            });
+            nbLines++;
+            lines.push({
+                id: nbLines,
+                name: 'Artistes',
+                description: '10 vendeurs',
+                categoryId: i + '005',
+                estimate: 1200,
+                orderNumber: 2
+            });
         }
     }
 

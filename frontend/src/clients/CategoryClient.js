@@ -1,9 +1,9 @@
 import { ApiClient } from './ApiClient';
 
 export class CategoryClient {
-    create = async (token, budgetId, name, type) => {
+    create = async (token, budgetId, name, type, orderNumber) => {
         const apiClient = new ApiClient();
-        var params = {budgetId, name, type};
+        var params = {budgetId, name, type, orderNumber};
         return await apiClient.post('/category', params, token);
     }
 
@@ -12,19 +12,29 @@ export class CategoryClient {
         return await apiClient.get(`/budget/${budgetId}/category`, token);
     }
 
-    get = async (token, categoryId) => {
+    getRevenuesOrExpenses = async (token, budgetId, type) => {
         const apiClient = new ApiClient();
-        return await apiClient.get(`/category/${categoryId}`, token);
+        return await apiClient.get(`/budget/${budgetId}/category?type=${type}`, token);
     }
 
-    update = async (token, budgetId, id, name, type) => {
+    getSummary = async (token, budgetId) => {
         const apiClient = new ApiClient();
-        var params = {budgetId, name, type};
+        return await apiClient.get(`/budget/${budgetId}/category/summary`, token);
+    }
+
+    get = async (token, id) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/category/${id}`, token);
+    }
+
+    update = async (token, budgetId, id, name, type, orderNumber) => {
+        const apiClient = new ApiClient();
+        var params = {budgetId, name, type, orderNumber};
         return await apiClient.put(`/category/${id}`, params, token);
     }
 
-    delete = async (token, budgetId, id) => {
+    delete = async (token, id) => {
         const apiClient = new ApiClient();
-        return await apiClient.delete(`/category/${id}?budgetId=${budgetId}`, token);
+        return await apiClient.delete(`/category/${id}`, token);
     }
 }

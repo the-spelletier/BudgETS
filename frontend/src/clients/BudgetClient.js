@@ -12,6 +12,16 @@ export class BudgetClient {
         return await apiClient.get(`/budget/${budgetId}`, token);
     }
 
+    getSummary = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/budget/${budgetId}/summary`, token);
+    }
+
+    getSummaryCategories = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/budget/${budgetId}/category/summary`, token);
+    }
+
     getCurrent = async (token) => {
         const apiClient = new ApiClient();
         return await apiClient.get("/budget/current", token);
@@ -33,7 +43,7 @@ export class BudgetClient {
         const apiClient = new ApiClient();
         var params = {name, startDate, endDate, isActive};
         if (clone)
-            return await apiClient.post(`/budget/clone/${budgetId}`, params, token);
+            return await apiClient.post(`/budget/${budgetId}/clone`, params, token);
         else
             return await apiClient.post('/budget', params, token);
     }

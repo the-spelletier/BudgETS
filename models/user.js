@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
             User.hasMany(models.Budget, {
                 foreignKey: 'userId'
             });
+            User.belongsTo(models.Budget, {
+                as: 'activeBudget',
+                foreignKey: 'activeBudgetId',
+                constraints: false
+            });
+            User.belongsToMany(models.Budget, {
+                through: models.Access,
+                foreignKey: 'userId',
+            });
         }
     };
 
@@ -40,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
         isAdmin : {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        activeBudgetId : {
+            type: DataTypes.UUID,
+            allowNull: true
         }
     }, {
         sequelize,

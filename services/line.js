@@ -1,7 +1,7 @@
-const { Line, Category } = require('../models');
+const { Line } = require('../models');
 const { lineDTO } = require('../dto');
 
-// Retourne une lingne (tous les paramètres) selon l'identificateur envoyé en paramètre
+// Retourne une ligne (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getLine = line => {
   	return Line.findOne({
       	where: line

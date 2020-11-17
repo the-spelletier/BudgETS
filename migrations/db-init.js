@@ -5,7 +5,10 @@ const {
     Category,
     Line,
     EntryStatus,
-    Entry
+    Entry,
+    Member,
+    Access,
+    Cashflow
 } = require('../models');
 
 module.exports = {
@@ -19,15 +22,21 @@ module.exports = {
         await User.sync();
         await Budget.sync();
         await Category.sync();
+        await Cashflow.sync();
         await Line.sync();
         await EntryStatus.sync();
+        await Member.sync();
         await Entry.sync();
+        await Access.sync();
     },
 
     down: async (queryInterface, Sequelize) => {
+        await Access.drop();
         await Entry.drop();
+        await Member.drop();
         await EntryStatus.drop();
         await Line.drop();
+        await Cashflow.drop();
         await Category.drop();
         await Budget.drop();
         await User.drop();

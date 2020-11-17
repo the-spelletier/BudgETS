@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'budgetId',
                 onDelete: 'RESTRICT'
             });
+            Budget.belongsToMany(models.User, {
+                through: models.Access,
+                foreignKey: 'budgetId',
+            });
         }
     };
 
@@ -29,10 +33,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            unique: 'compositeUnique'
         },
         userId: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
+            unique: 'compositeUnique'
         },
         startDate: {
             type: DataTypes.DATE,
@@ -42,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false
         },
-        isActive : {
+        isActive: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }

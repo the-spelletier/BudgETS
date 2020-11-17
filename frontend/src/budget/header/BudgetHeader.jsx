@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from "react";
 import { Link } from 'react-router-dom';
 import { Select, Button, notification } from "antd";
-import { PlusOutlined, CloseCircleTwoTone } from '@ant-design/icons';
+import { PlusOutlined, CloseCircleTwoTone, CopyOutlined } from '@ant-design/icons';
 
 import { BudgetClient } from "../../clients/BudgetClient";
 
@@ -67,9 +67,14 @@ const BudgetHeader = () => {
         <div className="header">
             {
                 budgets &&
-                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)}>
-                    {budgets.map((option) => 
-                        <Option key={option.id} value={option.id}><h2 className="budget-select-option">{option.name}</h2></Option>
+                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)} dropdownMatchSelectWidth={false}>
+                    {budgets
+                    .sort(function(a, b){
+                        return a.startDate < b.startDate;
+                    }).map((option) => 
+                        <Option key={option.id} value={option.id}>
+                            <h2 className="budget-select-option">{option.shortName}</h2>
+                        </Option>
                     )}
                 </Select>
             }
@@ -77,7 +82,7 @@ const BudgetHeader = () => {
                 size="large" 
                 type="primary" 
                 onClick={() => {return null}}>
-                    <Link to="/budget/clone"><PlusOutlined /> Clôner</Link>
+                    <Link to="/budget/clone"><CopyOutlined /> Clôner</Link>
             </Button>
             <Button className="new-budget-button"
                 size="large" 

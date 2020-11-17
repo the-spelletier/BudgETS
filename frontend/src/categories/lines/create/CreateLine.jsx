@@ -14,7 +14,7 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const {user} = useContext(UserContext);
 
     //Form info
-    const defaultLine = {name: "", description: "", estimate: 0};
+    const defaultLine = {name: "", description: "", estimate: 0, orderNumber: 1};
     const [line, setLine] = useState(defaultLine);
 
     //Validation
@@ -35,17 +35,22 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
         }
     }, [line.name]);
 
+    const cancel = () => {
+        setLine(defaultLine);
+        onCancel();
+    }
+
     const addLine = () => {
         const save = async () => {
             try {
-                await lineClient.create(user.token, line.name, line.description, line.estimate, categoryId);
+                await lineClient.create(user.token, line.name, line.description, line.orderNumber, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
-                      "La ligne a été créé avec succès",
+                      "La ligne a été créée avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -68,14 +73,14 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
     const editLine = () => {
         const save = async () => {
             try {
-                await lineClient.update(user.token, line.id, line.name, line.description, line.estimate, categoryId);
+                await lineClient.update(user.token, line.id, line.name, line.description, line.orderNumber, line.estimate, categoryId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
                     description:
                       "La ligne a été modifée avec succès",
                     });
-                onCancel(); // Closes modal
+                cancel(); // Closes modal
             }
             catch {
                 notification.open({
@@ -100,15 +105,17 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
             title={line.id ? "Modifier une ligne" : "Ajouter une ligne"}
             visible={visible}
             onOk={line.id ? editLine : addLine}
-            onCancel={onCancel}>
+            onCancel={cancel}>
                 <Alert showIcon type="warning" message="Attention! L'estimé est toujours une valeur positive. La catégorie détermine s'il s'agit d'une entrée ou d'une sortie." />
                 <div className={error.name === false ? "form-section" : "form-section error"}>
-                <Input size="large"
-                    placeholder="Nom de la ligne"
-                    value={line.name}
-                    onChange={(event) => setLine({...line, name: event.target.value})} />
+                    <div className="label">Nom de la ligne: </div>
+                    <Input size="large"
+                        placeholder="Nom de la ligne"
+                        value={line.name}
+                        onChange={(event) => setLine({...line, name: event.target.value})} />
                 </div>
                 <div className="form-section">
+                    <div className="label">Description: </div>
                     <TextArea size="large"
                         placeholder="Description"
                         rows={3}
@@ -116,12 +123,21 @@ const CreateLine = ({visible, onCancel, categoryId, initialLine}) => {
                         onChange={(event) => setLine({...line, description: event.target.value})} />
                 </div>
                 <div className="form-section">
-                    <span className="label">Estimé : </span>
+                    <div className="label">Estimé: </div>
                     <InputNumber size="large"
                         min={0}
                         placeholder="Estimé"
                         value={line.estimate}
                         onChange={(value) => setLine({...line, estimate: value})} />
+                </div>
+                <div className="form-section">
+                    <div className="label">Ordre: </div>
+                    <InputNumber size="large"
+                        min={1}
+                        max={99}
+                        placeholder="Ordre"
+                        value={line.orderNumber}
+                        onChange={(value) => setLine({...line, orderNumber: value})} />
                 </div>
         </Modal>
     );

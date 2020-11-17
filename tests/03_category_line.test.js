@@ -29,6 +29,7 @@ describe('3.0 - Catégories et lignes', () => {
                     .expect(200)
                     .then((response) => {
                         expect(response.body.length).toEqual(4);
+                        response.body.sort((a,b) => (a.id < b.id) ? -1 : 1);
                         for (let i = 0; i < response.body.length; ++i) {
                             const typeStr = ((5 + i) % 2 == 0) ? 'revenue' : 'expense';
                             expect(response.body[i]).toEqual(
@@ -39,11 +40,6 @@ describe('3.0 - Catégories et lignes', () => {
                                     budgetId: '2'
                                 })
                             );
-                            if (5 + i <= 6) {
-                                expect(response.body[i]['lines'].length).toEqual(4);
-                            } else {
-                                expect(response.body[i]['lines'].length).toEqual(0);
-                            }
                         }
                         done();
                     });
@@ -393,7 +389,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test("032006 - Créer une catégorie sans nom", (done) => {
@@ -441,7 +437,7 @@ describe('3.0 - Catégories et lignes', () => {
                     type: type,
                     budgetId: budgetId
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test("032008 - Créer une catégorie sans budget", (done) => {
@@ -664,7 +660,7 @@ describe('3.0 - Catégories et lignes', () => {
                     estimate: estimate,
                     categoryId: categoryId
                 })
-                .expect(404, done);
+                .expect(400, done);
         });
 
         test("033005 - Créer une ligne sans description", (done) => {
@@ -924,10 +920,10 @@ describe('3.0 - Catégories et lignes', () => {
                 .then((response) => {
                     expect(response.body).toEqual(
                         expect.objectContaining({
-                            id: 17, // Should remain unchanged
+                            id: '17', // Should remain unchanged
                             name: name,
                             type: 'expense', // Should remain unchanged
-                            budgetId: 9 // Should remain unchanged
+                            budgetId: '9' // Should remain unchanged
                         })
                     );
                     done();
@@ -968,7 +964,7 @@ describe('3.0 - Catégories et lignes', () => {
                 .send({
                     name: name
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test("034004 - Mettre à jour une catégorie qui ne m'appartient pas", (done) => {
@@ -1062,7 +1058,7 @@ describe('3.0 - Catégories et lignes', () => {
                             id: '33', // Should remain unchanged
                             name: name,
                             description: description,
-                            categoryId: 17, // Should remain unchanged
+                            categoryId: '17', // Should remain unchanged
                             estimate: estimate
                         })
                     );
@@ -1115,7 +1111,7 @@ describe('3.0 - Catégories et lignes', () => {
                     description: description,
                     estimate: estimate
                 })
-                .expect(403, done);
+                .expect(400, done);
         });
 
         test("035004 - Mettre à jour une ligne sans description", (done) => {

@@ -16,7 +16,8 @@ module.exports = {
                     id: nbUsers,
                     username: 'budgets_test' + ('00' + i).slice(-3),
                     password: bcrypt.hashSync('test123', config.saltRounds),
-                    isAdmin: false
+                    isAdmin: (i == 1),
+                    activeBudgetId: i == 2 ? '5' : null
                 });
             }
         } else if (process.env.NODE_ENV == 'development') {
@@ -39,6 +40,13 @@ module.exports = {
                 id: 3,
                 username: 'budgets_user2',
                 password: bcrypt.hashSync('dev123', config.saltRounds),
+                isAdmin: false
+            });
+
+            users.push({
+                id: 4,
+                username: 'simon_demo',
+                password: bcrypt.hashSync('demo_2020', config.saltRounds),
                 isAdmin: false
             });
         }

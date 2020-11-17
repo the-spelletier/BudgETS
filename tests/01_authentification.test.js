@@ -1,7 +1,18 @@
 const request = require('supertest');
+const sinon = require('sinon');
+const authService = require('../services/auth');
+
+const originalAuth = authService.authenticate;
+const stubAuth = sinon.stub(authService, 'authenticate');
+
 const app = require('../app.js');
 
 describe('1.0 - Authentification', () => {
+    beforeEach(() => {
+        // Original authentification service
+        authService.authenticate.callsFake(originalAuth);
+    });
+
     describe('1.1 - Utilisateur veut se logger', () => {
         test('011001 - Authentification correcte', (done) => {
             request(app)
@@ -75,5 +86,26 @@ describe('1.0 - Authentification', () => {
                     done();
                 });
         });
+
+        test('011006 - Retour token vide', (done) => {
+            // Stub the authenticate
+            authService.authenticate.callsFake(params => {
+                return new Promise((resolve, reject) => {
+                    resolve(false);
+                });
+            });
+
+            request(app)
+                .post('/api/login')
+                .send({
+                    username: 'budgets_test001'
+                })
+                .expect(401)
+                .then((response) => {
+                    expect(response.body.token).toBeUndefined();
+                    done();
+                });
+        });
+
     });
 });

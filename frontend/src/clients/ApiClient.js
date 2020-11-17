@@ -1,8 +1,8 @@
 import ApiBaseClient from './ApiBaseClient';
 
 export class ApiClient {
-    get = async (path, token) => {
-        return await ApiBaseClient.get(path, {headers: {'Authorization': `Bearer ${token}`}});
+    get = async (path, token, params = {}) => {
+        return await ApiBaseClient.get(path, {params: params, headers: {'Authorization': `Bearer ${token}`}});
     }
 
     post = async (path, params, token) => {

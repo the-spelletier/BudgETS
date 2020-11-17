@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { Card, Table, notification } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { Card, Table, Button, notification } from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import BudgetHeader from "../budget/header/BudgetHeader"; 
 import CreateEntry from "./create/CreateEntry";
 import EditMenu from "../components/edit-menu/EditMenu";
@@ -16,25 +16,29 @@ const Entries = () => {
     const {budget} = useContext(BudgetContext);
 
     const [entries, setEntries] = useState(null);
-    const [currentEntry, setCurrentEntry] = useState(null);
+    const [currentEntryId, setCurrentEntryId] = useState(null);
     const [createModalIsVisible, setCreateModalIsVisible] = useState(false);
 
+    const getEntries = async() => {
+        var response = await entryClient.getList(user.token, budget.id);
+        setEntries(response.data.sort(function (a, b){
+            return a.date < b.date;
+        }));
+    }
+
     useEffect(() => {
-        const getEntries = async() => {
-            var response = await entryClient.getList(user.token, budget.id);
-            setEntries(response.data.length > 0 ? response.data : [{}]);
+        if (user.token && budget.id) {
+            getEntries();
         }
+    }, [createModalIsVisible, budget.id]);
 
-        getEntries();
-    }, [createModalIsVisible]);
-
-    const onEditEntry = (entry) => {
-        setCurrentEntry(entry.id);
+    const onCreateOrEditEntry = (entryId) =>{
+        setCurrentEntryId(entryId);
         setCreateModalIsVisible(true);
     };
 
     const onCreateOrEditEntryModalCancel = () => {
-        setCurrentEntry(null);
+        setCurrentEntryId(null);
         setCreateModalIsVisible(false);
     };
 
@@ -68,48 +72,62 @@ const Entries = () => {
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onNewClick={() => setCreateModalIsVisible(true)} onEditClick={() => onEditEntry(entry)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
         },
         {
             title: "# Facture",
-            render: (entry) => entry.receiptCode
+            render: (entry) => entry.receiptCode,
+            sorter: (a, b) => a.receiptCode.localeCompare(b.receiptCode)
         },
         {
             title: "Categorie",
-            render: (entry) => entry.categoryName
+            render: (entry) => entry.categoryName,
+            sorter: (a, b) => a.categoryName.localeCompare(b.categoryName)
         },
         {
             title: "Ligne",
-            render: (entry) => entry.lineName
+            render: (entry) => entry.lineName,
+            sorter: (a, b) => a.lineName.localeCompare(b.lineName)
         },
         {
             title: "Description",
-            render: (entry) => entry.description 
+            render: (entry) => entry.description ,
+            sorter: (a, b) => a.description.localeCompare(b.description)
         },
         {
             title: "Membre",
-            render: (entry) => entry.member 
+            render: (entry) => entry.memberName ,
+            sorter: (a, b) => a.memberName.localeCompare(b.memberName)
         },
         {
             title: "Montant",
-            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : ""
+            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : "",
+            sorter: (a, b) => a.amount - b.amount
         },
         {
             title: "Date",
-            render: (entry) => moment(entry.date).format("YYYY-MM-DD") 
+            render: (entry) => moment(entry.date).format("YYYY-MM-DD"),
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix()
         },
         {
             title: "Status",
-            render: (entry) => entry.entryStatusName 
+            render: (entry) => entry.entryStatusName ,
+            sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {setCreateModalIsVisible(true)}}/>,
+            width: 50
         }
-    ]
+    ];
 
     return (
         <Fragment>
             <BudgetHeader />
-            <CreateEntry entryId={currentEntry} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
+            <h1 className="logo">Entrées</h1>
+            <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
-                <Table columns={columns} dataSource={entries} className="no-paging" />
+                <Table columns={columns} dataSource={entries} className="no-paging"/>
             </Card>
         </Fragment>
     );
