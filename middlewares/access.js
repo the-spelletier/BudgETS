@@ -3,6 +3,7 @@ const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const entryService = require('../services/entry');
+const memberService = require('../services/member');
 
 const validateBudget = (budgetId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
@@ -49,6 +50,7 @@ const validateCategory = (categoryId, req, res, next, checkOwner) => {
         id: categoryId
     }).then(category => {
         if (category) {
+            req.category = category;
             return validateBudget(category.budgetId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
@@ -64,10 +66,11 @@ const validateCategory = (categoryId, req, res, next, checkOwner) => {
 
 const validateLine = (lineId, req, res, next, checkOwner) => {
     // Obtenir le categoryId à partir de la ligne
-    lineService.getLine({
+    return lineService.getLine({
         id: lineId
     }).then(line => {
         if (line) {
+            req.line = line;
             return validateCategory(line.categoryId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
@@ -83,14 +86,33 @@ const validateLine = (lineId, req, res, next, checkOwner) => {
 
 const validateEntry = (entryId, req, res, next, checkOwner) => {
     // Obtenir le lineId à partir de l'entrée
-    entryService.getEntry({
+    return entryService.getEntry({
         id: entryId
     }).then(entry => {
         if (entry) {
+            req.entry = entry;
             return validateLine(entry.lineId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
                 message: 'Invalid entry'
+            });
+        }
+    }).catch(err => {
+        return res.status(404).send({
+            message: 'An unexpected error occurred'
+        });
+    });
+}
+
+const validateMember = (memberId, req, res, next) => {
+    // Obtenir le lineId à partir du membre
+    return memberService.getMember(memberId).then(member => {
+        if (member && member.userId === req.user.id) {
+            req.member = member;
+            return next();
+        } else {
+            return res.status(404).send({
+                message: 'Invalid member'
             });
         }
     }).catch(err => {
@@ -156,6 +178,16 @@ const isEntryOwner = (req, res, next) => {
     return hasEntryAccess(req, res, next, true);
 };
 
+const isMemberOwner = (req, res, next) => {
+    // Vérifier la présence de l'identifiant du membre
+    const memberId = req.params.memberId || req.body.memberId;
+    if (!req.user.id || typeof memberId === 'undefined') {
+        return res.sendStatus(400);
+    }
+
+    return validateMember(memberId, req, res, next);
+};
+
 module.exports = {
     hasBudgetAccess,
     isBudgetOwner,
@@ -164,5 +196,6 @@ module.exports = {
     hasLineAccess,
     isLineOwner,
     hasEntryAccess,
-    isEntryOwner
+    isEntryOwner,
+    isMemberOwner
 };
