@@ -5,6 +5,7 @@ function getAllByBudget(req, res) {
     accessService.getAccesses({
         budgetId: req.params.budgetId
     }).then(accesses => {
+        console.log(accesses);
         sendAccess(accesses, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
@@ -22,9 +23,9 @@ function getAllByUser(req, res) {
 }
 
 function create(req, res) {
-    if (req.body.budgetId && req.body.userId) {
+    if (req.params.budgetId && req.body.userId) {
         accessService.addAccess({
-            budgetId: req.body.budgetId,
+            budgetId: req.params.budgetId,
             userId: req.body.userId,
         }).then(a => {
             res.status(201);

@@ -211,6 +211,7 @@ const accessDTO = (access, a = {}) => {
   if (typeof access.userId != 'undefined') {
     a.userId = access.userId;
   }
+  return a;
 }
 
 module.exports = {
