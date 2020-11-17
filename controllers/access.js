@@ -5,7 +5,6 @@ function getAllByBudget(req, res) {
     accessService.getAccesses({
         budgetId: req.params.budgetId
     }).then(accesses => {
-        console.log(accesses);
         sendAccess(accesses, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });

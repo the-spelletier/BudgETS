@@ -33,7 +33,6 @@ function getEstimateCashflows(req, res) {
     let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
     let groupBy = typeof req.query.groupBy !== 'undefined' ? req.query.groupBy : false;
     categoryService.getCategoriesEstimateCashflows(req.params.budgetId, type, groupBy).then(c => {
-        console.log(c);
         sendCategory(sortCashflowsByCategory(c), res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
