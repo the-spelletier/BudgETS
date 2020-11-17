@@ -217,6 +217,16 @@ const cashflowDTO = (cashflow, c = {}) => {
   return c;
 }
 
+const accessDTO = (access, a = {}) => {
+  if (typeof access.budgetId != 'undefined') {
+    a.budgetId = access.budgetId;
+  }
+  if (typeof access.userId != 'undefined') {
+    a.userId = access.userId;
+  }
+  return a;
+}
+
 module.exports = {
   userDTO,
   budgetDTO,
@@ -226,4 +236,5 @@ module.exports = {
   entryStatusDTO,
   memberDTO,
   cashflowDTO,
+  accessDTO,
 }
