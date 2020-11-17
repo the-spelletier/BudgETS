@@ -3,7 +3,8 @@
     "username": "root",
     "password": "mysql",
     "database": "budgets_development",
-    "host": "127.0.0.1",
+    "port": "3306",
+    "host": "mysql",
     "dialect": "mysql",
     "define": {
         "timestamps": false
@@ -13,7 +14,8 @@
     "username": "root",
     "password": "mysql",
     "database": "budgets_test",
-    "host": "127.0.0.1",
+    "port": "3306",
+    "host": "mysql",
     "dialect": "mysql",
     "logging": false,
     "define": {
@@ -24,7 +26,8 @@
     "username": "root",
     "password": "mysql",
     "database": "budgets",
-    "host": "127.0.0.1",
+    "port": "3306",
+    "host": "mysql",
     "dialect": "mysql"
   }
 }
