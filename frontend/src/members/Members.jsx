@@ -121,9 +121,6 @@ const Members = () => {
                     }
                 </Fragment>
             }
-            {/* <Card title="Inactif">
-                <Table columns={columns} dataSource={members.filter(mem => !mem.active)} className="no-paging"/>
-            </Card> */}
         </Fragment>
     );
 };
