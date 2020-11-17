@@ -70,6 +70,12 @@ const categoryDTO = (category, c = {}) => {
       c.lines.push(lineDTO(l));
     });
   }
+  if (typeof category.Cashflows != 'undefined') {
+    c.cashflows = [];
+    category.Cashflows.forEach(cf => {
+      c.cashflows.push(cashflowDTO(cf));
+    });
+  }
   return c;
 };
 
@@ -185,11 +191,56 @@ const memberDTO = (member, m = {}) => {
   return m;
 };
 
+const entryStatusDTO = (status, s = {}) => {
+  if (typeof status.id != 'undefined') {
+    s.id = status.id;
+  }
+  if (typeof status.name != 'undefined') {
+    s.name = status.name;
+  }
+  if (typeof status.position != 'undefined') {
+    s.position = status.position;
+  }
+  return s;
+};
+
+const cashflowDTO = (cashflow, c = {}) => {
+  if (typeof cashflow.id != 'undefined') {
+    c.id = cashflow.id;
+  }
+  if (typeof cashflow.year != 'undefined') {
+    c.year = cashflow.year;
+  }
+  if (typeof cashflow.month != 'undefined') {
+    c.month = cashflow.month;
+  }
+  if (typeof cashflow.estimate != 'undefined') {
+    c.estimate = cashflow.estimate;
+  }
+  if (typeof cashflow.real != 'undefined') {
+    c.real = cashflow.real;
+  }
+  return c;
+}
+
+const accessDTO = (access, a = {}) => {
+  if (typeof access.budgetId != 'undefined') {
+    a.budgetId = access.budgetId;
+  }
+  if (typeof access.userId != 'undefined') {
+    a.userId = access.userId;
+  }
+  return a;
+}
+
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
   lineDTO,
   entryDTO,
-  memberDTO
+  entryStatusDTO,
+  memberDTO,
+  cashflowDTO,
+  accessDTO,
 }

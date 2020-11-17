@@ -74,7 +74,10 @@ const Members = () => {
         {
             title: "",
             width: 50,
-            render: (member) => <EditMenu key={member.id} onEditClick={() => onEditMember(member)} onDeleteClick={() => onDeleteMember(member)} />
+            render: (member) => <EditMenu key={member.id} 
+                onEditClick={() => onEditMember(member)} 
+                onDeleteClick={() => onDeleteMember(member)} 
+                onDeleteMessage="Voulez-vous vraiment supprimer ce membre?"/>
         },
         {
             title: "Nom",

@@ -6,7 +6,6 @@ function get(req, res) {
     lineService.getLine({ id: req.params.lineId }).then(line => {
         sendLine(line, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -15,7 +14,6 @@ function getAll(req, res) {
     lineService.getLines(req.params.categoryId).then(lines => {
         sendLine(lines, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -74,8 +72,8 @@ function sendLine(line, res) {
     if (line) {
         let lineRes;
         if (Array.isArray(line)) {
-            line.forEach((b, i, arr) => {
-                arr[i] = lineDTO(b);
+            line.forEach((l, i, arr) => {
+                arr[i] = lineDTO(l);
                 delete arr[i].description;
                 delete arr[i].estimate;
                 delete arr[i].categoryId;

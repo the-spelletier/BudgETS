@@ -6,7 +6,6 @@ function get(req, res) {
     categoryService.getCategory({ id: req.params.categoryId }).then(category => {
         sendCategory(category, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -14,10 +13,9 @@ function get(req, res) {
 function getAll(req, res) {
     let light = typeof req.query.light !== 'undefined';
     let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
-    categoryService.getCategories(req.params.budgetId, light, type).then(categories => {
+    categoryService.getCategories(req.params.budgetId, type, light).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
-        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -27,7 +25,26 @@ function getSummary(req, res) {
     categoryService.getCategoriesSummary(req.params.budgetId, type).then(c => {
         sendCategory(c, res);
     }).catch(err => {
-        console.log(err);
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
+function getEstimateCashflows(req, res) {
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    let groupBy = typeof req.query.groupBy !== 'undefined' ? req.query.groupBy : false;
+    categoryService.getCategoriesEstimateCashflows(req.params.budgetId, type, groupBy).then(c => {
+        sendCategory(sortCashflowsByCategory(c), res);
+    }).catch(err => {
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
+function getRealCashflows(req, res) {
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    let groupBy = typeof req.query.groupBy !== 'undefined' ? req.query.groupBy : false;
+    categoryService.getCategoriesRealCashflows(req.params.budgetId, type, groupBy).then(c => {
+        sendCategory(sortCashflowsByCategory(c), res);
+    }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
@@ -84,8 +101,8 @@ function sendCategory(category, res) {
     if (category) {
         let categoryRes;
         if (Array.isArray(category)) {
-            category.forEach((b, i, arr) => {
-                arr[i] = categoryDTO(b);
+            category.forEach((c, i, arr) => {
+                arr[i] = categoryDTO(c);
             });
             categoryRes = category;
         } else {
@@ -97,11 +114,37 @@ function sendCategory(category, res) {
     }
 }
 
+function sortCashflowsByCategory(cashflows) {
+    let categories = [];
+    cashflows.forEach((cat, i, arr) => {
+        let cashflowObj = {
+            month: cat.month,
+            year: cat.year,
+            real: cat.real,
+            estimate: cat.estimate
+        };
+        let index = categories.findIndex(c => c.id == cat.id);
+        if (index < 0) {
+            categories.push({
+                id: cat.id,
+                name: cat.name,
+                type: cat.type,
+                Cashflows: [cashflowObj]
+            });
+        } else {
+            categories[index].Cashflows.push(cashflowObj);
+        }
+    });
+    return categories;
+}
+
 module.exports = {
     get,
     getAll,
     create,
     update,
     deleteOne,
-    getSummary
+    getSummary,
+    getEstimateCashflows,
+    getRealCashflows,
 };

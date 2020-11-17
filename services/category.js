@@ -1,6 +1,4 @@
-const { Op } = require('sequelize');
-const { Category, Line, Entry, sequelize } = require('../models');
-const { categoryDTO } = require('../dto');
+const { Category, Line, Entry, Cashflow, sequelize } = require('../models');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
@@ -10,7 +8,7 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = (budgetId, light, type) => {
+const getCategories = (budgetId, type = '', light = false) => {
     let options = { 
         where: {
             budgetId: budgetId
@@ -40,8 +38,8 @@ const getCategories = (budgetId, light, type) => {
     return Category.findAll(options);
 }
 
-const getCategoriesSummary = (budgetId, light, type) => {
-    return getCategories(budgetId, light, type).then(categories => {
+const getCategoriesSummary = (budgetId, type) => {
+    return getCategories(budgetId, type).then(categories => {
         categories.forEach((c, i, arr) => {
             c.real = 0;
             c.estimate = 0;
@@ -57,6 +55,84 @@ const getCategoriesSummary = (budgetId, light, type) => {
     });
 }
 
+// Retourne tous les cashflows des catégories selon l'identifiant de budget
+const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
+    let options = {
+        attributes: [
+            [sequelize.col('year'), 'year'], 
+            [sequelize.col('month'), 'month'],
+            [sequelize.fn('SUM', sequelize.col('estimate')), 'estimate']
+        ],
+        where: {
+            budgetId: budgetId
+        },
+        include: {
+            model: Cashflow,
+            required: true,
+        },
+        group: [
+            [sequelize.col('year'), 'year'], 
+            [sequelize.col('month'), 'month'],
+        ],
+        raw: true
+    };
+
+    if (groupBy === 'revenue' || groupBy === 'expense') {
+        options.attributes.unshift('type');
+        options.group.unshift('Category.type');
+    } else {
+        options.attributes.unshift('id', 'name', 'type');
+        if (type === 'revenue' || type === 'expense') {
+            options.where.type = type;
+        }
+        options.group.unshift('Category.id');
+    }
+
+    return Category.findAll(options);
+}
+
+// Retourne tous les cashflows des catégories selon l'identifiant de budget
+const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
+    let options = {
+        attributes: [
+            [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
+            [sequelize.fn('MONTH', sequelize.col('date')), 'month'],
+            [sequelize.fn('SUM', sequelize.col('amount')), 'real']
+        ],
+        include: {
+            model: Line,
+            required: true,
+            attributes: [],
+            include: {
+                model: Entry,
+                required: true,
+                attributes: []
+            },
+        },
+        where: {
+            budgetId: budgetId
+        },
+        group: [
+            [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
+            [sequelize.fn('MONTH', sequelize.col('date')), 'month']
+        ],
+        raw: true
+    };
+
+    if (groupBy === 'revenue' || groupBy === 'expense') {
+        options.attributes.unshift('type');
+        options.group.unshift('Category.type');
+    } else {
+        options.attributes.unshift('id', 'name', 'type');
+        if (type === 'revenue' || type === 'expense') {
+            options.where.type = type;
+        }
+        options.group.unshift('Category.id');
+    }
+
+    return Category.findAll(options);
+}
+
 // Ajout d'une catégorie
 const addCategory = category => {
     return Category.create(category);
@@ -70,8 +146,7 @@ const updateCategory = category => {
         }
     }).then(c => {
         if (c) {
-            categoryDTO(category, c);
-            return c.save();
+            return c.update(category);
         }
         return c;
     });
@@ -92,5 +167,7 @@ module.exports = {
     addCategory,
     updateCategory,
     deleteCategory,
-    getCategoriesSummary
+    getCategoriesSummary,
+    getCategoriesEstimateCashflows,
+    getCategoriesRealCashflows,
 };
