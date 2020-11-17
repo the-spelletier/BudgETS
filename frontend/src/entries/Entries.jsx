@@ -126,7 +126,7 @@ const Entries = () => {
             sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix()
         },
         {
-            title: "Status",
+            title: "Statut",
             render: (entry) => entry.entryStatusName ,
             sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
         },
