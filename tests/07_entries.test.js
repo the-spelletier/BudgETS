@@ -800,7 +800,7 @@ describe('7.0 - Entrées budgétaires', () => {
                 new Date(2020, 9, 28),
                 'testDesc_updated',
                 39,
-                2,
+                3,
                 2
             )
 
