@@ -344,7 +344,7 @@ module.exports.set = app => {
     app.post(
         '/api/entry',
         // authMiddleware.verifyAuth,
-        [authMiddleware.verifyAuth, accessMiddleware.isLineOwner],
+        [authMiddleware.verifyAuth, accessMiddleware.isLineOwner, accessMiddleware.isMemberOwner],
         entryController.create
     );
 
@@ -356,7 +356,7 @@ module.exports.set = app => {
     app.put(
         '/api/entry/:entryId',
         // authMiddleware.verifyAuth,
-        [authMiddleware.verifyAuth, accessMiddleware.isEntryOwner],
+        [authMiddleware.verifyAuth, accessMiddleware.isEntryOwner, accessMiddleware.isLineOwner, accessMiddleware.isMemberOwner],
         entryController.update
     );
 
@@ -381,7 +381,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/member/:memberId',
-        authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.isMemberOwner],
         memberController.get
     );
 
@@ -415,7 +415,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/member/:memberId',
-        authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.isMemberOwner],
         memberController.update
     );
 
@@ -426,7 +426,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/member/:memberId',
-        authMiddleware.verifyAuth,
+        [authMiddleware.verifyAuth, accessMiddleware.isMemberOwner],
         memberController.deleteOne
     );
 
