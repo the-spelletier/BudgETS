@@ -2,6 +2,7 @@ const authController = require('./controllers/auth');
 const budgetController = require('./controllers/budget');
 const categoryController = require('./controllers/category');
 const entryController = require('./controllers/entry');
+const entryStatusController = require('./controllers/entryStatus');
 const lineController = require('./controllers/line');
 const userController = require('./controllers/user');
 const memberController = require('./controllers/member');
@@ -370,6 +371,19 @@ module.exports.set = app => {
         // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isEntryOwner],
         entryController.deleteOne
+    );
+
+    // ENTRY STATUS ENDPOINTS
+
+    // STATUS : GET
+    // Get all entry statuses
+    // Params : {}
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/status',
+        authMiddleware.verifyAuth,
+        entryStatusController.getAll
     );
 
     // USER MEMBER ENDPOINTS

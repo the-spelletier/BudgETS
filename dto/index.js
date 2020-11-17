@@ -185,6 +185,19 @@ const memberDTO = (member, m = {}) => {
   return m;
 };
 
+const entryStatusDTO = (status, s = {}) => {
+  if (typeof status.id != 'undefined') {
+    s.id = status.id;
+  }
+  if (typeof status.name != 'undefined') {
+    s.name = status.name;
+  }
+  if (typeof status.position != 'undefined') {
+    s.position = status.position;
+  }
+  return s;
+};
+
 const cashflowDTO = (cashflow, c = {}) => {
   if (typeof cashflow.id != 'undefined') {
     c.id = cashflow.id;
@@ -210,6 +223,7 @@ module.exports = {
   categoryDTO,
   lineDTO,
   entryDTO,
+  entryStatusDTO,
   memberDTO,
   cashflowDTO,
 }
