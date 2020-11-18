@@ -9,6 +9,15 @@
     display: flex;
 }
 
+.footbar{
+    text-align: right;
+    width: calc(100% - 250px) !important;
+
+    a{
+        margin: 5px;
+    }
+}
+
 .sidebar, .menu {
     background-color: $neutral;
 
