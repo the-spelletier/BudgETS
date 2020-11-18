@@ -41,12 +41,32 @@ describe('5.0 - Sommaire des dépenses', () => {
                 .expect(200)
                 .then((response) => {
                     sortBody(response.body);
-                    expect(resonse.body.length).toEqual(2);
+                    expect(response.body.length).toEqual(2);
+                    expect(response.body[0]).toEqual({
+                        id: '1',
+                        name: 'categoryTest0101',
+                        type: 'expense',
+                        orderNumber: 1,
+                        budgetId: '1',
+                        real: '40.00',
+                        estimate: '2.00',
+                        displayName: 'D - 001 - categoryTest0101'
+                    });
+                    expect(response.body[1]).toEqual({
+                        id: '3',
+                        name: 'categoryTest0103',
+                        type: 'expense',
+                        orderNumber: 1,
+                        budgetId: '1',
+                        real: '0.00',
+                        estimate: '0.00',
+                        displayName: 'D - 001 - categoryTest0103'
+                    });
                     done();
                 });
         });
 
-        /*test('051002 - Obtenir le sommaire sans authentification', (done) => {
+        test('051002 - Obtenir le sommaire sans authentification', (done) => {
             request(app)
                 .get(getRoute(1))
                 .expect(401, done);
@@ -83,9 +103,9 @@ describe('5.0 - Sommaire des dépenses', () => {
                 .get(getRoute(-1))
                 .expect(404, done);
         });
-    */});
+    });
 
-    /*describe('5.2 - Obtention du sommaire', () => {
+    describe('5.2 - Obtention du sommaire', () => {
         test('052001 - Obtenir sommaire sans type', (done) => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
@@ -123,6 +143,5 @@ describe('5.0 - Sommaire des dépenses', () => {
                     done();
                 });
         });
-    });*/
-
+    });
 });

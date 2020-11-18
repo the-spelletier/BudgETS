@@ -778,7 +778,7 @@ describe('0.0 - Backend', () => {
 
                 request(app)
                     .get('/testHasBudgetAccess')
-                    .expect(400, done);
+                    .expect(200, done);
             });
 
             test('003019 - Has Budget Access - Good credentials', (done) => {
@@ -929,7 +929,7 @@ describe('0.0 - Backend', () => {
 
                 request(app)
                     .get('/testHasCategoryAccess')
-                    .expect(400, done);
+                    .expect(200, done);
             });
 
             test('003023 - Has Category Access - Good credentials', (done) => {
@@ -1080,7 +1080,7 @@ describe('0.0 - Backend', () => {
 
                 request(app)
                     .get('/testHasLineAccess')
-                    .expect(400, done);
+                    .expect(200, done);
             });
 
             test('003027 - Has Line Access - Good credentials', (done) => {
@@ -1231,7 +1231,7 @@ describe('0.0 - Backend', () => {
 
                 request(app)
                     .get('/testHasEntryAccess')
-                    .expect(400, done);
+                    .expect(200, done);
             });
 
             test('003031 - Has Entry Access - Good credentials', (done) => {
