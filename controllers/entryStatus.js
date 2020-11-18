@@ -1,6 +1,14 @@
 const { entryStatusDTO } = require('../dto');
 const entryStatusService = require('../services/entryStatus');
 
+function get(req, res) {
+    entryStatusService.getStatus({id: req.params.statusId}).then(status => {
+        sendStatus(status, res);
+    }).catch(err => {
+        res.status(500).send({ message: 'An unexpected error occurred' });
+    });
+}
+
 function getAll(req, res) {
     entryStatusService.getStatuses().then(status => {
         sendStatus(status, res);
@@ -27,5 +35,6 @@ function sendStatus(status, res) {
 }
 
 module.exports = {
+    get,
     getAll
 };
