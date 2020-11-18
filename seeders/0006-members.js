@@ -47,9 +47,41 @@ module.exports = {
 
             members.push({
                 id: 4,
-                name: 'Michel',
+                name: 'Michael',
                 code: 'MIC23456',
-                email: 'michel@budgets.com',
+                email: 'michael@budgets.com',
+                userId: 4
+            });
+
+            members.push({
+                id: 5,
+                name: 'Véronique',
+                code: 'VER23456',
+                email: 'veronique@budgets.com',
+                userId: 4
+            });
+
+            members.push({
+                id: 6,
+                name: 'Philippe',
+                code: 'PHI23456',
+                email: 'philippe@budgets.com',
+                userId: 4
+            });
+
+            members.push({
+                id: 7,
+                name: 'German',
+                code: 'GER23456',
+                email: 'german@budgets.com',
+                userId: 4
+            });
+
+            members.push({
+                id: 8,
+                name: 'Jacques',
+                code: 'JAC23456',
+                email: 'jacques@budgets.com',
                 userId: 4
             });
         }

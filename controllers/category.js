@@ -13,7 +13,7 @@ function get(req, res) {
 function getAll(req, res) {
     let light = typeof req.query.light !== 'undefined';
     let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
-    categoryService.getCategories(req.params.budgetId, light, type).then(categories => {
+    categoryService.getCategories(req.params.budgetId, type, light).then(categories => {
         sendCategory(categories, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
@@ -30,17 +30,20 @@ function getSummary(req, res) {
 }
 
 function getEstimateCashflows(req, res) {
-    categoryService.getCategoriesEstimateCashflows(req.params.budgetId).then(c => {
-        sendCategory(c, res);
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    let groupBy = typeof req.query.groupBy !== 'undefined' ? req.query.groupBy : false;
+    categoryService.getCategoriesEstimateCashflows(req.params.budgetId, type, groupBy).then(c => {
+        sendCategory(sortCashflowsByCategory(c), res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }
 
 function getRealCashflows(req, res) {
-    categoryService.getCategoriesRealCashflows(req.params.budgetId).then(c => {
-        let categories = sortCashflowsByCategory(c);
-        sendCategory(categories, res);
+    let type = typeof req.query.type !== 'undefined' ? req.query.type : false;
+    let groupBy = typeof req.query.groupBy !== 'undefined' ? req.query.groupBy : false;
+    categoryService.getCategoriesRealCashflows(req.params.budgetId, type, groupBy).then(c => {
+        sendCategory(sortCashflowsByCategory(c), res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
@@ -117,13 +120,15 @@ function sortCashflowsByCategory(cashflows) {
         let cashflowObj = {
             month: cat.month,
             year: cat.year,
-            real: cat.real
+            real: cat.real,
+            estimate: cat.estimate
         };
         let index = categories.findIndex(c => c.id == cat.id);
         if (index < 0) {
             categories.push({
                 id: cat.id,
                 name: cat.name,
+                type: cat.type,
                 Cashflows: [cashflowObj]
             });
         } else {

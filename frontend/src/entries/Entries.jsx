@@ -69,10 +69,25 @@ const Entries = () => {
         deleteEntry();
     };
 
+    const parseAmount = (entry) => {
+        if (entry.type === "revenue"){
+            if (entry.amount < 0){
+                return "(" + Number(Math.abs(entry.amount)).toFixed(2) + ")";
+            }
+            return Number(entry.amount).toFixed(2);
+        } else if (entry.type === "expense" && entry.amount < 0){
+            return Number(Math.abs(entry.amount)).toFixed(2);
+        } 
+        return "(" + Number(entry.amount).toFixed(2) + ")";
+    }
+
     const columns = [
         {
             title: "",
-            render: (entry) => <EditMenu key={entry.id} onEditClick={() => onCreateOrEditEntry(entry.id)} onDeleteClick={() => onDeleteEntry(entry)} />
+            render: (entry) => <EditMenu key={entry.id} 
+                onEditClick={() => onCreateOrEditEntry(entry.id)} 
+                onDeleteClick={() => onDeleteEntry(entry)} 
+                onDeleteMessage="Voulez-vous vraiment supprimer l'entrée?"/>
         },
         {
             title: "# Facture",
@@ -101,7 +116,7 @@ const Entries = () => {
         },
         {
             title: "Montant",
-            render: (entry) => entry.amount ? entry.type === "revenue" ? Number(entry.amount).toFixed(2) : "(" + Number(entry.amount).toFixed(2) + ")" : "",
+            render: (entry) => entry.amount ? parseAmount(entry) : "",
             sorter: (a, b) => a.amount - b.amount
         },
         {

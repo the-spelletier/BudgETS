@@ -1,6 +1,4 @@
-const { Op } = require('sequelize');
 const { Category, Line, Entry, Cashflow, sequelize } = require('../models');
-const { categoryDTO } = require('../dto');
 
 // Retourne une catégorie selon l'identificateur envoyé en paramètre
 const getCategory = category => {
@@ -10,7 +8,7 @@ const getCategory = category => {
 }
 
 // Retourne toutes les catégories
-const getCategories = (budgetId, light, type) => {
+const getCategories = (budgetId, type = '', light = false) => {
     let options = { 
         where: {
             budgetId: budgetId
@@ -40,8 +38,8 @@ const getCategories = (budgetId, light, type) => {
     return Category.findAll(options);
 }
 
-const getCategoriesSummary = (budgetId, light, type) => {
-    return getCategories(budgetId, light, type).then(categories => {
+const getCategoriesSummary = (budgetId, type) => {
+    return getCategories(budgetId, type).then(categories => {
         categories.forEach((c, i, arr) => {
             c.real = 0;
             c.estimate = 0;
@@ -58,25 +56,45 @@ const getCategoriesSummary = (budgetId, light, type) => {
 }
 
 // Retourne tous les cashflows des catégories selon l'identifiant de budget
-const getCategoriesEstimateCashflows = budgetId => {
+const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
     let options = {
-        attributes: ['id', 'name'],
+        attributes: [
+            [sequelize.col('year'), 'year'], 
+            [sequelize.col('month'), 'month'],
+            [sequelize.fn('SUM', sequelize.col('estimate')), 'estimate']
+        ],
         where: {
             budgetId: budgetId
         },
         include: {
-            model: Cashflow
-        }
+            model: Cashflow,
+            required: true,
+        },
+        group: [
+            [sequelize.col('year'), 'year'], 
+            [sequelize.col('month'), 'month'],
+        ],
+        raw: true
     };
+
+    if (groupBy === 'revenue' || groupBy === 'expense') {
+        options.attributes.unshift('type');
+        options.group.unshift('Category.type');
+    } else {
+        options.attributes.unshift('id', 'name', 'type');
+        if (type === 'revenue' || type === 'expense') {
+            options.where.type = type;
+        }
+        options.group.unshift('Category.id');
+    }
+
     return Category.findAll(options);
 }
 
 // Retourne tous les cashflows des catégories selon l'identifiant de budget
-const getCategoriesRealCashflows = budgetId => {
+const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
     let options = {
         attributes: [
-            'id', 
-            'name',
             [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
             [sequelize.fn('MONTH', sequelize.col('date')), 'month'],
             [sequelize.fn('SUM', sequelize.col('amount')), 'real']
@@ -95,12 +113,22 @@ const getCategoriesRealCashflows = budgetId => {
             budgetId: budgetId
         },
         group: [
-            'Category.id',
             [sequelize.fn('YEAR', sequelize.col('date')), 'year'],
             [sequelize.fn('MONTH', sequelize.col('date')), 'month']
         ],
         raw: true
     };
+
+    if (groupBy === 'revenue' || groupBy === 'expense') {
+        options.attributes.unshift('type');
+        options.group.unshift('Category.type');
+    } else {
+        options.attributes.unshift('id', 'name', 'type');
+        if (type === 'revenue' || type === 'expense') {
+            options.where.type = type;
+        }
+        options.group.unshift('Category.id');
+    }
 
     return Category.findAll(options);
 }
@@ -118,8 +146,7 @@ const updateCategory = category => {
         }
     }).then(c => {
         if (c) {
-            categoryDTO(category, c);
-            return c.save();
+            return c.update(category);
         }
         return c;
     });

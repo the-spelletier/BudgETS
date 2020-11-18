@@ -1,5 +1,4 @@
 const { Cashflow, Category } = require('../models');
-const { cashflowDTO } = require('../dto');
 
 // Retourne un cashflow selon l'identificateur envoyé en paramètre
 const getCashflow = cashflow => {
@@ -30,8 +29,7 @@ const updateCashflow = cashflow => {
         }
     }).then(c => {
     	if (c) {
-	        cashflowDTO(cashflow, c);
-	        return c.save();
+	        return c.update(cashflow);
     	}
     });
 }
