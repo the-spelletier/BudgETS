@@ -22,7 +22,6 @@ const BudgetDetails = () => {
 
     const {budget, setCurrentBudget} = useContext(BudgetContext);
     const {user, setCurrentUser} = useContext(UserContext);
-    const [initialBudget, setInitialBudget] = useState(null);
 
     const budgetClient = new BudgetClient();
     const accessClient = new AccessClient();
@@ -31,6 +30,7 @@ const BudgetDetails = () => {
     //Validation
     const [error, setError] = useState({name: false})
     
+    const [initialBudget, setInitialBudget] = useState(null);
     const [accesses, setAccesses] = useState(null);
     const [users, setUsers] = useState(null);
 
@@ -48,7 +48,7 @@ const BudgetDetails = () => {
         setInitialBudget(budget);
         getAccesses();
         getUsers();
-    }, []);
+    }, [budget]);
 
     const submit = () => {
         const save = async() => {
@@ -176,7 +176,7 @@ const BudgetDetails = () => {
                             size="large" 
                             style={{ width: '100%' }}
                             dropdownMatchSelectWidth={false}
-                            defaultValue={accesses}
+                            value={accesses}
                             onSelect={onCreateAccess}
                             onDeselect={onDeleteAccess}
                             filterOption={(input, option) =>  
