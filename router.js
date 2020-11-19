@@ -447,6 +447,16 @@ module.exports.set = app => {
 
     // USER ENDPOINTS
 
+    // USER : GET
+    // Create user
+    // Params : { username, password, isAdmin }
+    // Returns : Code 200 if user added successfully
+    app.get(
+        '/api/users',
+        [authMiddleware.verifyAuth],
+        userController.getAll
+    );
+
     // USER : POST
     // Create user
     // Params : { username, password, isAdmin }

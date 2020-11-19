@@ -1,7 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from "react";
 import moment from "moment";
 import { useHistory } from 'react-router-dom';
-import { Card, Input, DatePicker, Button, notification } from "antd";
+import { Card, Input, DatePicker, Button, notification, Select } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 import BudgetHeader from "../header/BudgetHeader";
@@ -10,6 +10,8 @@ import BudgetContext from "../../contexts/budget/BudgetContext";
 import UserContext from "../../contexts/user/UserContext";
 
 import { BudgetClient } from "../../clients/BudgetClient";
+import { AccessClient } from "../../clients/AccessClient";
+import { UserClient } from "../../clients/UserClient";
 
 import "./budgetDetails.scss";
 
@@ -23,12 +25,29 @@ const BudgetDetails = () => {
     const [initialBudget, setInitialBudget] = useState(null);
 
     const budgetClient = new BudgetClient();
+    const accessClient = new AccessClient();
+    const userClient = new UserClient();
 
     //Validation
     const [error, setError] = useState({name: false})
+    
+    const [accesses, setAccesses] = useState(null);
+    const [users, setUsers] = useState(null);
+
+    const getAccesses = async() => {
+        var response = await accessClient.getAll(user.token, budget.id);
+        setAccesses(response.data.length > 0 ? response.data.map(a => a.userId) : [{}]);
+    }
+
+    const getUsers = async() => {
+        var response = await userClient.getAll(user.token);
+        setUsers(response.data.length > 0 ? response.data : [{}]);
+    }
 
     useEffect(() => {
         setInitialBudget(budget);
+        getAccesses();
+        getUsers();
     }, []);
 
     const submit = () => {
@@ -65,13 +84,64 @@ const BudgetDetails = () => {
         }
     }
 
+    const onCreateAccess = (userId) => {
+        const createAccess = async () => {
+            try {
+                await accessClient.create(user.token, budget.id, userId);
+                    notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description: "L'accès a été ajouté avec succès",
+                });
+
+                getAccesses();
+            }
+            catch (error){
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description: "Une erreur est survenue en ajoutant l'accès",
+                });
+            }
+        };
+
+        createAccess();
+    };
+
+    const onDeleteAccess = (userId) => {
+
+        const deleteAccess = async () => {
+            try {
+                await accessClient.delete(user.token, budget.id, userId);
+                notification.open({
+                message: "Succès",
+                icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                description:
+                  "L'accès a été supprimé avec succès",
+                });
+                
+                getAccesses();
+            }
+            catch (error){
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                    "Une erreur est survenue en supprimant l'accès",
+                    });
+            }
+        };
+
+        deleteAccess();
+    };
+
     return (
         <Fragment>
             <BudgetHeader />
             { budget && initialBudget &&
                 <Fragment>
                 <h1 className="logo">Détails</h1>
-                <Card className="budget-details-card">
+                <Card title={ <h2>Modifier le budget</h2> } className="budget-details-card">
                     <div className={error.name === false ? "form-section" : "form-section error"}>
                         <Input className="form-input" 
                             size="large" 
@@ -96,6 +166,26 @@ const BudgetDetails = () => {
                                 Modifier
                         </Button>
                     </div>
+                </Card>
+                <Card title={ <h2>Ajouter des accès en lecture</h2> }>
+                    {
+                        users && accesses &&
+                        <Select
+                            mode="multiple"
+                            placeholder="Please select"
+                            size="large" 
+                            dropdownMatchSelectWidth={false}
+                            defaultValue={accesses}
+                            onSelect={onCreateAccess}
+                            onDeselect={onDeleteAccess}>
+                            {
+                                users.map((option) => 
+                                    <Select.Option key={option.id} value={option.id}>
+                                        <h2>{option.username}</h2>
+                                    </Select.Option>)
+                            }
+                        </Select>
+                    }
                 </Card>
                 </Fragment>
             }
