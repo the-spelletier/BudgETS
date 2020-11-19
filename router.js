@@ -407,7 +407,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/members',
+        '/api/user/:userId/members',
         authMiddleware.verifyAuth,
         memberController.getAll
     );

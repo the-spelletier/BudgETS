@@ -21,12 +21,12 @@ const Members = () => {
 
     useEffect(() => {
         const getMembers = async() => {
-            var response = await memberClient.getAll(user.token, user.id);
+            var response = await memberClient.getAll(user.token, budget.userId);
             setMembers(response.data.length > 0 ? response.data : [{}]);
         }
 
         getMembers();
-    }, [createModalIsVisible]);
+    }, [budget, createModalIsVisible]);
 
     const onEditMember = (member) => {
         setCurrentMember(member.id);
@@ -116,7 +116,7 @@ const Members = () => {
     return (
         <Fragment>
             <BudgetHeader />
-        <h1 className="logo">Membres</h1>
+            <h1 className="logo">Membres</h1>
             {
                 members &&
                 <Fragment>
