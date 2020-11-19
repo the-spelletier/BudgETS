@@ -36,7 +36,7 @@ const BudgetDetails = () => {
 
     const getAccesses = async() => {
         var response = await accessClient.getAll(user.token, budget.id);
-        setAccesses(response.data.length > 0 ? response.data.map(a => a.userId) : [{}]);
+        setAccesses(response.data.length > 0 ? response.data.map(a => a.userId) : []);
     }
 
     const getUsers = async() => {
@@ -172,16 +172,22 @@ const BudgetDetails = () => {
                         users && accesses &&
                         <Select
                             mode="multiple"
-                            placeholder="Please select"
+                            placeholder="Accès en lecture"
                             size="large" 
+                            style={{ width: '100%' }}
                             dropdownMatchSelectWidth={false}
                             defaultValue={accesses}
                             onSelect={onCreateAccess}
-                            onDeselect={onDeleteAccess}>
+                            onDeselect={onDeleteAccess}
+                            filterOption={(input, option) =>  
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 
+                                || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            >
                             {
                                 users.map((option) => 
                                     <Select.Option key={option.id} value={option.id}>
-                                        <h2>{option.username}</h2>
+                                        {option.username}
                                     </Select.Option>)
                             }
                         </Select>
