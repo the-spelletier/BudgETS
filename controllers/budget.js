@@ -32,6 +32,7 @@ function get(req, res) {
             id: req.user.id,
             activeBudgetId: b.id
         }).then(() => {
+            b.edit = b.userId === req.user.id;
             sendBudget(b, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
