@@ -50,7 +50,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         budgetController.get
     );
@@ -72,7 +71,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/summary',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         budgetController.getSummary
     );
@@ -95,7 +93,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/budget/:budgetId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
         budgetController.update
     )
@@ -107,7 +104,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/budget/:budgetId/clone',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
         budgetController.clone
     );
@@ -132,7 +128,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/category/:categoryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasCategoryAccess],
         categoryController.get
     )
@@ -144,7 +139,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/category',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         categoryController.getAll
     );
@@ -156,7 +150,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/category/summary',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         categoryController.getSummary
     );
@@ -168,7 +161,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/category',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
         categoryController.create
     );
@@ -180,7 +172,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/category/:categoryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isCategoryOwner],
         categoryController.update
     );
@@ -192,7 +183,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/category/:categoryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isCategoryOwner],
         categoryController.deleteOne
     );
@@ -206,7 +196,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/category/cashflow/estimate',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         categoryController.getEstimateCashflows
     );
@@ -218,7 +207,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/category/cashflow/real',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         categoryController.getRealCashflows
     );
@@ -230,7 +218,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/cashflow',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isCategoryOwner],
         cashflowController.create
     );
@@ -242,10 +229,7 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/cashflow/:cashflowId',
-        // authMiddleware.verifyAuth,
-        // TODO create isCashflowOwner
-        // [authMiddleware.verifyAuth, accessMiddleware.isCashflowOwner],
-        [authMiddleware.verifyAuth],
+        [authMiddleware.verifyAuth, accessMiddleware.isCashflowOwner],
         cashflowController.update
     );
 
@@ -258,7 +242,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/line/:lineId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasLineAccess],
         lineController.get
     );
@@ -271,7 +254,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/category/:categoryId/line',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasCategoryAccess],
         lineController.getAll
     );
@@ -283,7 +265,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/line',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isCategoryOwner],
         lineController.create
     );
@@ -295,7 +276,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/line/:lineId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isLineOwner],
         lineController.update
     );
@@ -307,7 +287,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/line/:lineId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isLineOwner],
         lineController.deleteOne
     );
@@ -321,7 +300,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/entry/:entryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasEntryAccess],
         entryController.get
     );
@@ -333,7 +311,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.get(
         '/api/budget/:budgetId/entry',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.hasBudgetAccess],
         entryController.getAll
     );
@@ -345,7 +322,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.post(
         '/api/entry',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isLineOwner, accessMiddleware.isMemberOwner],
         entryController.create
     );
@@ -357,7 +333,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.put(
         '/api/entry/:entryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isEntryOwner, accessMiddleware.isLineOwner, accessMiddleware.isMemberOwner],
         entryController.update
     );
@@ -369,7 +344,6 @@ module.exports.set = app => {
     // Returns : Code 200 if user is authentified
     app.delete(
         '/api/entry/:entryId',
-        // authMiddleware.verifyAuth,
         [authMiddleware.verifyAuth, accessMiddleware.isEntryOwner],
         entryController.deleteOne
     );

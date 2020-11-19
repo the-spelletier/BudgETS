@@ -4,6 +4,7 @@ const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const entryService = require('../services/entry');
 const memberService = require('../services/member');
+const cashflowService = require('../services/cashflow');
 
 const validateBudget = (budgetId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
@@ -127,6 +128,26 @@ const validateMember = (memberId, req, res, next) => {
     });
 }
 
+const validateCashflow = (cashflowId, req, res, next, checkOwner) => {
+    // Obtenir le lineId à partir de l'entrée
+    return cashflowService.getCashflow({
+        id: cashflowId
+    }).then(cashflow => {
+        if (cashflow) {
+            req.cashflow = cashflow;
+            return validateCategory(cashflow.categoryId, req, res, next, checkOwner);
+        } else {
+            return res.status(404).send({
+                message: 'Invalid cashflow'
+            });
+        }
+    }).catch(err => {
+        return res.status(404).send({
+            message: 'An unexpected error occurred'
+        });
+    });
+}
+
 const hasBudgetAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de budget
     const budgetId = req.params.budgetId || req.body.budgetId;
@@ -203,6 +224,18 @@ const isMemberOwner = (req, res, next) => {
     return validateMember(memberId, req, res, next);
 };
 
+const isCashflowOwner = (req, res, next) => {
+    // Vérifier la présence de l'identifiant de cashflow
+    const cashflowId = req.params.cashflowId || req.body.cashflowId;
+    if (!req.user.id) {
+        return res.sendStatus(400);
+    } else if (typeof cashflowId === 'undefined') {
+        return next();
+    }
+
+    return validateCashflow(cashflowId, req, res, next, true);
+};
+
 module.exports = {
     hasBudgetAccess,
     isBudgetOwner,
@@ -212,5 +245,6 @@ module.exports = {
     isLineOwner,
     hasEntryAccess,
     isEntryOwner,
-    isMemberOwner
+    isMemberOwner,
+    isCashflowOwner
 };
