@@ -111,6 +111,7 @@ const Members = () => {
 
     return (
         <Fragment>
+            <BudgetHeader />
         <h1 className="logo">Membres</h1>
             {
                 members &&
