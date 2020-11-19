@@ -150,21 +150,24 @@ const BudgetDetails = () => {
                             size="large" 
                             value={budget.name}
                             placeholder="Nom du budget"
-                            onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }/>  
+                            onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }
+                            disabled={!budget.edit}/>  
                     </div>
                     <div className="form-section">
                         <RangePicker className="form-input" 
                             size="large" 
                             placeholder={["Date de début", "Date de fin"]}
                             value={[moment(budget.startDate), moment(budget.endDate)]}
-                            onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}/>
+                            onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}
+                            disabled={!budget.edit}/>
                     </div>
                     <div className="form-section submit">
                         <Button size="large"
                             type="primary"
                             disabled={budget.endDate == initialBudget.endDate 
                                 && budget.startDate == initialBudget.startDate 
-                                && budget.name == initialBudget.name}
+                                && budget.name == initialBudget.name
+                                && !budget.edit}
                             onClick={submit}>
                                 Modifier
                         </Button>
@@ -180,6 +183,7 @@ const BudgetDetails = () => {
                             style={{ width: '100%' }}
                             dropdownMatchSelectWidth={false}
                             value={accesses}
+                            disabled={!budget.edit}
                             onSelect={onCreateAccess}
                             onDeselect={onDeleteAccess}
                             filterOption={(input, option) =>  
