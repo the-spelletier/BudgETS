@@ -24,9 +24,18 @@ const getBudgetByID = id => {
 }
 
 // Retourne tous les budgets
-const getBudgets = budget => {
+const getBudgets = (budget, budgetIds) => {
     return Budget.findAll({ 
-        where: budget
+        where: {
+            [Op.or]: [
+                budget,
+                {
+                    id: {
+                        [Op.in]: [...budgetIds]
+                    }
+                }
+            ]
+        }
     });
 };
 
