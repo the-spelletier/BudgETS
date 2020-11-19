@@ -46,6 +46,9 @@ const BudgetDetails = () => {
 
     useEffect(() => {
         setInitialBudget(budget);
+    }, []);
+
+    useEffect(() => {
         getAccesses();
         getUsers();
     }, [budget]);
