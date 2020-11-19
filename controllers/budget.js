@@ -12,8 +12,8 @@ function getCurrent(req, res) {
         else {
             budgetService.getBudgets({
                 userId: req.user.id
-            }).then(budgets => {
-                sendBudget(budgets[0], res);
+            }, []).then(b => {
+                sendBudget(b[0], res);
             }).catch(err => {
                 res.status(403).send({ message: 'Validation error' });
             });

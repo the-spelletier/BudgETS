@@ -47,6 +47,21 @@ const updateUser = user => {
     });
 }
 
+// Mise à jour d'un utilisateur selon l'identificateur envoyé en paramètre
+const updateUserAfterAccess = (userId, budgetId) => {
+    return User.findOne({
+        where: {
+            id: userId
+        }
+    }).then(u => {
+        if (u && u.activeBudgetId == budgetId) {
+            u.activeBudgetId = null;
+            return u.save(); 
+        }
+        return u;
+    });
+}
+
 // Suppression d'un utilisateur selon l'identificateur envoyé en paramètre
 const deleteUser = user => {
     return User.destroy({ 
@@ -73,6 +88,7 @@ module.exports = {
     getUsers,
     addUser,
     updateUser,
+    updateUserAfterAccess,
     deleteUser,
     getUserActiveBudget
 };
