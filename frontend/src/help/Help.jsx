@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 
 const Help = () => {
     

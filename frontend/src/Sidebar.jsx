@@ -48,9 +48,6 @@ const Sidebar = () => {
                     </Menu.Item>
                 </Fragment>
             }
-            <Menu.Item key="/help">
-                <Link to="/help">Aide</Link>
-            </Menu.Item>
             <Menu.Item className="bottom login" key="/auth">
                 { !user.token && <Link to="/auth">Se connecter</Link> }
                 { user.token && <span className="logout" onClick={logout}>Se déconnecter</span> }
