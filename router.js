@@ -351,6 +351,17 @@ module.exports.set = app => {
     // ENTRY STATUS ENDPOINTS
 
     // STATUS : GET
+    // Get an entry status from specified Id
+    // Params : {statusId}
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/status/:statusId',
+        authMiddleware.verifyAuth,
+        entryStatusController.get
+    );
+
+    // STATUS : GET
     // Get all entry statuses
     // Params : {}
     // Requires user to be authentified
