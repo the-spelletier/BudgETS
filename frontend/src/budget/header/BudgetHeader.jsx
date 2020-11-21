@@ -67,15 +67,27 @@ const BudgetHeader = () => {
         <div className="header">
             {
                 budgets &&
-                <Select defaultValue={selectedBudgetId} size="large" onChange={(value) => setSelectedBudgetId(value)} dropdownMatchSelectWidth={false}>
-                    {budgets
-                    .sort(function(a, b){
-                        return a.startDate < b.startDate;
-                    }).map((option) => 
-                        <Option key={option.id} value={option.id}>
-                            <h2 className="budget-select-option">{option.shortName}</h2>
-                        </Option>
-                    )}
+                <Select 
+                    showSearch
+                    defaultValue={selectedBudgetId} 
+                    optionFilterProp="children"
+                    size="large" 
+                    style={{ width: '50%' }}
+                    onChange={(value) => setSelectedBudgetId(value)} 
+                    dropdownMatchSelectWidth={false}
+                    filterOption={(input, option) =>  
+                        option.children.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }>
+                    {
+                        budgets
+                        .sort(function(a, b){
+                            return a.startDate < b.startDate;
+                        }).map((option) => 
+                            <Option key={option.id} value={option.id}>
+                                <h2 className="budget-select-option">{option.shortName}</h2>
+                            </Option>
+                        )
+                    }
                 </Select>
             }
             <Button className="new-budget-button"

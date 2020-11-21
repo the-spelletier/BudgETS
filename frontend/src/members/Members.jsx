@@ -21,12 +21,12 @@ const Members = () => {
 
     useEffect(() => {
         const getMembers = async() => {
-            var response = await memberClient.getAll(user.token, user.id);
+            var response = await memberClient.getAll(user.token, budget.userId);
             setMembers(response.data.length > 0 ? response.data : [{}]);
         }
 
         getMembers();
-    }, [createModalIsVisible]);
+    }, [budget, createModalIsVisible]);
 
     const onEditMember = (member) => {
         setCurrentMember(member.id);
@@ -75,6 +75,7 @@ const Members = () => {
             title: "",
             width: 50,
             render: (member) => <EditMenu key={member.id} 
+                disabled={!budget.edit}
                 onEditClick={() => onEditMember(member)} 
                 onDeleteClick={() => onDeleteMember(member)} 
                 onDeleteMessage="Voulez-vous vraiment supprimer ce membre?"/>
@@ -104,14 +105,18 @@ const Members = () => {
     const renderMembers = (members, title, active) => {
         members = members.filter(mem => mem.active === active);
         return (members.length > 0 || active) && 
-                <Card title={ <h2>{title}</h2> } extra={active && <Button icon={<PlusOutlined/>} onClick={() => {onCreateMember()}}/> } >
+                <Card title={ <h2>{title}</h2> } 
+                    extra={active && <Button icon={<PlusOutlined/>} 
+                        disabled={!budget.edit} 
+                        onClick={() => {onCreateMember()}}/> } >
                     <Table columns={columns} dataSource={members} className="no-paging"/>
                 </Card>
     }
 
     return (
         <Fragment>
-        <h1 className="logo">Membres</h1>
+            <BudgetHeader />
+            <h1 className="logo">Membres</h1>
             {
                 members &&
                 <Fragment>

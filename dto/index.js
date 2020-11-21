@@ -36,6 +36,9 @@ const budgetDTO = (budget, b = {}) => {
   if (typeof budget.expense != 'undefined') {
     b.expense = budget.expense;
   }
+  if (typeof budget.edit != 'undefined') {
+    b.edit = budget.edit;
+  }
   return b;
 };
 
