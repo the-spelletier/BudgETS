@@ -10,7 +10,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    memberService.getMembers(req.user.id).then(members => {
+    memberService.getMembers(req.params.userId).then(members => {
         sendMember(members, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });

@@ -6,9 +6,9 @@ export class MemberClient {
         return await apiClient.get(`/member/${id}`, token);
     }
 
-    getAll = async (token) => {
+    getAll = async (token, userId) => {
         const apiClient = new ApiClient();
-        return await apiClient.get(`/members`, token);
+        return await apiClient.get(`user/${userId}/members`, token);
     }
 
     create = async (token, name, code, email, active, notify) => {

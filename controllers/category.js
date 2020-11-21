@@ -117,7 +117,8 @@ function sendCategory(category, res) {
 function sortCashflowsByCategory(cashflows) {
     let categories = [];
     cashflows.forEach((cat, i, arr) => {
-        let cashflowObj = {
+        let cashflowObj = !cat.month ? null : {
+            id: cat.cashflowId,
             month: cat.month,
             year: cat.year,
             real: cat.real,
@@ -129,9 +130,11 @@ function sortCashflowsByCategory(cashflows) {
                 id: cat.id,
                 name: cat.name,
                 type: cat.type,
-                Cashflows: [cashflowObj]
+                Cashflows: []
             });
-        } else {
+            index = categories.length - 1;
+        }
+        if (cashflowObj) {
             categories[index].Cashflows.push(cashflowObj);
         }
     });

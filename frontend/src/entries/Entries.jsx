@@ -87,7 +87,8 @@ const Entries = () => {
             render: (entry) => <EditMenu key={entry.id} 
                 onEditClick={() => onCreateOrEditEntry(entry.id)} 
                 onDeleteClick={() => onDeleteEntry(entry)} 
-                onDeleteMessage="Voulez-vous vraiment supprimer l'entrée?"/>
+                onDeleteMessage="Voulez-vous vraiment supprimer l'entrée?"
+                disabled={!budget.edit}/>
         },
         {
             title: "# Facture",
@@ -131,7 +132,7 @@ const Entries = () => {
             sorter: (a, b) => a.entryStatusName.localeCompare(b.entryStatusName)
         },
         {
-            title: <Button icon={<PlusOutlined/>} onClick={() => {setCreateModalIsVisible(true)}}/>,
+            title: <Button icon={<PlusOutlined/>} disabled={!budget.edit} onClick={() => {setCreateModalIsVisible(true)}}/>,
             width: 50
         }
     ];

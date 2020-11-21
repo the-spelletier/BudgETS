@@ -381,7 +381,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/members',
+        '/api/user/:userId/members',
         authMiddleware.verifyAuth,
         memberController.getAll
     );
@@ -420,6 +420,16 @@ module.exports.set = app => {
     );
 
     // USER ENDPOINTS
+
+    // USER : GET
+    // Create user
+    // Params : { username, password, isAdmin }
+    // Returns : Code 200 if user added successfully
+    app.get(
+        '/api/users',
+        [authMiddleware.verifyAuth],
+        userController.getAll
+    );
 
     // USER : POST
     // Create user
