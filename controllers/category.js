@@ -118,6 +118,7 @@ function sortCashflowsByCategory(cashflows) {
     let categories = [];
     cashflows.forEach((cat, i, arr) => {
         let cashflowObj = {
+            id: cat.cashflowId,
             month: cat.month,
             year: cat.year,
             real: cat.real,
