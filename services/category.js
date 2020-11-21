@@ -80,7 +80,7 @@ const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
 
     if (groupBy === 'revenue' || groupBy === 'expense') {
         options.attributes.unshift('type');
-        options.group.unshift('Category.type');
+        options.where.type = groupBy;
     } else {
         options.attributes.unshift('id', 'name', 'type');
         if (type === 'revenue' || type === 'expense') {
@@ -120,7 +120,7 @@ const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
 
     if (groupBy === 'revenue' || groupBy === 'expense') {
         options.attributes.unshift('type');
-        options.group.unshift('Category.type');
+        options.where.type = groupBy;
     } else {
         options.attributes.unshift('id', 'name', 'type');
         if (type === 'revenue' || type === 'expense') {
