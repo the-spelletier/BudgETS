@@ -61,14 +61,15 @@ const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
         attributes: [
             [sequelize.col('year'), 'year'], 
             [sequelize.col('month'), 'month'],
-            [sequelize.fn('SUM', sequelize.col('estimate')), 'estimate']
+            [sequelize.fn('SUM', sequelize.col('estimate')), 'estimate'],
+            [sequelize.col('Cashflows.id'), 'cashflowId']
         ],
         where: {
             budgetId: budgetId
         },
         include: {
+            attributes: [],
             model: Cashflow,
-            required: true,
         },
         group: [
             [sequelize.col('year'), 'year'], 
@@ -101,11 +102,9 @@ const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
         ],
         include: {
             model: Line,
-            required: true,
             attributes: [],
             include: {
                 model: Entry,
-                required: true,
                 attributes: []
             },
         },
