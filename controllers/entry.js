@@ -19,8 +19,7 @@ function getAll(req, res) {
 
 function create(req, res) {
     let entry = entryDTO(req.body);
-    // TODO add validation for member
-    if (entry.lineId && entry.amount && entry.date && entry.description) { 
+    if (entry.lineId && entry.date && entry.description && entry.entryStatusId && typeof entry.amount !== 'undefined') { 
         entryService.addEntry(entry).then(e => {
             res.status(201);
             sendEntry(e, res);
@@ -34,7 +33,7 @@ function create(req, res) {
 
 function update(req, res) {
     let entry = entryDTO(req.body);
-    if (req.params.entryId) {
+    if (req.params.entryId && req.body.lineId && typeof req.body.amount !== 'undefined' && req.body.date && req.body.memberId && typeof entry.description !== 'undefined' && entry.entryStatusId) {
         entry.id = req.params.entryId;
         entryService.updateEntry(entry).then(e => {
             sendEntry(e, res);

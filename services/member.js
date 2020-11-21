@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const { Member } = require('../models');
-const { memberDTO } = require('../dto');
 
 // Retourne un membre selon l'identificateur envoyé en paramètre
 const getMember = id => {
@@ -29,8 +28,7 @@ const updateMember = member => {
         }
     }).then(m => {
     	if (m) {
-	        memberDTO(member, m);
-	        return m.save();
+	        return m.update(member);
     	}
     });
 }

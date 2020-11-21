@@ -150,7 +150,9 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                title: <EditMenu onEditClick={() => {onEditCategory(category)}} 
+                    onDeleteClick={() => {onDeleteCategory(category)}} 
+                    onDeleteMessage="Voulez-vous vraiment supprimer la catégorie?"/>,
                 width: 50,
                 render: () => ""
             },
@@ -159,7 +161,9 @@ const Categories = () => {
                 align: 'left',
                 colSpan: 2,
                 width: 50,
-                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
+                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} 
+                    onDeleteClick={() => {onDeleteLine(line)}}
+                    onDeleteMessage="Voulez-vous vraiment supprimer la ligne?"/> )
             },
             {
                 title: "",

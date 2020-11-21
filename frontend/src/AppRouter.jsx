@@ -11,6 +11,8 @@ import Members from "./members/Members";
 import Summary from "./summary/Summary";
 import RevenuesOrExpenses from "./revenues-or-expenses/RevenuesOrExpenses";
 import Help from "./help/Help";
+import About from "./about/About";
+import EmptyState from "./EmptyState";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Cashflow from "./cashflow/Cashflow";
 
@@ -35,6 +37,7 @@ const AppRouter = () => {
             <ProtectedRoute path="/members"><Members /></ProtectedRoute>
             <Route path="/auth"><Auth /></Route>
             <Route path="/help"><Help /></Route>
+            <Route path="/about"><About /></Route>
         </Switch>
     );
 };

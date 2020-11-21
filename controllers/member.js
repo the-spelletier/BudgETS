@@ -3,8 +3,6 @@ const memberService = require('../services/member');
 
 function get(req, res) {
     memberService.getMember( req.params.memberId ).then(member => {
-        // TODO
-        member.userId = req.user.id;
         sendMember(member, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });

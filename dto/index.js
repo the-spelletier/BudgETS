@@ -182,7 +182,26 @@ const memberDTO = (member, m = {}) => {
   if (typeof member.email != 'undefined') {
     m.email = member.email;
   }
+  if (typeof member.active != 'undefined') {
+    m.active = member.active;
+  }
+  if (typeof member.notify != 'undefined') {
+    m.notify = member.notify;
+  }
   return m;
+};
+
+const entryStatusDTO = (status, s = {}) => {
+  if (typeof status.id != 'undefined') {
+    s.id = status.id;
+  }
+  if (typeof status.name != 'undefined') {
+    s.name = status.name;
+  }
+  if (typeof status.position != 'undefined') {
+    s.position = status.position;
+  }
+  return s;
 };
 
 const cashflowDTO = (cashflow, c = {}) => {
@@ -204,12 +223,24 @@ const cashflowDTO = (cashflow, c = {}) => {
   return c;
 }
 
+const accessDTO = (access, a = {}) => {
+  if (typeof access.budgetId != 'undefined') {
+    a.budgetId = access.budgetId;
+  }
+  if (typeof access.userId != 'undefined') {
+    a.userId = access.userId;
+  }
+  return a;
+}
+
 module.exports = {
   userDTO,
   budgetDTO,
   categoryDTO,
   lineDTO,
   entryDTO,
+  entryStatusDTO,
   memberDTO,
   cashflowDTO,
+  accessDTO,
 }

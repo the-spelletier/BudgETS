@@ -1,5 +1,4 @@
 const { Line } = require('../models');
-const { lineDTO } = require('../dto');
 
 // Retourne une ligne (tous les paramètres) selon l'identificateur envoyé en paramètre
 const getLine = line => {
@@ -30,8 +29,7 @@ const updateLine = line => {
         }
     }).then(l => {
     	if (l) {
-	        lineDTO(line, l);
-	        return l.save();
+            return l.update(line);
     	}
     });
 }

@@ -1,5 +1,4 @@
 const { Entry, EntryStatus, Line, Category, Member } = require('../models');
-const { entryDTO } = require('../dto');
 
 /**
  * [Retourne une entrée selon l'identificateur envoyé en paramètre]
@@ -72,8 +71,7 @@ const updateEntry = entry => {
         }
     }).then(e => {
         if (e) {
-            entryDTO(entry, e);
-            return e.save();
+            return e.update(entry);
         }
         return e;
     });
