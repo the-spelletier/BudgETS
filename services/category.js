@@ -102,11 +102,9 @@ const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
         ],
         include: {
             model: Line,
-            required: true,
             attributes: [],
             include: {
                 model: Entry,
-                required: true,
                 attributes: []
             },
         },
