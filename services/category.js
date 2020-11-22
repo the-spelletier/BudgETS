@@ -62,7 +62,6 @@ const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
             [sequelize.col('year'), 'year'], 
             [sequelize.col('month'), 'month'],
             [sequelize.fn('SUM', sequelize.col('estimate')), 'estimate'],
-            [sequelize.col('Cashflows.id'), 'cashflowId']
         ],
         where: {
             budgetId: budgetId
@@ -80,9 +79,9 @@ const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
 
     if (groupBy === 'revenue' || groupBy === 'expense') {
         options.attributes.unshift('type');
-        options.group.unshift('Category.type');
+        options.where.type = groupBy;
     } else {
-        options.attributes.unshift('id', 'name', 'type');
+        options.attributes.unshift('id', 'name', 'type', [sequelize.col('Cashflows.id'), 'cashflowId']);
         if (type === 'revenue' || type === 'expense') {
             options.where.type = type;
         }
@@ -120,7 +119,7 @@ const getCategoriesRealCashflows = (budgetId, type = '', groupBy = '') => {
 
     if (groupBy === 'revenue' || groupBy === 'expense') {
         options.attributes.unshift('type');
-        options.group.unshift('Category.type');
+        options.where.type = groupBy;
     } else {
         options.attributes.unshift('id', 'name', 'type');
         if (type === 'revenue' || type === 'expense') {
