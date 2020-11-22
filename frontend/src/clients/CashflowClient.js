@@ -1,9 +1,14 @@
 import { ApiClient } from "./ApiClient";
 
 export class CashflowClient {
-    get = async (token, budgetId, type) => {
+    get = async (token, budgetId, type, categoryType) => {
         const apiClient = new ApiClient();
-        return await apiClient.get(`/budget/${budgetId}/category/cashflow/${type}`, token);        
+        return await apiClient.get(`/budget/${budgetId}/category/cashflow/${type}?type=${categoryType}`, token);        
+    }
+
+    getGrouped = async (token, budgetId, type, categoryType) => {
+        const apiClient = new ApiClient();
+        return await apiClient.get(`/budget/${budgetId}/category/cashflow/${type}?groupBy=${categoryType}`, token);        
     }
 
     create = async (token, year, month, estimate, categoryId) => {

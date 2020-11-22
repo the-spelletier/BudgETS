@@ -23,8 +23,6 @@ const CreateOrEditCashflow = ({visible, onCancel, initialCashflow}) => {
                 estimate: initialCashflow.estimate
             });
         }
-
-        console.log(initialCashflow);
     }, [initialCashflow]);
 
     const cancel = () => {
