@@ -46,6 +46,9 @@ const Sidebar = () => {
                     <Menu.Item key="/members">
                         <Link to="/members">Membres</Link>
                     </Menu.Item>
+                    <Menu.Item key="/statuses">
+                        <Link to="/statuses">Statuts</Link>
+                    </Menu.Item>
                 </Fragment>
             }
             <Menu.Item className="bottom login" key="/auth">
