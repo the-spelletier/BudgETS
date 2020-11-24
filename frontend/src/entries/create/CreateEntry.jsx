@@ -51,7 +51,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         };
 
         const fetchMembers = async() => {
-            var response = await memberClient.getAll(user.token);
+            var response = await memberClient.getAll(user.token, budget.userId);
             var members = response.data.sort( function(a, b){
                 return a.name > b.name;
             }).sort( function(a, b){
