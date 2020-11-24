@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import {XYPlot, XAxis, YAxis, LineSeries} from 'react-vis';
+import {XYPlot, XAxis, YAxis, VerticalBarSeries} from 'react-vis';
 import DiscreteColorLegend from 'react-vis/dist/legends/discrete-color-legend';
 
 import UserContext from "../contexts/user/UserContext";
@@ -98,8 +98,8 @@ const CashflowChart = ({type, isActive}) => {
                                 attrAxis="x"
                                 orientation="left"
                             />
-                            <LineSeries data={formattedData[0]} color={Colors[0]}/>
-                            <LineSeries data={formattedData[1]} color={Colors[2]}/>
+                            <VerticalBarSeries data={formattedData[0]} color={Colors[0]}/>
+                            <VerticalBarSeries data={formattedData[1]} color={Colors[2]}/>
                         </XYPlot>
                         <DiscreteColorLegend
                             height={100}
