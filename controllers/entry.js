@@ -33,8 +33,9 @@ function create(req, res) {
 
 function update(req, res) {
     let entry = entryDTO(req.body);
-    if (req.params.entryId && req.body.lineId && typeof req.body.amount !== 'undefined' && req.body.date && req.body.memberId && typeof entry.description !== 'undefined' && entry.entryStatusId) {
+    if (req.params.entryId && req.body.lineId && typeof req.body.amount !== 'undefined' && req.body.date && typeof entry.description !== 'undefined' && entry.entryStatusId) {
         entry.id = req.params.entryId;
+        entry.memberId = req.body.memberId || null;
         entryService.updateEntry(entry).then(e => {
             sendEntry(e, res);
         }).catch(err => {
