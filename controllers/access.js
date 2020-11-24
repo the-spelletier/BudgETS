@@ -1,5 +1,6 @@
 const { accessDTO } = require('../dto');
 const accessService = require('../services/access');
+const userService = require('../services/user');
 
 function getAllByBudget(req, res) {
     accessService.getAccesses({
@@ -39,15 +40,19 @@ function create(req, res) {
 
 function deleteOne(req, res) {
     if (req.params.budgetId && req.params.userId) {
-        accessService.deleteAccess({
-            budgetId: req.params.budgetId,
-            userId: req.params.userId,
-        }).then(result => {
-            if (result) {
-                res.sendStatus(204);
-            } else {
-                res.status(404).send({ message: "Access Not Found" });
-            }
+        userService.updateUserAfterAccess(req.params.userId, req.params.budgetId).then(u => {
+            accessService.deleteAccess({
+                budgetId: req.params.budgetId,
+                userId: u.id,
+            }).then(result => {
+                if (result) {
+                    res.sendStatus(204);
+                } else {
+                    res.status(404).send({ message: "Access Not Found" });
+                }
+            }).catch(err => {
+                res.status(403).send({ message: 'Validation error' });
+            });
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
         });

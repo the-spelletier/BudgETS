@@ -12,8 +12,8 @@ function getCurrent(req, res) {
         else {
             budgetService.getBudgets({
                 userId: req.user.id
-            }).then(budgets => {
-                sendBudget(budgets[0], res);
+            }, []).then(b => {
+                sendBudget(b[0], res);
             }).catch(err => {
                 res.status(403).send({ message: 'Validation error' });
             });
@@ -32,6 +32,7 @@ function get(req, res) {
             id: req.user.id,
             activeBudgetId: b.id
         }).then(() => {
+            b.edit = b.userId === req.user.id;
             sendBudget(b, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });

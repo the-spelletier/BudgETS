@@ -13,6 +13,7 @@ function get(req, res) {
 
 function getAll(req, res) {
     userService.getUsers().then(users => {
+        users = users.filter(u => u.id != req.user.id);
         sendUser(users, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
