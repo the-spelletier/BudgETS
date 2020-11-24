@@ -13,6 +13,7 @@ const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const entryService = require('../services/entry');
 const lineService = require('../services/line');
+const cashflowService = require('../services/cashflow');
 
 const originalAuth = auth.verifyAuth;
 const stubAuth = sinon.stub(auth, 'verifyAuth');
@@ -32,6 +33,9 @@ const stubGetEntry = sinon.stub(entryService, 'getEntry');
 const originalGetLine = lineService.getLine;
 const stubGetLine = sinon.stub(lineService, 'getLine');
 
+const originalGetCashflow = cashflowService.getCashflow;
+const stubGetCashflow = sinon.stub(cashflowService, 'getCashflow');
+
 const app = require('../app.js');
 
 describe('0.0 - Backend', () => {
@@ -42,6 +46,7 @@ describe('0.0 - Backend', () => {
         categoryService.getCategory.callsFake(originalGetCategory);
         entryService.getEntry.callsFake(originalGetEntry);
         lineService.getLine.callsFake(originalGetLine);
+        cashflowService.getCashflow.callsFake(originalGetCashflow);
     });
 
     describe('0.1 - Routes', () => {
@@ -1307,6 +1312,170 @@ describe('0.0 - Backend', () => {
 
                 request(app)
                     .get('/testIsEntryOwner')
+                    .expect(200, done);
+            });
+        });
+
+        describe('Validate Cashflow', () => {
+            beforeEach(() => {
+                // Stub the verifyAuth
+                auth.verifyAuth.callsFake((req, res, next) => {
+                    req.user = { id: 1 };
+                    req.params = {
+                        budgetId: 1,
+                        categoryId: 1,
+                        cashflowId: 1
+                    };
+                    next();
+                });
+
+                // Stub the getBudget
+                budgetService.getBudget.callsFake(budget => {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            userId: 1
+                        });
+                    });
+                });
+
+                // Stub the getCategory
+                categoryService.getCategory.callsFake(category => {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            id: 1
+                        });
+                    });
+                });
+
+                app.get(
+                    '/testValidateCashflow',
+                    [auth.verifyAuth, accessMiddleware.isCashflowOwner],
+                    function (req, res) {
+                        res.status(200);
+                        res.send();
+                    }
+                );
+            });
+
+            test('003033 - Validate Cashflow - Get Cashflow fails', (done) => {
+                // Stub the getCashflow
+                cashflowService.getCashflow.callsFake(cashflow => {
+                    return new Promise((resolve, reject) => {
+                        reject();
+                    });
+                });
+    
+                request(app)
+                    .get('/testValidateCashflow')
+                    .expect(404, done);
+            });
+
+            test('003034 - Validate Cashflow - No cashflow returned', (done) => {
+                // Stub the getCashflow
+                cashflowService.getCashflow.callsFake(cashflow => {
+                    return new Promise((resolve, reject) => {
+                        resolve();
+                    });
+                });
+    
+                request(app)
+                    .get('/testValidateCashflow')
+                    .expect(404, done);
+            });
+
+            test('003035 - Validate Cashflow - Good cashflow', (done) => {
+                // Stub the getCashflow
+                cashflowService.getCashflow.callsFake(cashflow => {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            id: 1
+                        });
+                    });
+                });
+    
+                request(app)
+                    .get('/testValidateCashflow')
+                    .expect(200, done);
+            });
+        });
+
+        describe('Is Cashflow Owner', () => {
+            beforeEach(() => {
+                // Stub the getBudget
+                budgetService.getBudget.callsFake(budget => {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            userId: 1
+                        });
+                    });
+                });
+
+                // Stub the getCategory
+                categoryService.getCategory.callsFake(category => {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            id: 1
+                        });
+                    });
+                });
+
+                app.get(
+                    '/testCashflowOwner',
+                    [auth.verifyAuth, accessMiddleware.isCashflowOwner],
+                    function (req, res) {
+                        res.status(200);
+                        res.send();
+                    }
+                );
+            });
+
+            test('003036 - Is Cashflow Owner - No user Id', (done) => {
+                // Stub the verifyAuth
+                auth.verifyAuth.callsFake((req, res, next) => {
+                    req.user = { test: 1 };
+                    req.params = {
+                        budgetId: 1,
+                        categoryId: 1,
+                        cashflowId: 1
+                    };
+                    next();
+                });
+
+                request(app)
+                    .get('/testCashflowOwner')
+                    .expect(400, done);
+            });
+
+            test('003037 - Is Cashflow Owner - No Cashflow id', (done) => {
+                // Stub the verifyAuth
+                auth.verifyAuth.callsFake((req, res, next) => {
+                    req.user = { id: 1 };
+                    req.params = {
+                        budgetId: 1,
+                        categoryId: 1
+                    };
+                    next();
+                });
+
+                request(app)
+                    .get('/testCashflowOwner')
+                    .expect(200, done);
+            });
+
+            test('003038 - Is Cashflow Owner - Good credentials', (done) => {
+                // Stub the verifyAuth
+                auth.verifyAuth.callsFake((req, res, next) => {
+                    req.user = { id: 1 };
+                    req.params = {
+                        budgetId: 1,
+                        categoryId: 1,
+                        cashflowId: 1
+                    };
+                    next();
+                });
+
+                request(app)
+                    .get('/testCashflowOwner')
                     .expect(200, done);
             });
         });
