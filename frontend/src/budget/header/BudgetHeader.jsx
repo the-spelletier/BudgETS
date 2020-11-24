@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, { Fragment, useEffect, useState, useContext} from "react";
 import { Link } from 'react-router-dom';
-import { Select, Button, notification } from "antd";
-import { PlusOutlined, CloseCircleTwoTone, CopyOutlined } from '@ant-design/icons';
+import { Select, Button, notification, Modal, Radio } from "antd";
+import { PlusOutlined, CloseCircleTwoTone, CopyOutlined, DownloadOutlined } from '@ant-design/icons';
 
 import { BudgetClient } from "../../clients/BudgetClient";
 
@@ -17,8 +17,12 @@ const BudgetHeader = () => {
     const {user} = useContext(UserContext);
     const {budget, setCurrentBudget} = useContext(BudgetContext);
 
+    const FORMATS = {EXCEL : 0, PDF: 1};
+
     const [budgets, setBudgets] = useState(null);
     const [selectedBudgetId, setSelectedBudgetId] = useState(budget.id);
+    const [downloadFormat, setDownloadFormat] = useState(FORMATS.EXCEL);
+    const [downloadModalVisible, setDownloadModalVisible] = useState(null);
    
     useEffect(() => {
         const listBudgets = async() => {
@@ -62,11 +66,31 @@ const BudgetHeader = () => {
         }
     }, [selectedBudgetId]);
 
+    const download = () => {
+        const downloadFromServer = async() => {
+            //Cool logic here
+        };
+
+        alert('Pas implémenté!');
+        setDownloadModalVisible(false);
+        setDownloadFormat(FORMATS.EXCEL);
+    }
 
     return (
         <div className="header">
             {
                 budgets &&
+                <Fragment>
+                <Modal
+                    title="Veuillez choisir le format du téléchargement"
+                    visible={downloadModalVisible}
+                    onOk={download}
+                    onCancel={() => setDownloadModalVisible(false)}>
+                    <Radio.Group onChange={(event) => setDownloadFormat(event.target.value)} value={downloadFormat}>
+                        <Radio value={FORMATS.EXCEL}>Excel</Radio>
+                        <Radio value={FORMATS.PDF}>Pdf</Radio>
+                    </Radio.Group>
+                </Modal>
                 <Select 
                     showSearch
                     defaultValue={selectedBudgetId} 
@@ -89,6 +113,14 @@ const BudgetHeader = () => {
                         )
                     }
                 </Select>
+                    <Button
+                        className="download-button"
+                        size="large" 
+                        type="primary" 
+                        onClick={() => setDownloadModalVisible(true)}>
+                            <DownloadOutlined />
+                    </Button>
+                </Fragment>
             }
             <Button className="new-budget-button"
                 size="large" 
