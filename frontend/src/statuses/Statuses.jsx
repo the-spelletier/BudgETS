@@ -80,7 +80,8 @@ const Statuses = () => {
                 onDeleteMessage="Voulez-vous vraiment supprimer ce statut?"/>
         },
         {
-            title: "Numéro",
+            title: "Ordre",
+            width: 100,
             render: (status) => status.position,
             defaultSortOrder: 'ascend',
             sorter: (a, b) => a.position - b.position
@@ -89,19 +90,23 @@ const Statuses = () => {
             title: "Nom",
             render: (status) => status.name,
             sorter: (a, b) => a.name.localeCompare(b.name)
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateStatus()}}/>,
+            width: 50,
+            render:() => ""
         }
     ]
 
     return (
         <Fragment>
-        <h1 className="logo">Statuts</h1>
+            <BudgetHeader/>    
+            <h1 className="logo">Statuts</h1>
             {
                 statuses &&
                 <Fragment>
                     <CreateStatus statusId={currentStatusId} visible={createModalIsVisible} onCancelParent={onCreateOrEditStatusModalCancel} />
-                    <Card extra={ <Button icon={<PlusOutlined/>} onClick={() => {onCreateStatus()}}/> } >
-                        <Table columns={columns} dataSource={statuses} className="no-paging"/>
-                    </Card>
+                    <Table columns={columns} dataSource={statuses} className="no-paging"/>
                 </Fragment>
             }
         </Fragment>
