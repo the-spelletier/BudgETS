@@ -351,6 +351,17 @@ module.exports.set = app => {
     // ENTRY STATUS ENDPOINTS
 
     // STATUS : GET
+    // Get an entry status from specified Id
+    // Params : {statusId}
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/status/:statusId',
+        authMiddleware.verifyAuth,
+        entryStatusController.get
+    );
+
+    // STATUS : GET
     // Get all entry statuses
     // Params : {}
     // Requires user to be authentified
@@ -359,6 +370,39 @@ module.exports.set = app => {
         '/api/status',
         authMiddleware.verifyAuth,
         entryStatusController.getAll
+    );
+
+    // STATUS : POST
+    // Create an entry status
+    // Params : { name, position }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.post(
+        '/api/status',
+        authMiddleware.verifyAuth,
+        entryStatusController.create
+    );
+
+    // STATUS : PUT
+    // Updates an entry status
+    // Params : { statusId, name, position }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.put(
+        '/api/status/:statusId',
+        authMiddleware.verifyAuth,
+        entryStatusController.update
+    );
+
+    // STATUS : DELETE
+    // Deletes an entry status
+    // Params : { statusId }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.delete(
+        '/api/status/:statusId',
+        authMiddleware.verifyAuth,
+        entryStatusController.deleteOne
     );
 
     // USER MEMBER ENDPOINTS
