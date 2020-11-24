@@ -203,6 +203,9 @@ const entryStatusDTO = (status, s = {}) => {
   }
   if (typeof status.position != 'undefined') {
     s.position = status.position;
+    if (typeof status.name != 'undefined') {
+      s.displayName = status.position + " - " + status.name;
+    }
   }
   return s;
 };

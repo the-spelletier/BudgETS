@@ -62,7 +62,9 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
 
         const fetchStatuses = async() => {
             var response = await entryStatusClient.getAll(user.token);
-            setStatuses(response.data);
+            setStatuses(response.data.sort( function(a, b){
+                return a.position > b.position;
+            }));
         }
 
         if(visible){
@@ -251,7 +253,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             value={entry.entryStatusId} 
                             onChange={(id) => setEntry({...entry, entryStatusId: id})}>
                             {
-                                statuses.map((status) => <Option key={status.id} value={status.id}>{status.name}</Option>) 
+                                statuses.map((status) => <Option key={status.id} value={status.id}>{status.displayName}</Option>) 
                             }
                         </Select>
                     </div>
