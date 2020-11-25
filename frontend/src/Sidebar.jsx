@@ -43,14 +43,17 @@ const Sidebar = () => {
                     <Menu.Item key="/budget/entries">
                         <Link to="/budget/entries">Entrées budgétaires</Link>
                     </Menu.Item>
-                    <Menu.Item key="/members">
-                        <Link to="/members">Membres</Link>
+                    <Menu.Item key="/budget/cashflows">
+                        <Link to="/budget/cashflows">Cashflows</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/budget/members">
+                        <Link to="/budget/members">Membres</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/statuses">
+                        <Link to="/statuses">Statuts</Link>
                     </Menu.Item>
                 </Fragment>
             }
-            <Menu.Item key="/help">
-                <Link to="/help">Aide</Link>
-            </Menu.Item>
             <Menu.Item className="bottom login" key="/auth">
                 { !user.token && <Link to="/auth">Se connecter</Link> }
                 { user.token && <span className="logout" onClick={logout}>Se déconnecter</span> }

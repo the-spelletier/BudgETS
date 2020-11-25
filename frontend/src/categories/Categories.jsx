@@ -150,7 +150,10 @@ const Categories = () => {
 
         return [
             {
-                title: <EditMenu onEditClick={() => {onEditCategory(category)}} onDeleteClick={() => {onDeleteCategory(category)}}/>,
+                title: <EditMenu onEditClick={() => {onEditCategory(category)}} 
+                    onDeleteClick={() => {onDeleteCategory(category)}} 
+                    onDeleteMessage="Voulez-vous vraiment supprimer la catégorie?"
+                    disabled={!budget.edit}/>,
                 width: 50,
                 render: () => ""
             },
@@ -159,7 +162,10 @@ const Categories = () => {
                 align: 'left',
                 colSpan: 2,
                 width: 50,
-                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} onDeleteClick={() => {onDeleteLine(line)}}/> )
+                render: (line) =>(<EditMenu onEditClick={() => {onEditLine(category.id, line)}} 
+                    onDeleteClick={() => {onDeleteLine(line)}}
+                    onDeleteMessage="Voulez-vous vraiment supprimer la ligne?"
+                    disabled={!budget.edit}/> )
             },
             {
                 title: "",
@@ -188,7 +194,7 @@ const Categories = () => {
                     "( " + Number(line.estimate).toFixed(2) + " )"
             },
             {
-                title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateLine(category.id)}}/>,
+                title: <Button icon={<PlusOutlined/>} disabled={!budget.edit} onClick={() => {onCreateLine(category.id)}}/>,
                 width: 50,
                 render:() => ""
             }
@@ -199,7 +205,7 @@ const Categories = () => {
 
     const renderCategories = (categories, type, title) => {
         return <Card title={ <h2>{title}</h2> } 
-            extra={<Button icon={<PlusOutlined/>} onClick={() => {onCreateCategory(type)}}/>}>
+            extra={<Button icon={<PlusOutlined/>} disabled={!budget.edit} onClick={() => {onCreateCategory(type)}}/>}>
                     {
                     categories
                     .filter(cat => cat.type === type)

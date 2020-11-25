@@ -1,21 +1,24 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 
-import { Popover, Button } from "antd";
+import { Popover, Button, Popconfirm } from "antd";
 
-import { SettingOutlined, DeleteOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
+import { SettingOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-const EditMenu = ({onEditClick, onDeleteClick}) => {
+const EditMenu = ({onEditClick, onDeleteClick, onDeleteMessage, disabled}) => {
 
     const popoverContent = (
         <Fragment>
-            <Button icon={<EditOutlined/>} onClick={onEditClick}/>
-            <Button icon={<DeleteOutlined/>} onClick={onDeleteClick}/>
+            <Button icon={<EditOutlined/>} disabled={disabled} onClick={onEditClick}/>
+            <Popconfirm disabled={disabled} title={onDeleteMessage} okText="Oui" cancelText="Non" onConfirm={onDeleteClick}>
+                <Button icon={<DeleteOutlined/>} disabled={disabled}/>
+            </Popconfirm>
         </Fragment>
     );
 
     return (
-        <Popover content={popoverContent} placement="left" trigger="click">
-            <Button shape="circle" 
+        <Popover disabled={disabled} content={popoverContent} placement="left" trigger="click">
+            <Button disabled={disabled}
+                shape="circle" 
                 icon={<SettingOutlined />} 
                 onClick={() => ""} />
         </Popover>

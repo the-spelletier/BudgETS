@@ -32,7 +32,19 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
+        },
+        sms: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        notify : {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        active : {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
         },
         userId: {
             type: DataTypes.UUID,

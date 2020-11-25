@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const { Budget, Category, Line } = require('../models');
-const { budgetDTO } = require('../dto');
 
 // Retourne un budget selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
@@ -25,9 +24,18 @@ const getBudgetByID = id => {
 }
 
 // Retourne tous les budgets
-const getBudgets = budget => {
+const getBudgets = (budget, budgetIds) => {
     return Budget.findAll({ 
-        where: budget
+        where: {
+            [Op.or]: [
+                budget,
+                {
+                    id: {
+                        [Op.in]: [...budgetIds]
+                    }
+                }
+            ]
+        }
     });
 };
 
@@ -98,8 +106,7 @@ const updateBudget = budget => {
             if (startDate.getTime() > endDate.getTime()) {
                 throw new Error('Invalid date');
             }
-            budgetDTO(budget, b);
-            return b.save();
+            return b.update(budget);
         }
         return b;
     });

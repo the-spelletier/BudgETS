@@ -51,7 +51,7 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
                         width={300}
                         items={[
                             { title: 'Dépenses', color: Colors[0], stroke: '#fff', strokeWidth: '2' },
-                            { title: 'Revenus', color: Colors[0], stroke: '#fff', strokeWidth: '2' }
+                            { title: 'Revenus', color: Colors[1], stroke: '#fff', strokeWidth: '2' }
                         ]}
                     />
                 </div>

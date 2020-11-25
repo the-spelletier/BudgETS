@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import moment from "moment";
-import {Modal, notification, Input, DatePicker, InputNumber, Select} from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import {Modal, notification, Input, DatePicker, InputNumber, Select, Tooltip} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, WarningOutlined } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import BudgetContext from "../../contexts/budget/BudgetContext";
 import { CategoryClient } from "../../clients/CategoryClient";
@@ -9,6 +9,7 @@ import { LineClient } from "../../clients/LineClient";
 import { MemberClient } from "../../clients/MemberClient";
 import TextArea from "antd/lib/input/TextArea";
 import { EntryClient } from "../../clients/EntryClient";
+import { EntryStatusClient } from "../../clients/EntryStatusClient";
 
 const { Option } = Select;
 
@@ -17,6 +18,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const lineClient = new LineClient();
     const entryClient = new EntryClient();
     const memberClient = new MemberClient();
+    const entryStatusClient = new EntryStatusClient();
 
     const {user} = useContext(UserContext);
     const {budget} = useContext(BudgetContext);
@@ -24,9 +26,10 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const [entry, setEntry] = useState({categoryId : null});
     const [error, setError] = useState({name: false});
     
-    const [statuses, setStatuses] = useState([{id: 1, name: "Envoyé"}]);
     const [categories, setCategories] = useState(null);
     const [members, setMembers] = useState(null);
+    const [statuses, setStatuses] = useState(null);
+    
     //Get according to selected category
     const [lines, setLines] = useState(null);
     // Wether entry.lineId should change when entry.categoryId changes
@@ -48,17 +51,24 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         };
 
         const fetchMembers = async() => {
-            var response = await memberClient.getAll(user.token);
-            setMembers(response.data);
+            var response = await memberClient.getAll(user.token, budget.userId);
+            var members = response.data.sort( function(a, b){
+                return a.name > b.name;
+            }).sort( function(a, b){
+                return a.active < b.active;
+            });
+            setMembers(members);
         };
 
         const fetchStatuses = async() => {
-            // TODO : get all statuses into const statuses
+            var response = await entryStatusClient.getAll(user.token);
+            setStatuses(response.data);
         }
 
         if(visible){
             fetchCategories();
             fetchMembers();
+            fetchStatuses();
 
             if(entryId){
                 getEntry();
@@ -101,7 +111,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         const save = async () => {
             try {
                 await entryClient.create(user.token, entry.lineId, entry.description, 
-                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1, entry.memberId);
+                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, entry.entryStatusId, entry.memberId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -127,7 +137,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         const save = async () => {
             try {
                 await entryClient.update(user.token, entry.id, entry.lineId, entry.description, 
-                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, 1, entry.memberId);
+                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, entry.entryStatusId, entry.memberId);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -217,10 +227,15 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     <div className="form-section">
                         <div className="label">Montant: </div>
                         <InputNumber size="large"
-                            min={0}
                             placeholder="Montant"
                             value={entry.amount}
                             onChange={(value) => setEntry({...entry, amount: value})} />
+                        {
+                            entry.amount < 0 &&
+                            <Tooltip placement="topLeft" title="Un montant négatif représente un remboursement de dépense/revenu. Entrez un montant positif pour une dépense/revenu normal.">
+                                <WarningOutlined className="input-tootip" />
+                            </Tooltip>
+                        }
                     </div>
                     <div className="form-section">
                         <div className="label">Date: </div>
@@ -231,7 +246,10 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                     </div>
                     <div className="form-section">
                         <div className="label">Statut: </div>
-                        <Select value={1} dropdownMatchSelectWidth={false}>
+                        <Select placeholder="Statut"
+                            dropdownMatchSelectWidth={false}
+                            value={entry.entryStatusId} 
+                            onChange={(id) => setEntry({...entry, entryStatusId: id})}>
                             {
                                 statuses.map((status) => <Option key={status.id} value={status.id}>{status.name}</Option>) 
                             }

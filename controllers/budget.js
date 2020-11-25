@@ -3,6 +3,7 @@ const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const userService = require('../services/user');
+const accessService = require('../services/access');
 
 function getCurrent(req, res) {
     userService.getUserActiveBudget(req.user.id).then(user => {
@@ -11,8 +12,8 @@ function getCurrent(req, res) {
         else {
             budgetService.getBudgets({
                 userId: req.user.id
-            }).then(budgets => {
-                sendBudget(budgets[0], res);
+            }, []).then(b => {
+                sendBudget(b[0], res);
             }).catch(err => {
                 res.status(403).send({ message: 'Validation error' });
             });
@@ -31,6 +32,7 @@ function get(req, res) {
             id: req.user.id,
             activeBudgetId: b.id
         }).then(() => {
+            b.edit = b.userId === req.user.id;
             sendBudget(b, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
@@ -41,10 +43,12 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    budgetService.getBudgets({
-        userId: req.user.id
-    }).then(budgets => {
-        sendBudget(budgets, res);
+    accessService.getAccesses({ userId: req.user.id}).then(accesses => {
+        budgetService.getBudgets({ userId: req.user.id }, accesses.map(a => a.budgetId)).then(budgets => {
+            sendBudget(budgets, res);
+        }).catch(err => {
+            res.status(403).send({ message: 'Validation error' });
+        });
     }).catch(err => {
         res.status(403).send({ message: 'Validation error' });
     });

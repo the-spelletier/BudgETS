@@ -3,6 +3,8 @@ const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const entryService = require('../services/entry');
+const memberService = require('../services/member');
+const cashflowService = require('../services/cashflow');
 
 const validateBudget = (budgetId, req, res, next, checkOwner) => {
     // Obtenir le budgetId à partir de la catégorie
@@ -49,6 +51,7 @@ const validateCategory = (categoryId, req, res, next, checkOwner) => {
         id: categoryId
     }).then(category => {
         if (category) {
+            req.category = category;
             return validateBudget(category.budgetId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
@@ -64,10 +67,11 @@ const validateCategory = (categoryId, req, res, next, checkOwner) => {
 
 const validateLine = (lineId, req, res, next, checkOwner) => {
     // Obtenir le categoryId à partir de la ligne
-    lineService.getLine({
+    return lineService.getLine({
         id: lineId
     }).then(line => {
         if (line) {
+            req.line = line;
             return validateCategory(line.categoryId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
@@ -83,10 +87,11 @@ const validateLine = (lineId, req, res, next, checkOwner) => {
 
 const validateEntry = (entryId, req, res, next, checkOwner) => {
     // Obtenir le lineId à partir de l'entrée
-    entryService.getEntry({
+    return entryService.getEntry({
         id: entryId
     }).then(entry => {
         if (entry) {
+            req.entry = entry;
             return validateLine(entry.lineId, req, res, next, checkOwner);
         } else {
             return res.status(404).send({
@@ -100,11 +105,56 @@ const validateEntry = (entryId, req, res, next, checkOwner) => {
     });
 }
 
+const validateMember = (memberId, req, res, next) => {
+    return memberService.getMember(memberId).then(member => {
+        if (member) {
+            if (member.userId === req.user.id) {
+                req.member = member;
+                return next();
+            } else {
+                return res.status(403).send({
+                    message: 'Invalid access'
+                });
+            }
+        } else {
+            return res.status(404).send({
+                message: 'Invalid member'
+            });
+        }
+    }).catch(err => {
+        return res.status(404).send({
+            message: 'An unexpected error occurred'
+        });
+    });
+}
+
+const validateCashflow = (cashflowId, req, res, next, checkOwner) => {
+    // Obtenir le lineId à partir de l'entrée
+    return cashflowService.getCashflow({
+        id: cashflowId
+    }).then(cashflow => {
+        if (cashflow) {
+            req.cashflow = cashflow;
+            return validateCategory(cashflow.categoryId, req, res, next, checkOwner);
+        } else {
+            return res.status(404).send({
+                message: 'Invalid cashflow'
+            });
+        }
+    }).catch(err => {
+        return res.status(404).send({
+            message: 'An unexpected error occurred'
+        });
+    });
+}
+
 const hasBudgetAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de budget
     const budgetId = req.params.budgetId || req.body.budgetId;
-    if (!req.user.id || typeof budgetId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof budgetId === 'undefined') {
+        return next();
     }
 
     return validateBudget(budgetId, req, res, next, checkOwner);
@@ -117,8 +167,10 @@ const isBudgetOwner = (req, res, next) => {
 const hasCategoryAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de catégorie
     const categoryId = req.params.categoryId || req.body.categoryId;
-    if (!req.user.id || typeof categoryId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof categoryId === 'undefined') {
+        return next();
     }
 
     return validateCategory(categoryId, req, res, next, checkOwner);
@@ -131,8 +183,10 @@ const isCategoryOwner = (req, res, next) => {
 const hasLineAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant de ligne
     const lineId = req.params.lineId || req.body.lineId;
-    if (!req.user.id || typeof lineId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof lineId === 'undefined') {
+        return next();
     }
 
     return validateLine(lineId, req, res, next, checkOwner);
@@ -145,8 +199,10 @@ const isLineOwner = (req, res, next) => {
 const hasEntryAccess = (req, res, next, checkOwner = false) => {
     // Vérifier la présence de l'identifiant d'entrée
     const entryId = req.params.entryId || req.body.entryId;
-    if (!req.user.id || typeof entryId === 'undefined') {
+    if (!req.user.id) {
         return res.sendStatus(400);
+    } else if (typeof entryId === 'undefined') {
+        return next();
     }
 
     return validateEntry(entryId, req, res, next, checkOwner);
@@ -154,6 +210,30 @@ const hasEntryAccess = (req, res, next, checkOwner = false) => {
 
 const isEntryOwner = (req, res, next) => {
     return hasEntryAccess(req, res, next, true);
+};
+
+const isMemberOwner = (req, res, next) => {
+    // Vérifier la présence de l'identifiant du membre
+    const memberId = req.params.memberId || req.body.memberId;
+    if (!req.user.id) {
+        return res.sendStatus(400);
+    } else if (typeof memberId === 'undefined') {
+        return next();
+    }
+
+    return validateMember(memberId, req, res, next);
+};
+
+const isCashflowOwner = (req, res, next) => {
+    // Vérifier la présence de l'identifiant de cashflow
+    const cashflowId = req.params.cashflowId || req.body.cashflowId;
+    if (!req.user.id) {
+        return res.sendStatus(400);
+    } else if (typeof cashflowId === 'undefined') {
+        return next();
+    }
+
+    return validateCashflow(cashflowId, req, res, next, true);
 };
 
 module.exports = {
@@ -164,5 +244,7 @@ module.exports = {
     hasLineAccess,
     isLineOwner,
     hasEntryAccess,
-    isEntryOwner
+    isEntryOwner,
+    isMemberOwner,
+    isCashflowOwner
 };

@@ -9,6 +9,15 @@
     display: flex;
 }
 
+.footbar{
+    text-align: right;
+    width: calc(100% - 250px) !important;
+
+    a{
+        margin: 5px;
+    }
+}
+
 .sidebar, .menu {
     background-color: $neutral;
 
@@ -102,6 +111,14 @@ h2 {
         width: 80%;
         margin: auto;
     }
+
+    .input-tootip {
+        margin-left: 5px;
+    };
+
+    .check-box {
+        margin-left: 10px;
+    };
 }
 
 .submit {
