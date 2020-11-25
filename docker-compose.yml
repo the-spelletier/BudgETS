@@ -26,8 +26,7 @@ services:
     web:
         build: .
         depends_on: 
-            mysql:
-                condition: service_healthy
+            - mysql
         expose:
             - "3000"
         ports:
