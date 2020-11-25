@@ -31,7 +31,7 @@ services:
             - "3000"
         ports:
              - "3000:3000"
-        entrypoint: ["/bin/bash", "./entrypoint3.sh"]
+        entrypoint: ["/bin/bash", "./entrypoint.sh"]
         environment:
           - MYSQL_PASSWORD=mysql
           - MYSQL_ROOT_PASSWORD=mysql

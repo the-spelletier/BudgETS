@@ -1,9 +1,8 @@
-#!/bin/bash
+#entypoint.sh
 
 npm install
-
-npx sequelize db:create
-npx sequelize db:migrate
-
 npm run clean-dev
+
+echo "startApi Server"
+
 npm run start
