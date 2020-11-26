@@ -38,7 +38,8 @@ module.exports = {
               references: {
                   model: 'Budgets',
                   key: 'id'
-              }
+              },
+              onDelete: 'RESTRICT'
           }
         },
         {

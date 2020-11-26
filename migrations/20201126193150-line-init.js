@@ -30,7 +30,8 @@ module.exports = {
               references: {
                   model: 'Categories',
                   key: 'id'
-              }
+              },
+              onDelete: 'RESTRICT'
           },
           estimate: {
               type: Sequelize.DECIMAL(10,2),

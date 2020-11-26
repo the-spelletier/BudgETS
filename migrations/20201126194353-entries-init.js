@@ -25,7 +25,8 @@ module.exports = {
               references: {
                   model: 'EntryStatuses',
                   key: 'id'
-              }
+              },
+              onDelete: 'RESTRICT'
           },
           memberId: {
               type: Sequelize.UUID,
@@ -33,7 +34,8 @@ module.exports = {
               references: {
                   model: 'Members',
                   key: 'id'
-              }
+              },
+              onDelete: 'RESTRICT'
           },
           amount: {
               type: Sequelize.DECIMAL(10,2),

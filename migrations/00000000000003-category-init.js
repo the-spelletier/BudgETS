@@ -10,34 +10,35 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,
             primaryKey: true
-        },
-        name: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: 'compositeUnique'
-        },
-        orderNumber: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            defaultValue: '99'
-        },
-        budgetId: {
-            type: Sequelize.UUID,
-            allowNull: false,
-            unique: 'compositeUnique',
+          },
+          name: {
+              type: Sequelize.STRING,
+              allowNull: false,
+              unique: 'compositeUnique'
+          },
+          orderNumber: {
+              type: Sequelize.INTEGER,
+              allowNull: false,
+              defaultValue: '99'
+          },
+          budgetId: {
+              type: Sequelize.UUID,
+              allowNull: false,
+              unique: 'compositeUnique',
               references: {
                   model: 'Budgets',
                   key: 'id'
+              },
+              onDelete: 'RESTRICT'
+          },
+          type: {
+              type: Sequelize.ENUM('revenue', 'expense'),
+              allowNull: false,
+              unique: 'compositeUnique',
+              validate: {
+                  isIn: [['revenue', 'expense']]
               }
-        },
-        type: {
-            type: Sequelize.ENUM('revenue', 'expense'),
-            allowNull: false,
-            unique: 'compositeUnique',
-            validate: {
-                isIn: [['revenue', 'expense']]
-            }
-        }
+          }
         },
         {
           engine: 'MYISAM',                     // default: 'InnoDB'

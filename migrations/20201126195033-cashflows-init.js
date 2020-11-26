@@ -18,7 +18,8 @@ module.exports = {
               references: {
                   model: 'Categories',
                   key: 'id'
-              }
+              },
+              onDelete: 'RESTRICT'
           },
           year: {
               type: Sequelize.INTEGER(4),
