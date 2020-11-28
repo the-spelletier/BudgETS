@@ -14,10 +14,22 @@ module.exports = {
                 nbUsers++;
                 users.push({
                     id: nbUsers,
-                    username: 'budgets_test' + ('00' + i).slice(-3),
+                    username: 'budgets_test' + ('00' + nbUsers).slice(-3),
                     password: bcrypt.hashSync('test123', config.saltRounds),
                     isAdmin: (i == 1),
                     activeBudgetId: i == 2 ? '5' : null
+                });
+            }
+
+            // Add dummy users with no budget owner (Used for access tests and so on)
+            for (let i = 1; i <= settings.NB_TEST_DUMMY_USERS; ++i) {
+                nbUsers++;
+                users.push({
+                    id: nbUsers,
+                    username: 'budgets_test' + ('00' + nbUsers).slice(-3),
+                    password: bcrypt.hashSync('test123', config.saltRounds),
+                    isAdmin: false,
+                    activeBudgetId: null
                 });
             }
         } else if (process.env.NODE_ENV == 'development') {

@@ -56,6 +56,8 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                 return a.name > b.name;
             }).sort( function(a, b){
                 return a.active < b.active;
+            }).sort( function(a, b){
+                return a.deleted > b.deleted;
             });
             setMembers(members);
         };
@@ -214,7 +216,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             onChange={(id) => setEntry({...entry, memberId: id})}
                             allowClear>
                             { 
-                                members.map((member) => <Option key={member.id} value={member.id}>{member.name + " " + member.code + " " + member.email}</Option>) 
+                                members.map((member) => <Option key={member.id} value={member.id} disabled={member.deleted}>{member.name + " " + member.code + " " + member.email}</Option>) 
                             }                            
                         </Select>    
                     </div>

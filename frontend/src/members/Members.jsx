@@ -22,7 +22,7 @@ const Members = () => {
     useEffect(() => {
         const getMembers = async() => {
             var response = await memberClient.getAll(user.token, budget.userId);
-            setMembers(response.data.length > 0 ? response.data : [{}]);
+            setMembers(response.data.length > 0 ? response.data.filter(m => !m.deleted) : [{}]);
         }
 
         getMembers();
