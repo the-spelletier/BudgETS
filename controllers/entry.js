@@ -46,7 +46,6 @@ function update(req, res) {
         newEntry.memberId = req.body.memberId || null;
         entryService.updateEntry(newEntry).then(e => {
 
-            console.log(notify);
             if (notify){
                 entryStatusService
                 .getStatus(newEntry.entryStatusId)
