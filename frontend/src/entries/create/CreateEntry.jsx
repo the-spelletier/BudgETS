@@ -23,6 +23,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
     const {user} = useContext(UserContext);
     const {budget} = useContext(BudgetContext);
 
+    const [initialStatus, setInitialStatus] = useState();
     const [entry, setEntry] = useState({categoryId : null});
     const [error, setError] = useState({name: false});
     
@@ -39,6 +40,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         const getEntry = async () => {
             var response = await entryClient.get(user.token, entryId);
             setEntry(response.data);
+            setInitialStatus(response.data.entryStatusId);
         };
 
         const fetchCategories = async() => {
@@ -144,9 +146,16 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
 
     const editEntry = () => {
         const save = async () => {
+            var notify = false;
+            if (initialStatus != entry.entryStatusId && 
+                statuses.filter(s => s.id === entry.entryStatusId) &&
+                members.filter(m => m.id === entry.memberId)){
+                notify = statuses.filter(s => s.id === entry.entryStatusId)[0].notify &&
+                            members.filter(m => m.id === entry.memberId)[0].notify;
+            }
             try {
                 await entryClient.update(user.token, entry.id, entry.lineId, entry.description, 
-                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, entry.entryStatusId, entry.memberId);
+                    moment(entry.date).format("YYYY-MM-DD HH:mm:ss"), entry.amount, entry.entryStatusId, entry.memberId, notify);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
