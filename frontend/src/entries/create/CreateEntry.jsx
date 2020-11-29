@@ -63,10 +63,15 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         };
 
         const fetchStatuses = async() => {
-            var response = await entryStatusClient.getAll(user.token);
-            setStatuses(response.data.sort( function(a, b){
-                return a.position > b.position;
-            }));
+            var response = await entryStatusClient.getAll(user.token, budget.userId);
+            setStatuses(response.data
+                .sort(function(a, b){
+                    return a.position > b.position;
+                })
+                .sort(function(a, b){
+                    return a.deleted > b.deleted;
+                })
+            );
         }
 
         if(visible){
@@ -255,7 +260,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
                             value={entry.entryStatusId} 
                             onChange={(id) => setEntry({...entry, entryStatusId: id})}>
                             {
-                                statuses.map((status) => <Option key={status.id} value={status.id}>{status.displayName}</Option>) 
+                                statuses.map((status) => <Option key={status.id} value={status.id} disabled={status.deleted}>{status.displayName}</Option>) 
                             }
                         </Select>
                     </div>

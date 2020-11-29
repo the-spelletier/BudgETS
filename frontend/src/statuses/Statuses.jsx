@@ -21,8 +21,8 @@ const Statuses = () => {
 
     useEffect(() => {
         const getStatuses = async() => {
-            var response = await statusClient.getAll(user.token/*TODO , user.id*/);
-            setStatuses(response.data.length > 0 ? response.data : [{}]);
+            var response = await statusClient.getAll(user.token, budget.id);
+            setStatuses(response.data.length > 0 ? response.data.filter(s => !s.deleted) : [{}]);
         }
 
         getStatuses();
@@ -90,6 +90,12 @@ const Statuses = () => {
             title: "Nom",
             render: (status) => status.name,
             sorter: (a, b) => a.name.localeCompare(b.name)
+        },
+        {
+            title:  "Notifier?" ,
+            width: 100,
+            render: (status) => status.notify ? "Oui" : "Non",
+            sorter: (a, b) => a.notify - b.notify
         },
         {
             title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateStatus()}}/>,

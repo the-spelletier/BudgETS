@@ -12,19 +12,22 @@ module.exports = {
         entryStatuses.push({
             id: 1,
             name: 'Envoyé',
-            position: 1
+            position: 1,
+            budgetId: 8
         });
 
         entryStatuses.push({
             id: 2,
             name: 'À traiter',
-            position: 2
+            position: 2,
+            budgetId: 8
         });
 
         entryStatuses.push({
             id: 3,
             name: 'Traité',
-            position: 3
+            position: 3,
+            budgetId: 8
         });
     }
 

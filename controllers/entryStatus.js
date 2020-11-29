@@ -10,7 +10,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-    entryStatusService.getStatuses().then(status => {
+    entryStatusService.getStatuses(req.params.budgetId).then(status => {
         sendStatus(status, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });

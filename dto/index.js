@@ -210,6 +210,15 @@ const entryStatusDTO = (status, s = {}) => {
       s.displayName = status.position + " - " + status.name;
     }
   }
+  if (typeof status.budgetId != 'undefined') {
+    s.budgetId = status.budgetId;
+  }
+  if (typeof status.deleted != 'undefined') {
+    s.deleted = status.deleted;
+  }
+  if (typeof status.notify != 'undefined') {
+    s.notify = status.notify;
+  }
   return s;
 };
 

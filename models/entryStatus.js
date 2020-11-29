@@ -25,6 +25,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         position: {
             type: DataTypes.INTEGER
+        },
+        budgetId: {
+            type: DataTypes.UUID
+        },
+        notify: {
+            type: DataTypes.BOOLEAN
+        },
+        deleted: {
+            type: DataTypes.BOOLEAN
         }
     }, {
         sequelize,
