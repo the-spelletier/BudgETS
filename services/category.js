@@ -35,6 +35,9 @@ const getCategories = (budgetId, type = '', light = false) => {
     if (type) {
         options.where.type = type;
     }
+    options.order = [
+        ['orderNumber', 'ASC'],
+    ]
     return Category.findAll(options);
 }
 
@@ -86,6 +89,7 @@ const getCategoriesEstimateCashflows = (budgetId, type = '', groupBy = '') => {
             options.where.type = type;
         }
         options.group.unshift('Category.id');
+        options.group.push(sequelize.col('Cashflows.id'));
     }
 
     return Category.findAll(options);

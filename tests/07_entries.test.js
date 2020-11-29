@@ -108,7 +108,7 @@ describe('7.0 - Entrées budgétaires', () => {
         });
 
         test("072003 - Obtenir toutes les entrées budgétaires d'un budget qui ne m'appartient pas", (done) => {
-            stubAuthEntries('budgets_test001')
+            stubAuthEntries('budgets_test009')
 
             request(app)
                 .get(getRouteAllEntries(5))
@@ -679,7 +679,7 @@ describe('7.0 - Entrées budgétaires', () => {
             request(app)
                 .put(getRouteOneEntry(74))
                 .send(entry)
-                .expect(400, done);
+                .expect(200, done);
         });
 
         test("074011 - Modifier une entrée budgtétaire avec membre sans acces au budget", (done) => {

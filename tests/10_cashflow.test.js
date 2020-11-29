@@ -127,7 +127,7 @@ describe('10.0 - Cashflows', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username: 'budgets_test001'
+                    username: 'budgets_test009'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();
@@ -365,7 +365,7 @@ describe('10.0 - Cashflows', () => {
             // Stub the verifyAuth
             auth.verifyAuth.callsFake((req, res, next) => {
                 userService.getUser({
-                    username: 'budgets_test001'
+                    username: 'budgets_test009'
                 }).then(user => {
                     req.user = User.build(user, {raw: true});
                     next();

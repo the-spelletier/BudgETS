@@ -191,6 +191,9 @@ const memberDTO = (member, m = {}) => {
   if (typeof member.notify != 'undefined') {
     m.notify = member.notify;
   }
+  if (typeof member.deleted != 'undefined') {
+    m.deleted = member.deleted;
+  }
   return m;
 };
 
