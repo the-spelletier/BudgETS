@@ -2,52 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'Users',
-        {
-          id: {
-              type: Sequelize.UUID,
-              defaultValue: Sequelize.UUIDV4,
-              primaryKey: true
-          },
-          username: {
-              type: Sequelize.STRING,
-              allowNull: false,
-              unique: true
-          },
-          password: {
-              type: Sequelize.STRING,
-              allowNull: false
-          },
-          attemptFailed : {
-              type: Sequelize.INTEGER,
-              defaultValue: 0
-          },
-          isBlocked : {
-              type: Sequelize.BOOLEAN,
-              defaultValue: false
-          },
-          isAdmin : {
-              type: Sequelize.BOOLEAN,
-              defaultValue: false
-          },
-          activeBudgetId : {
-              type: Sequelize.UUID,
-              allowNull: true,
-              references: {
-                  model: 'Budgets',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `Users` (`id` CHAR(36) BINARY , `username` VARCHAR(255) NOT NULL UNIQUE, `password` VARCHAR(255) NOT NULL, `attemptFailed` INTEGER DEFAULT 0, `isBlocked` TINYINT(1) DEFAULT false, `isAdmin` TINYINT(1) DEFAULT false, `activeBudgetId` CHAR(36) BINARY, PRIMARY KEY (`id`)) ENGINE=InnoDB;")
   },
 
   down: async (queryInterface, Sequelize) => {

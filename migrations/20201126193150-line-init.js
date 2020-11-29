@@ -2,49 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'Lines',
-        {
-          id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-          },
-          name: {
-              type: Sequelize.STRING,
-              unique: 'compositeUnique'
-          },
-          description: {
-              type: Sequelize.STRING
-          },
-          orderNumber: {
-              type: Sequelize.INTEGER,
-              allowNull: false,
-              defaultValue: '99'
-          },
-          categoryId: {
-              type: Sequelize.UUID,
-              allowNull: false,
-              unique: 'compositeUnique',
-              references: {
-                  model: 'Categories',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          },
-          estimate: {
-              type: Sequelize.DECIMAL(10,2),
-              allowNull: false,
-              defaultValue: '0.00',
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `Lines` (`id` CHAR(36) BINARY , `name` VARCHAR(255), `description` VARCHAR(255), `orderNumber` INTEGER NOT NULL DEFAULT '99', `categoryId` CHAR(36) BINARY NOT NULL, `estimate` DECIMAL(10,2) NOT NULL DEFAULT '0.00', UNIQUE `compositeUnique` (`name`, `categoryId`), PRIMARY KEY (`id`), FOREIGN KEY (`categoryId`) REFERENCES `Categories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE=InnoDB;");
   },
 
   down: async (queryInterface, Sequelize) => {

@@ -2,52 +2,9 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'Budgets',
-        {
-          id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-          },
-          name: {
-              type: Sequelize.STRING,
-              unique: true,
-              allowNull: false,
-              unique: 'compositeUnique'
-          },
-          userId: {
-              type: Sequelize.UUID,
-              allowNull: false,
-              unique: 'compositeUnique',
-              references: {
-                  model: 'Users',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          },
-          startDate: {
-              type: Sequelize.DATE,
-              allowNull: false
-          },
-          endDate: {
-              type: Sequelize.DATE,
-              allowNull: false
-          },
-          isActive: {
-              type: Sequelize.BOOLEAN,
-              defaultValue: false
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `Budgets` (`id` CHAR(36) BINARY , `name` VARCHAR(255) NOT NULL, `userId` CHAR(36) BINARY NOT NULL, `startDate` DATETIME NOT NULL, `endDate` DATETIME NOT NULL, `isActive` TINYINT(1) DEFAULT false, UNIQUE `compositeUnique` (`name`, `userId`), PRIMARY KEY (`id`), FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE=InnoDB;");
   },
-
+  
   down: async (queryInterface, Sequelize) => {
     queryInterface.dropTable('Budgets')
   }

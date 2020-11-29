@@ -2,50 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'Categories',
-        {
-          id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-          },
-          name: {
-              type: Sequelize.STRING,
-              allowNull: false,
-              unique: 'compositeUnique'
-          },
-          orderNumber: {
-              type: Sequelize.INTEGER,
-              allowNull: false,
-              defaultValue: '99'
-          },
-          budgetId: {
-              type: Sequelize.UUID,
-              allowNull: false,
-              unique: 'compositeUnique',
-              references: {
-                  model: 'Budgets',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          },
-          type: {
-              type: Sequelize.ENUM('revenue', 'expense'),
-              allowNull: false,
-              unique: 'compositeUnique',
-              validate: {
-                  isIn: [['revenue', 'expense']]
-              }
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `Categories` (`id` CHAR(36) BINARY , `name` VARCHAR(255) NOT NULL, `orderNumber` INTEGER NOT NULL DEFAULT '99', `budgetId` CHAR(36) BINARY NOT NULL, `type` ENUM('revenue', 'expense') NOT NULL, UNIQUE `compositeUnique` (`name`, `budgetId`, `type`), PRIMARY KEY (`id`), FOREIGN KEY (`budgetId`) REFERENCES `Budgets` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE=InnoDB;");
   },
 
   down: async (queryInterface, Sequelize) => {
