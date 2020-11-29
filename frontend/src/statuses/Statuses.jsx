@@ -26,7 +26,7 @@ const Statuses = () => {
         }
 
         getStatuses();
-    }, [createModalIsVisible]);
+    }, [createModalIsVisible, budget]);
 
     const onEditStatus = (status) => {
         setCurrentStatusId(status.id);
