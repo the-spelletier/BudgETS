@@ -2,28 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'EntryStatuses',
-        {
-          id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-          },
-          name: {
-              type: Sequelize.STRING
-          },
-          position: {
-              type: Sequelize.INTEGER
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `EntryStatuses` (`id` CHAR(36) BINARY , `name` VARCHAR(255), `position` INTEGER, PRIMARY KEY (`id`)) ENGINE=InnoDB;");
   },
 
   down: async (queryInterface, Sequelize) => {

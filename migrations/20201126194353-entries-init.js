@@ -2,62 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable(
-        'Entries',
-        {
-          id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true
-          },
-          lineId: {
-              type: Sequelize.UUID,
-              allowNull: false,
-              references: {
-                  model: 'Lines',
-                  key: 'id'
-              }
-          },
-          entryStatusId: {
-              type: Sequelize.UUID,
-              allowNull: true,
-              references: {
-                  model: 'EntryStatuses',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          },
-          memberId: {
-              type: Sequelize.UUID,
-              allowNull: true,
-              references: {
-                  model: 'Members',
-                  key: 'id'
-              },
-              onDelete: 'RESTRICT'
-          },
-          amount: {
-              type: Sequelize.DECIMAL(10,2),
-              allowNull: false,
-              defaultValue: '0.00',
-          },
-          date: {
-              type: Sequelize.DATE,
-          },
-          description: {
-              type: Sequelize.STRING
-          },
-          receiptCode: {
-              type: Sequelize.STRING
-          }
-        },
-        {
-          engine: 'MYISAM',                     // default: 'InnoDB'
-          charset: 'latin1'                     // default: null
-        }
-      ),
-    ]);
+    return queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS `Entries` (`id` CHAR(36) BINARY , `lineId` CHAR(36) BINARY NOT NULL, `entryStatusId` CHAR(36) BINARY, `memberId` CHAR(36) BINARY, `amount` DECIMAL(10,2) NOT NULL DEFAULT '0.00', `date` DATETIME, `description` VARCHAR(255), `receiptCode` VARCHAR(255), PRIMARY KEY (`id`), FOREIGN KEY (`lineId`) REFERENCES `Lines` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY (`entryStatusId`) REFERENCES `EntryStatuses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY (`memberId`) REFERENCES `Members` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE=InnoDB;");
   },
 
   down: async (queryInterface, Sequelize) => {
