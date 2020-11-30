@@ -464,6 +464,7 @@ function generateEntrySheet(budget, entries, workbook) {
         entrySheet.getCell('H' + catRow).value = currentEntry.entryStatusName;
         entrySheet.getCell('H' + catRow).alignment = leftAlign;
         entrySheet.getCell('H' + catRow).font = catDefaultFont;
+        catRow++;
     });
 
     return Promise.resolve();
