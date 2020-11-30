@@ -5,6 +5,8 @@ import { CategoryClient } from "../clients/CategoryClient";
 import BudgetContext from "../contexts/budget/BudgetContext";
 import UserContext from "../contexts/user/UserContext";
 
+const formatCurrency = require('format-currency')
+
 const RevenuesOrExpenses = ({type}) => {
     const categoryClient = new CategoryClient();
 
@@ -49,7 +51,7 @@ const RevenuesOrExpenses = ({type}) => {
             colSpan: 2,
             render: (val) => {
                 return {
-                    children: val.total,
+                    children: formatCurrency(val.total),
                     props: {
                       colSpan: 2,
                     }
@@ -60,22 +62,22 @@ const RevenuesOrExpenses = ({type}) => {
             title: <div className="right-text">Prévisions</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
-                <div className="right-text">{val.estimateTotal.toFixed(2)}</div> : 
-                <div className="right-text">{val.estimateTotal.toFixed(2)}</div>
+                <div className="right-text">{formatCurrency(val.estimateTotal)}</div> : 
+                <div className="right-text">{formatCurrency(val.estimateTotal)}</div>
         },
         {
             title: <div className="right-text">Réel</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
-                <div className="right-text">{val.realTotal.toFixed(2)}</div> : 
-                <div className="right-text">{val.realTotal.toFixed(2)}</div>
+                <div className="right-text">{formatCurrency(val.realTotal)}</div> : 
+                <div className="right-text">{formatCurrency(val.realTotal)}</div>
         },
         {
             title: <div className="right-text">Reste</div>,
             colSpan: 1,
             render: (val) => type === "revenue" ?
-                <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div> : 
-                <div className="right-text">{(val.estimateTotal - val.realTotal).toFixed(2)}</div>
+                <div className="right-text">{formatCurrency(val.estimateTotal - val.realTotal)}</div> : 
+                <div className="right-text">{formatCurrency(val.estimateTotal - val.realTotal)}</div>
         }
     ];
 
@@ -129,22 +131,16 @@ const RevenuesOrExpenses = ({type}) => {
                 }
             },
             {
-                title: <div className="right-text">{estimateTotal.toFixed(2)}</div>,
-                render: (line) => type === "revenue" ? 
-                    <div className="right-text">{Number(line.estimate).toFixed(2)}</div> : 
-                    <div className="right-text">{Number(line.estimate).toFixed(2)}</div>
+                title: <div className="right-text">{formatCurrency(estimateTotal)}</div>,
+                render: (line) => <div className="right-text">{formatCurrency(line.estimate)}</div>
             },
             {
-                title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
-                render: (line) =>  type === "revenue" ? 
-                    <div className="right-text">{Number(line.real).toFixed(2)}</div> : 
-                    <div className="right-text">{Number(line.real).toFixed(2)}</div>
+                title: <div className="right-text">{formatCurrency(realTotal)}</div>, 
+                render: (line) => <div className="right-text">{formatCurrency(line.real)}</div>
             },
             {
-                title: <div className="right-text">{realTotal.toFixed(2)}</div>, 
-                render: (line) =>  type === "revenue" ? 
-                    <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div> : 
-                    <div className="right-text">{Number(line.estimate - line.real).toFixed(2)}</div>
+                title: <div className="right-text">{formatCurrency(realTotal)}</div>, 
+                render: (line) => <div className="right-text">{formatCurrency(line.estimate - line.real)}</div>
             }
         ]
     };

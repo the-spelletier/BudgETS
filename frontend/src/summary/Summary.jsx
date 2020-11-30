@@ -1,7 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import BudgetHeader from "../budget/header/BudgetHeader";
-
 import UserContext from "../contexts/user/UserContext";
 import BudgetContext from "../contexts/budget/BudgetContext";
 import { BudgetClient } from "../clients/BudgetClient";
@@ -9,6 +8,8 @@ import { Table, Card } from "antd";
 import ComparisonGraph from "./graphs/ComparisonGraph";
 import PieChart from "./graphs/PieChart";
 import { Colors } from "./graphs/colors";
+
+const formatCurrency = require('format-currency')
 
 const Summary = () => {
     const budgetClient = new BudgetClient();
@@ -130,7 +131,7 @@ const Summary = () => {
             columns = [...columns,
                 {
                     title: column,
-                    render: (line) => line.values[key].toFixed(2)
+                    render: (line) => formatCurrency(line.values[key])
                 }
             ];
         });

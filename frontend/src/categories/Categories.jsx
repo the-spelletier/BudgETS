@@ -13,6 +13,8 @@ import BudgetContext from "../contexts/budget/BudgetContext";
 
 import "./categories.scss";
 
+const formatCurrency = require('format-currency')
+
 const Categories = () => {
     const categoryClient = new CategoryClient();
     const lineClient = new LineClient();
@@ -186,12 +188,12 @@ const Categories = () => {
             },
             {
                 title: category.type === "revenue" ? 
-                    Number(totalEstimate).toFixed(2) : 
-                    "( " + Number(totalEstimate).toFixed(2) + " )",
+                    formatCurrency(totalEstimate) : 
+                    "( " + formatCurrency(totalEstimate) + " )",
                 width: '20%',
                 render: (line) => category.type === "revenue" ? 
-                    Number(line.estimate).toFixed(2) : 
-                    "( " + Number(line.estimate).toFixed(2) + " )"
+                    formatCurrency(line.estimate) : 
+                    "( " + formatCurrency(line.estimate) + " )"
             },
             {
                 title: <Button icon={<PlusOutlined/>} disabled={!budget.edit} onClick={() => {onCreateLine(category.id)}}/>,

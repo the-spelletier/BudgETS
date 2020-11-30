@@ -7,6 +7,8 @@ import { CashflowClient } from "../clients/CashflowClient";
 import CreateOrEditCashflow from "./create-or-edit/CreateOrEditCashflow";
 import { dateRange } from "./cashflowUtils";
 
+const formatCurrency = require('format-currency')
+
 const CashflowTable = ({cashflowType, categoryType}) => {
     const cashflowClient = new CashflowClient();
 
@@ -114,7 +116,7 @@ const CashflowTable = ({cashflowType, categoryType}) => {
                                     categoryId: data.categoryId, 
                                     categoryName: data.categoryName}) : null}
                                 >
-                                {Number(cashflow.value).toFixed(2)}
+                                {formatCurrency(cashflow.value)}
                             </div>
                         );
                     }
@@ -128,7 +130,7 @@ const CashflowTable = ({cashflowType, categoryType}) => {
                                     categoryId: data.categoryId, 
                                     categoryName: data.categoryName}) : null}
                                 >
-                                {Number(0).toFixed(2)}
+                                {formatCurrency(0)}
                             </div>
                         );
                     }
