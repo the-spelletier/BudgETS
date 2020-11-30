@@ -5,26 +5,26 @@ const categoryService = require('../services/category');
 const entryService = require('../services/entry');
 const { getBudgetSummaries } = require('../controllers/budget');
 
-const headersFont = {
+const tahoma20BoldFont = {
     name: 'Tahoma',
     size: 20,
     bold: true
 };
-const defaultFont = {
+const tahoma16Font = {
     name: 'Tahoma',
     size: 16
 };
-const catHeaderFont = {
+const tahoma16BoldFont = {
     name: 'Tahoma',
     size: 16,
     bold: true
 };
-const catSubHeaderFont = {
+const tahoma12BoldFont = {
     name: 'Tahoma',
     size: 12,
     bold: true
 };
-const catDefaultFont = {
+const tahoma12Font = {
     name: 'Tahoma',
     size: 12
 };
@@ -65,7 +65,6 @@ function generateReport(req, res) {
                      res.status(404).send({ message: 'Error writing report' });
                 });
             }).catch(err => {
-                console.log(err);
                 res.status(404).send({ message: 'Budget Not Found' });
             });
         }).catch(err => {
@@ -96,21 +95,21 @@ function generateSummarySheet(budgets, workbook) {
     sheet.getCell('A1').value = 'Résultat';
     sheet.getCell('A1').alignment = centerAlign;
     sheet.getCell('A1').fill = colorFill;
-    sheet.getCell('A1').font = headersFont;
+    sheet.getCell('A1').font = tahoma20BoldFont;
     sheet.getCell('A4').fill = colorFill;
     sheet.getCell('A5').fill = colorFill;
     sheet.getCell('A6').value = 'Total des revenus';
-    sheet.getCell('A6').font = defaultFont;
+    sheet.getCell('A6').font = tahoma16Font;
     sheet.getCell('A6').alignment = rightAlign
     sheet.getCell('A7').value = 'Total des dépenses';
-    sheet.getCell('A7').font = defaultFont;
+    sheet.getCell('A7').font = tahoma16Font;
     sheet.getCell('A7').alignment = rightAlign
     sheet.getCell('A9').value = 'Total($)';
-    sheet.getCell('A9').font = defaultFont;
+    sheet.getCell('A9').font = tahoma16Font;
     sheet.getCell('A9').alignment = rightAlign
     sheet.getCell('A9').fill = colorFill;
     sheet.getCell('A11').value = 'Dépassement(%)';
-    sheet.getCell('A11').font = defaultFont;
+    sheet.getCell('A11').font = tahoma16Font;
     sheet.getCell('A11').alignment = rightAlign
     sheet.getCell('A11').fill = colorFill;
 
@@ -119,14 +118,14 @@ function generateSummarySheet(budgets, workbook) {
     sheet.getCell('B1').value = budgets.currentBudget.name;
     sheet.getCell('B1').alignment = centerAlign;
     sheet.getCell('B1').fill = colorFill;
-    sheet.getCell('B1').font = headersFont;
+    sheet.getCell('B1').font = tahoma20BoldFont;
 
     //Last column
     sheet.mergeCells('F1:F2');
     sheet.getCell('F1').value = new Date();
     sheet.getCell('F1').alignment = centerAlign;
     sheet.getCell('F1').fill = colorFill;
-    sheet.getCell('F1').font = headersFont;
+    sheet.getCell('F1').font = tahoma20BoldFont;
 
     // Data
     fillBudgetSummary(sheet, 'B', budgets.currentBudget.name, budgets.currentBudget.revenue.real, budgets.currentBudget.expense.real, 'R-');
@@ -193,18 +192,18 @@ function generateCategorySheets(budget, categories, workbook) {
         sheet.getCell('A1').value = sheetInfo.name.charAt(0);
         sheet.getCell('A1').alignment = centerAlign;
         sheet.getCell('A1').fill = colorFill;
-        sheet.getCell('A1').font = catHeaderFont;
+        sheet.getCell('A1').font = tahoma16BoldFont;
 
         sheet.mergeCells('C1:E1');
         sheet.getCell('C1').value = sheetInfo.name;
         sheet.getCell('C1').alignment = leftAlign;
         sheet.getCell('C1').fill = colorFill;
-        sheet.getCell('C1').font = catHeaderFont;
+        sheet.getCell('C1').font = tahoma16BoldFont;
 
         sheet.getCell('F1').value = budget.name;
         sheet.getCell('F1').alignment = leftAlign;
         sheet.getCell('F1').fill = colorFill;
-        sheet.getCell('F1').font = catHeaderFont;
+        sheet.getCell('F1').font = tahoma16BoldFont;
 
         sheet.mergeCells('G1:I1');
         sheet.getCell('G1').fill = colorFill;
@@ -213,7 +212,7 @@ function generateCategorySheets(budget, categories, workbook) {
         sheet.getCell('A2').value = '0';
         sheet.getCell('A2').alignment = centerAlign;
         sheet.getCell('A2').fill = colorFill;
-        sheet.getCell('A2').font = catSubHeaderFont;
+        sheet.getCell('A2').font = tahoma12BoldFont;
 
         sheet.mergeCells('B2:F2');
         sheet.getCell('B2').fill = colorFill;
@@ -221,33 +220,33 @@ function generateCategorySheets(budget, categories, workbook) {
         sheet.getCell('G2').value = 'Prévision';
         sheet.getCell('G2').alignment = centerAlign;
         sheet.getCell('G2').fill = colorFill;
-        sheet.getCell('G2').font = catSubHeaderFont;
+        sheet.getCell('G2').font = tahoma12BoldFont;
 
         sheet.getCell('H2').value = 'Réel';
         sheet.getCell('H2').alignment = centerAlign;
         sheet.getCell('H2').fill = colorFill;
-        sheet.getCell('H2').font = catSubHeaderFont;
+        sheet.getCell('H2').font = tahoma12BoldFont;
 
         sheet.getCell('I2').value = 'Reste';
         sheet.getCell('I2').alignment = centerAlign;
         sheet.getCell('I2').fill = colorFill;
-        sheet.getCell('I2').font = catSubHeaderFont;
+        sheet.getCell('I2').font = tahoma12BoldFont;
 
         // Third Row
         sheet.getCell('G3').value = Number(budget[sheetInfo.catType].estimate);
         sheet.getCell('G3').numFmt = '#,##0.00 $';
         sheet.getCell('G3').alignment = centerAlign;
-        sheet.getCell('G3').font = defaultFont; 
+        sheet.getCell('G3').font = tahoma16Font; 
 
         sheet.getCell('H3').value = Number(budget[sheetInfo.catType].real);
         sheet.getCell('H3').numFmt = '#,##0.00 $';
         sheet.getCell('H3').alignment = centerAlign;
-        sheet.getCell('H3').font = defaultFont;
+        sheet.getCell('H3').font = tahoma16Font;
 
         sheet.getCell('I3').value = Number(budget[sheetInfo.catType].estimate - budget[sheetInfo.catType].real);
         sheet.getCell('I3').numFmt = '#,##0.00 $';
         sheet.getCell('I3').alignment = centerAlign;
-        sheet.getCell('I3').font = defaultFont;
+        sheet.getCell('I3').font = tahoma16Font;
 
         //Categories
         let catRow = 5;
@@ -256,33 +255,33 @@ function generateCategorySheets(budget, categories, workbook) {
             sheet.getCell('A' + catRow).value = c.orderNumber.toString().padStart(2, "0");
             sheet.getCell('A' + catRow).alignment = centerAlign;
             sheet.getCell('A' + catRow).fill = colorFill;
-            sheet.getCell('A' + catRow).font = catSubHeaderFont;
+            sheet.getCell('A' + catRow).font = tahoma12BoldFont;
 
             sheet.mergeCells('B'+catRow+':E'+catRow);
             sheet.getCell('B' + catRow).value = c.name,
             sheet.getCell('B' + catRow).alignment = leftAlign;
             sheet.getCell('B' + catRow).fill = colorFill;
-            sheet.getCell('B' + catRow).font = catSubHeaderFont;
+            sheet.getCell('B' + catRow).font = tahoma12BoldFont;
 
             sheet.getCell('F' + catRow).value = 'Explication',
             sheet.getCell('F' + catRow).alignment = centerAlign;
             sheet.getCell('F' + catRow).fill = colorFill;
-            sheet.getCell('F' + catRow).font = catSubHeaderFont;
+            sheet.getCell('F' + catRow).font = tahoma12BoldFont;
 
             sheet.getCell('G' + catRow).value = 'Prévision';
             sheet.getCell('G' + catRow).alignment = centerAlign;
             sheet.getCell('G' + catRow).fill = colorFill;
-            sheet.getCell('G' + catRow).font = catSubHeaderFont;
+            sheet.getCell('G' + catRow).font = tahoma12BoldFont;
 
             sheet.getCell('H' + catRow).value = 'Réel';
             sheet.getCell('H' + catRow).alignment = centerAlign;
             sheet.getCell('H' + catRow).fill = colorFill;
-            sheet.getCell('H' + catRow).font = catSubHeaderFont;
+            sheet.getCell('H' + catRow).font = tahoma12BoldFont;
 
             sheet.getCell('I' + catRow).value = 'Reste';
             sheet.getCell('I' + catRow).alignment = centerAlign;
             sheet.getCell('I' + catRow).fill = colorFill;
-            sheet.getCell('I' + catRow).font = catSubHeaderFont;
+            sheet.getCell('I' + catRow).font = tahoma12BoldFont;
 
             c.real = 0;
             c.estimate = 0;
@@ -325,36 +324,34 @@ function fillCatLine(sheet, rowNum, line, real, estimate) {
 
     sheet.getCell('B' + rowNum).value = line.orderNumber.toString().padStart(3, "0");
     sheet.getCell('B' + rowNum).alignment = rightAlign;
-    sheet.getCell('B' + rowNum).font = catDefaultFont;
+    sheet.getCell('B' + rowNum).font = tahoma12Font;
 
     sheet.mergeCells('C'+rowNum+':E'+rowNum);
     sheet.getCell('C' + rowNum).value = line.name,
     sheet.getCell('C' + rowNum).alignment = leftAlign;
-    sheet.getCell('C' + rowNum).font = catDefaultFont;
+    sheet.getCell('C' + rowNum).font = tahoma12Font;
 
     sheet.getCell('F' + rowNum).value = line.description,
     sheet.getCell('F' + rowNum).alignment = leftAlign;
-    sheet.getCell('F' + rowNum).font = catDefaultFont;
+    sheet.getCell('F' + rowNum).font = tahoma12Font;
 
     sheet.getCell('G' + rowNum).value = estimate;
     sheet.getCell('G' + rowNum).numFmt = '#,##0.00 $';
     sheet.getCell('G' + rowNum).alignment = rightAlign;
-    sheet.getCell('G' + rowNum).font = catDefaultFont;
+    sheet.getCell('G' + rowNum).font = tahoma12Font;
 
     sheet.getCell('H' + rowNum).value = real;
     sheet.getCell('H' + rowNum).numFmt = '#,##0.00 $';
     sheet.getCell('H' + rowNum).alignment = rightAlign;
-    sheet.getCell('H' + rowNum).font = catDefaultFont;
+    sheet.getCell('H' + rowNum).font = tahoma12Font;
 
     sheet.getCell('I' + rowNum).value = estimate - real;
     sheet.getCell('I' + rowNum).numFmt = '#,##0.00 $';
     sheet.getCell('I' + rowNum).alignment = rightAlign;
-    sheet.getCell('I' + rowNum).font = catDefaultFont;
+    sheet.getCell('I' + rowNum).font = tahoma12Font;
 }
 
 function generateEntrySheet(budget, entries, workbook) {
-    console.log(budget);
-    console.log(entries);
     let entrySheet = workbook.addWorksheet('Entrées Budgétaires');
 
     // Column widths
@@ -372,99 +369,99 @@ function generateEntrySheet(budget, entries, workbook) {
     entrySheet.getCell('A1').value = 'Entrées Budgétaires';
     entrySheet.getCell('A1').alignment = centerAlign;
     entrySheet.getCell('A1').fill = colorFill;
-    entrySheet.getCell('A1').font = headersFont;
+    entrySheet.getCell('A1').font = tahoma20BoldFont;
 
     entrySheet.mergeCells('C1:F2');
     entrySheet.getCell('C1').value = budget.name;
     entrySheet.getCell('C1').alignment = centerAlign;
     entrySheet.getCell('C1').fill = colorFill;
-    entrySheet.getCell('C1').font = headersFont;
+    entrySheet.getCell('C1').font = tahoma20BoldFont;
 
     entrySheet.mergeCells('G1:H2');
     entrySheet.getCell('G1').value = new Date();
     entrySheet.getCell('G1').alignment = centerAlign;
     entrySheet.getCell('G1').fill = colorFill;
-    entrySheet.getCell('G1').font = headersFont;
+    entrySheet.getCell('G1').font = tahoma20BoldFont;
 
     // Second Row
     entrySheet.getCell('A4').value = '# Facture';
     entrySheet.getCell('A4').alignment = centerAlign;
     entrySheet.getCell('A4').fill = colorFill;
-    entrySheet.getCell('A4').font = catSubHeaderFont;
+    entrySheet.getCell('A4').font = tahoma12BoldFont;
 
     entrySheet.getCell('B4').value = 'Catégorie';
     entrySheet.getCell('B4').alignment = centerAlign;
     entrySheet.getCell('B4').fill = colorFill;
-    entrySheet.getCell('B4').font = catSubHeaderFont;
+    entrySheet.getCell('B4').font = tahoma12BoldFont;
 
     entrySheet.getCell('C4').value = 'Ligne';
     entrySheet.getCell('C4').alignment = centerAlign;
     entrySheet.getCell('C4').fill = colorFill;
-    entrySheet.getCell('C4').font = catSubHeaderFont;
+    entrySheet.getCell('C4').font = tahoma12BoldFont;
 
     entrySheet.getCell('D4').value = 'Description';
     entrySheet.getCell('D4').alignment = centerAlign;
     entrySheet.getCell('D4').fill = colorFill;
-    entrySheet.getCell('D4').font = catSubHeaderFont;
+    entrySheet.getCell('D4').font = tahoma12BoldFont;
 
     entrySheet.getCell('E4').value = 'Membre';
     entrySheet.getCell('E4').alignment = centerAlign;
     entrySheet.getCell('E4').fill = colorFill;
-    entrySheet.getCell('E4').font = catSubHeaderFont;
+    entrySheet.getCell('E4').font = tahoma12BoldFont;
 
     entrySheet.getCell('F4').value = 'Montant';
     entrySheet.getCell('F4').alignment = centerAlign;
     entrySheet.getCell('F4').fill = colorFill;
-    entrySheet.getCell('F4').font = catSubHeaderFont;
+    entrySheet.getCell('F4').font = tahoma12BoldFont;
 
     entrySheet.getCell('G4').value = 'Date';
     entrySheet.getCell('G4').alignment = centerAlign;
     entrySheet.getCell('G4').fill = colorFill;
-    entrySheet.getCell('G4').font = catSubHeaderFont;
+    entrySheet.getCell('G4').font = tahoma12BoldFont;
 
     entrySheet.getCell('H4').value = 'Statut';
     entrySheet.getCell('H4').alignment = centerAlign;
     entrySheet.getCell('H4').fill = colorFill;
-    entrySheet.getCell('H4').font = catSubHeaderFont;
+    entrySheet.getCell('H4').font = tahoma12BoldFont;
 
-    //Categories
+    //Entries
     let currentEntry;
-    let catRow = 5;
+    let entryRow = 5;
     entries.forEach((e, i, arr) => {
         currentEntry = entryDTO(e);
-        entrySheet.getCell('A' + catRow).value = currentEntry.receiptCode;
-        entrySheet.getCell('A' + catRow).alignment = leftAlign;
-        entrySheet.getCell('A' + catRow).font = catDefaultFont;
+        entrySheet.getCell('A' + entryRow).value = currentEntry.receiptCode;
+        entrySheet.getCell('A' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('A' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('B' + catRow).value = currentEntry.categoryName;
-        entrySheet.getCell('B' + catRow).alignment = leftAlign;
-        entrySheet.getCell('B' + catRow).font = catDefaultFont;
+        entrySheet.getCell('B' + entryRow).value = currentEntry.categoryName;
+        entrySheet.getCell('B' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('B' + entryRow).font = tahoma12Font;
         
-        entrySheet.getCell('C' + catRow).value = currentEntry.lineName;
-        entrySheet.getCell('C' + catRow).alignment = leftAlign;
-        entrySheet.getCell('C' + catRow).font = catDefaultFont;
+        entrySheet.getCell('C' + entryRow).value = currentEntry.lineName;
+        entrySheet.getCell('C' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('C' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('D' + catRow).value = currentEntry.description;
-        entrySheet.getCell('D' + catRow).alignment = leftAlign;
-        entrySheet.getCell('D' + catRow).font = catDefaultFont;
+        entrySheet.getCell('D' + entryRow).value = currentEntry.description;
+        entrySheet.getCell('D' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('D' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('E' + catRow).value = currentEntry.memberName;
-        entrySheet.getCell('E' + catRow).alignment = leftAlign;
-        entrySheet.getCell('E' + catRow).font = catDefaultFont;
+        entrySheet.getCell('E' + entryRow).value = currentEntry.memberName;
+        entrySheet.getCell('E' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('E' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('F' + catRow).value = Number(currentEntry.amount);
-        entrySheet.getCell('F' + catRow).numFmt = '#,##0.00 $';
-        entrySheet.getCell('F' + catRow).alignment = leftAlign;
-        entrySheet.getCell('F' + catRow).font = catDefaultFont;
+        entrySheet.getCell('F' + entryRow).value = Number(currentEntry.amount);
+        entrySheet.getCell('F' + entryRow).numFmt = '#,##0.00 $';
+        entrySheet.getCell('F' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('F' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('G' + catRow).value = currentEntry.date;
-        entrySheet.getCell('G' + catRow).alignment = leftAlign;
-        entrySheet.getCell('G' + catRow).font = catDefaultFont;
+        entrySheet.getCell('G' + entryRow).value = currentEntry.date;
+        entrySheet.getCell('G' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('G' + entryRow).font = tahoma12Font;
 
-        entrySheet.getCell('H' + catRow).value = currentEntry.entryStatusName;
-        entrySheet.getCell('H' + catRow).alignment = leftAlign;
-        entrySheet.getCell('H' + catRow).font = catDefaultFont;
-        catRow++;
+        entrySheet.getCell('H' + entryRow).value = currentEntry.entryStatusName;
+        entrySheet.getCell('H' + entryRow).alignment = leftAlign;
+        entrySheet.getCell('H' + entryRow).font = tahoma12Font;
+        entryRow++;
     });
 
     return Promise.resolve();
