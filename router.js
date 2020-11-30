@@ -8,6 +8,7 @@ const userController = require('./controllers/user');
 const memberController = require('./controllers/member');
 const cashflowController = require('./controllers/cashflow');
 const accessController = require('./controllers/access');
+const reportController = require('./controllers/report');
 
 const authMiddleware = require('./middlewares/auth');
 const accessMiddleware = require('./middlewares/access');
@@ -106,6 +107,17 @@ module.exports.set = app => {
         '/api/budget/:budgetId/clone',
         [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
         budgetController.clone
+    );
+
+    // BUDGET : GET
+    // Clone a budget
+    // Params : { budgetId, startDate, endDate, name }
+    // Requires user to be authentified
+    // Returns : Code 200 if user is authentified
+    app.get(
+        '/api/budget/:budgetId/report',
+        [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
+        reportController.generateReport
     );
 
     // BUDGET : DELETE
