@@ -125,11 +125,11 @@ module.exports.set = app => {
     // Params : { budgetId }
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
-    // app.delete(
-    //     '/api/budget/:id',
-    //     authMiddleware.verifyAuth,
-    //     budgetController.delete
-    // );
+    app.delete(
+        '/api/budget/:id',
+        [authMiddleware.verifyAuth, accessMiddleware.isBudgetOwner],
+        budgetController.deleteOne
+    );
 
     // CATEGORY ENDPOINTS
 

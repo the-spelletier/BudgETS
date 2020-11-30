@@ -9,13 +9,13 @@ const entryStatusService = require('../services/entryStatus');
 
 function getCurrent(req, res) {
     userService.getUserActiveBudget(req.user.id).then(user => {
-        if (user.activeBudgetId)
+        if (user.activeBudgetId && !user.activeBudget.deleted)
             sendBudget(user.activeBudget, res);
         else {
             budgetService.getBudgets({
                 userId: req.user.id
             }, []).then(b => {
-                sendBudget(b[0], res);
+                sendBudget(b.filter(b => !b.deleted)[0], res);
             }).catch(err => {
                 res.status(403).send({ message: 'Validation error' });
             });
@@ -34,7 +34,7 @@ function get(req, res) {
             id: req.user.id,
             activeBudgetId: b.id
         }).then(() => {
-            b.edit = b.userId === req.user.id;
+            b.edit = b.userId === req.user.id && !b.deleted;
             sendBudget(b, res);
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
@@ -112,6 +112,28 @@ function update(req, res) {
         budget.id = req.params.budgetId;
         budgetService.updateBudget(budget).then(b => {
             sendBudget(b, res);
+        }).catch(err => {
+            res.status(403).send({ message: 'Validation error' });
+        });
+    } else {
+        res.status(400).send({ message: 'Invalid parameters' });
+    }
+}
+
+function deleteOne(req, res) {
+    if (req.params.id) {
+        budgetService.deleteBudget({
+            id: req.params.id
+        }).then(b => {
+            if (b) {
+                userService.updateUserAfterAccess(
+                    req.user.id,
+                    b.id
+                );
+                res.sendStatus(204);
+            } else {
+                res.status(404).send({ message: "Budget Not Found" });
+            }
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
         });
@@ -238,5 +260,6 @@ module.exports = {
     getBudgetSummaries, // Move this somewhere else
     create,
     update,
+    deleteOne,
     clone
 };

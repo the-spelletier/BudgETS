@@ -118,10 +118,15 @@ const updateBudget = budget => {
 
 // Suppression d'un budget selon l'identificateur envoyé en paramètre
 const deleteBudget = budget => {
-    return Budget.destroy({ 
-        where: { 
+    return Budget.findOne({
+        where: {
             id: budget.id 
-        } 
+        }
+    }).then(b => {
+    	if (b) {
+            b.deleted = true;
+	        return b.save();
+    	}
     });
 }
 
