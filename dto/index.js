@@ -39,6 +39,9 @@ const budgetDTO = (budget, b = {}) => {
   if (typeof budget.edit != 'undefined') {
     b.edit = budget.edit;
   }
+  if (typeof budget.deleted != 'undefined') {
+    b.deleted = budget.deleted;
+  }
   return b;
 };
 
