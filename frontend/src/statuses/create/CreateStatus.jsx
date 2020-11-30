@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import moment from "moment";
-import { Modal, notification, Input, InputNumber, Select, Switch  } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { Modal, notification, Input, InputNumber, Select, Switch, Tooltip  } from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
+import BudgetContext from "../../contexts/budget/BudgetContext";
 import UserContext from "../../contexts/user/UserContext";
 import { EntryStatusClient } from "../../clients/EntryStatusClient";
 
@@ -11,6 +12,7 @@ const CreateStatus = ({statusId, visible, onCancelParent}) => {
     const statusClient = new EntryStatusClient();
 
     const {user} = useContext(UserContext);
+    const {budget} = useContext(BudgetContext);
 
     const [status, setStatus] = useState({});
     const [error, setError] = useState({name: false}); 
@@ -34,7 +36,7 @@ const CreateStatus = ({statusId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await statusClient.create(user.token, status.name, status.position);
+                await statusClient.create(user.token, status.name, status.position, budget.id, status.notify);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -59,7 +61,7 @@ const CreateStatus = ({statusId, visible, onCancelParent}) => {
     const editStatus = () => {
         const save = async () => {
             try {
-                await statusClient.update(user.token, status.id, status.name, status.position);
+                await statusClient.update(user.token, status.id, status.name, status.position, status.notify);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -97,13 +99,25 @@ const CreateStatus = ({statusId, visible, onCancelParent}) => {
                             onChange={(event) => setStatus({...status, name: event.target.value})} />
                     </div>
                     <div className="form-section">
-                        <div className="label">Numéro: </div>
+                        <div className="label">Ordre: </div>
                         <InputNumber size="large"
                         min={1}
                         max={99}
                         placeholder="Numéro"
                         value={status.position}
                         onChange={(value) => setStatus({...status, position: value})} />
+                    </div>
+                    <div className="form-section">
+                        <div className="label"> 
+                            <Tooltip placement="topLeft" title="Lorsqu'une entrée budgétaire atteint ce statut, le membre recevera un e-mail de confirmation.">
+                                <ExclamationCircleOutlined className="input-tootip" />
+                            </Tooltip>
+                            Notifier: 
+                            <Switch  size="large"
+                                className="check-box"
+                                checked={status.notify}
+                                onChange={(event) => setStatus({...status, notify: event})} />
+                        </div>
                     </div>
                 </Fragment>
             }

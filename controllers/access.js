@@ -39,7 +39,6 @@ function create(req, res) {
 }
 
 function deleteOne(req, res) {
-    console.log(req.params.userId);
     if (req.params.budgetId && req.params.userId) {
         userService.updateUserAfterAccess(req.params.userId, req.params.budgetId).then(u => {
             accessService.deleteAccess({

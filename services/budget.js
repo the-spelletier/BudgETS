@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Budget, Category, Line } = require('../models');
+const { Budget, Category, Line, EntryStatus } = require('../models');
 
 // Retourne un budget selon l'identificateur envoyé en paramètre
 const getBudget = budget => {
@@ -18,8 +18,12 @@ const getBudgetByID = id => {
             model: Category,
             include: [{
                 model: Line,
-            }]
-        }]
+                }]
+            }, 
+            {
+                model: EntryStatus
+            }
+        ]
     });
 }
 

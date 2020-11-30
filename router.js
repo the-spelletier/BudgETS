@@ -367,7 +367,7 @@ module.exports.set = app => {
     // Requires user to be authentified
     // Returns : Code 200 if user is authentified
     app.get(
-        '/api/status',
+        '/api/budget/:budgetId/status',
         authMiddleware.verifyAuth,
         entryStatusController.getAll
     );

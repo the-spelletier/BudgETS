@@ -21,12 +21,12 @@ const Statuses = () => {
 
     useEffect(() => {
         const getStatuses = async() => {
-            var response = await statusClient.getAll(user.token/*TODO , user.id*/);
-            setStatuses(response.data.length > 0 ? response.data : [{}]);
+            var response = await statusClient.getAll(user.token, budget.id);
+            setStatuses(response.data.length > 0 ? response.data.filter(s => !s.deleted) : [{}]);
         }
 
         getStatuses();
-    }, [createModalIsVisible]);
+    }, [createModalIsVisible, budget]);
 
     const onEditStatus = (status) => {
         setCurrentStatusId(status.id);
@@ -80,7 +80,8 @@ const Statuses = () => {
                 onDeleteMessage="Voulez-vous vraiment supprimer ce statut?"/>
         },
         {
-            title: "Numéro",
+            title: "Ordre",
+            width: 100,
             render: (status) => status.position,
             defaultSortOrder: 'ascend',
             sorter: (a, b) => a.position - b.position
@@ -89,19 +90,29 @@ const Statuses = () => {
             title: "Nom",
             render: (status) => status.name,
             sorter: (a, b) => a.name.localeCompare(b.name)
+        },
+        {
+            title:  "Notifier?" ,
+            width: 100,
+            render: (status) => status.notify ? "Oui" : "Non",
+            sorter: (a, b) => a.notify - b.notify
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateStatus()}}/>,
+            width: 50,
+            render:() => ""
         }
     ]
 
     return (
         <Fragment>
-        <h1 className="logo">Statuts</h1>
+            <BudgetHeader/>    
+            <h1 className="logo">Statuts</h1>
             {
                 statuses &&
                 <Fragment>
                     <CreateStatus statusId={currentStatusId} visible={createModalIsVisible} onCancelParent={onCreateOrEditStatusModalCancel} />
-                    <Card extra={ <Button icon={<PlusOutlined/>} onClick={() => {onCreateStatus()}}/> } >
-                        <Table columns={columns} dataSource={statuses} className="no-paging"/>
-                    </Card>
+                    <Table columns={columns} dataSource={statuses} className="no-paging"/>
                 </Fragment>
             }
         </Fragment>

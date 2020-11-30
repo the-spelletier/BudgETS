@@ -1,9 +1,11 @@
-const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
+const { budgetDTO, categoryDTO, lineDTO, entryStatusDTO } = require('../dto');
 const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const userService = require('../services/user');
 const accessService = require('../services/access');
+const entryStatusService = require('../services/entryStatus');
+
 
 function getCurrent(req, res) {
     userService.getUserActiveBudget(req.user.id).then(user => {
@@ -127,9 +129,23 @@ function clone(req, res) {
                 // Create new budgets
                 budgetService.addBudget(budget).then(newB => {
 
+                    let message = '';
+
+                    let statusAdd;
+                    oldB.EntryStatuses.forEach(oldS => {
+                        statusAdd = entryStatusDTO(oldS);
+                        delete statusAdd.id;
+                        statusAdd.budgetId = newB.id;
+
+                        entryStatusService
+                        .addStatus(statusAdd)
+                        .catch(err => {
+                            message = message + 'Impossible d\'ajouter le statut ' + statusAdd.name + ' ';
+                        });
+                    });
+
                     // Adding each category
                     let categoryAdd;
-                    let message = '';
                     oldB.Categories.forEach(oldC => {
                         categoryAdd = categoryDTO(oldC);
                         delete categoryAdd.id;
