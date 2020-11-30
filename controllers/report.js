@@ -55,7 +55,8 @@ function generateReport(req, res) {
                 return Promise.all([
                     Promise.resolve(workbook),
                     generateSummarySheet(responses[2], workbook),
-                    generateCategorySheets(responses[2].currentBudget, responses[0], workbook),
+                    generateCategorySheets(responses[2].currentBudget, responses[0], workbook, 'Dépense', 'expense'),
+                    generateCategorySheets(responses[2].currentBudget, responses[0], workbook, 'Revenu', 'revenue'),
                     generateEntrySheet(responses[2].currentBudget, responses[1], workbook)
                 ]);
             }).then((workbookResponses) => {
@@ -64,6 +65,7 @@ function generateReport(req, res) {
                 });
             });
         }).catch(err => {
+            console.log(err);
             res.status(500).send({ message: 'An unexpected error occurred' });
         });
     } else {
@@ -161,155 +163,146 @@ function fillBudgetSummary(sheet, column, name, revenue, expense, prefix = '', t
     sheet.getCell(column + '11').alignment = rightAlign;
 }
 
-function generateCategorySheets(budget, categories, workbook) {
-    [{
-        name: 'Dépense',
-        catType: 'expense'
-    }, 
-    {
-        name: 'Revenu',
-        catType: 'revenue'
-    }].forEach(sheetInfo => {
-        let sheet = workbook.addWorksheet(sheetInfo.name);
+function generateCategorySheets(budget, categories, workbook, sheetName, catType) {
+    let sheet = workbook.addWorksheet(sheetName);
 
-        // Column widths
-        sheet.getColumn('A').width = 5;
-        sheet.getColumn('B').width = 5;
-        sheet.getColumn('C').width = 5;
-        sheet.getColumn('D').width = 10;
-        sheet.getColumn('E').width = 50;
-        sheet.getColumn('F').width = 50;
-        sheet.getColumn('G').width = 20;
-        sheet.getColumn('H').width = 20;
-        sheet.getColumn('I').width = 20;
+    // Column widths
+    sheet.getColumn('A').width = 5;
+    sheet.getColumn('B').width = 5;
+    sheet.getColumn('C').width = 5;
+    sheet.getColumn('D').width = 10;
+    sheet.getColumn('E').width = 50;
+    sheet.getColumn('F').width = 50;
+    sheet.getColumn('G').width = 20;
+    sheet.getColumn('H').width = 20;
+    sheet.getColumn('I').width = 20;
 
-        // First Row
-        sheet.mergeCells('A1:B1');
-        sheet.getCell('A1').value = sheetInfo.name.charAt(0);
-        sheet.getCell('A1').alignment = centerAlign;
-        sheet.getCell('A1').fill = colorFill;
-        sheet.getCell('A1').font = tahoma16BoldFont;
+    // First Row
+    sheet.mergeCells('A1:B1');
+    sheet.getCell('A1').value = sheetName.charAt(0);
+    sheet.getCell('A1').alignment = centerAlign;
+    sheet.getCell('A1').fill = colorFill;
+    sheet.getCell('A1').font = tahoma16BoldFont;
 
-        sheet.mergeCells('C1:E1');
-        sheet.getCell('C1').value = sheetInfo.name;
-        sheet.getCell('C1').alignment = leftAlign;
-        sheet.getCell('C1').fill = colorFill;
-        sheet.getCell('C1').font = tahoma16BoldFont;
+    sheet.mergeCells('C1:E1');
+    sheet.getCell('C1').value = sheetName;
+    sheet.getCell('C1').alignment = leftAlign;
+    sheet.getCell('C1').fill = colorFill;
+    sheet.getCell('C1').font = tahoma16BoldFont;
 
-        sheet.getCell('F1').value = budget.name;
-        sheet.getCell('F1').alignment = leftAlign;
-        sheet.getCell('F1').fill = colorFill;
-        sheet.getCell('F1').font = tahoma16BoldFont;
+    sheet.getCell('F1').value = budget.name;
+    sheet.getCell('F1').alignment = leftAlign;
+    sheet.getCell('F1').fill = colorFill;
+    sheet.getCell('F1').font = tahoma16BoldFont;
 
-        sheet.mergeCells('G1:I1');
-        sheet.getCell('G1').fill = colorFill;
+    sheet.mergeCells('G1:I1');
+    sheet.getCell('G1').fill = colorFill;
 
-        // Second Row
-        sheet.getCell('A2').value = '0';
-        sheet.getCell('A2').alignment = centerAlign;
-        sheet.getCell('A2').fill = colorFill;
-        sheet.getCell('A2').font = tahoma12BoldFont;
+    // Second Row
+    sheet.getCell('A2').value = '0';
+    sheet.getCell('A2').alignment = centerAlign;
+    sheet.getCell('A2').fill = colorFill;
+    sheet.getCell('A2').font = tahoma12BoldFont;
 
-        sheet.mergeCells('B2:F2');
-        sheet.getCell('B2').fill = colorFill;
+    sheet.mergeCells('B2:F2');
+    sheet.getCell('B2').fill = colorFill;
 
-        sheet.getCell('G2').value = 'Prévision';
-        sheet.getCell('G2').alignment = centerAlign;
-        sheet.getCell('G2').fill = colorFill;
-        sheet.getCell('G2').font = tahoma12BoldFont;
+    sheet.getCell('G2').value = 'Prévision';
+    sheet.getCell('G2').alignment = centerAlign;
+    sheet.getCell('G2').fill = colorFill;
+    sheet.getCell('G2').font = tahoma12BoldFont;
 
-        sheet.getCell('H2').value = 'Réel';
-        sheet.getCell('H2').alignment = centerAlign;
-        sheet.getCell('H2').fill = colorFill;
-        sheet.getCell('H2').font = tahoma12BoldFont;
+    sheet.getCell('H2').value = 'Réel';
+    sheet.getCell('H2').alignment = centerAlign;
+    sheet.getCell('H2').fill = colorFill;
+    sheet.getCell('H2').font = tahoma12BoldFont;
 
-        sheet.getCell('I2').value = 'Reste';
-        sheet.getCell('I2').alignment = centerAlign;
-        sheet.getCell('I2').fill = colorFill;
-        sheet.getCell('I2').font = tahoma12BoldFont;
+    sheet.getCell('I2').value = 'Reste';
+    sheet.getCell('I2').alignment = centerAlign;
+    sheet.getCell('I2').fill = colorFill;
+    sheet.getCell('I2').font = tahoma12BoldFont;
 
-        // Third Row
-        sheet.getCell('G3').value = Number(budget[sheetInfo.catType].estimate);
-        sheet.getCell('G3').numFmt = '#,##0.00 $';
-        sheet.getCell('G3').alignment = centerAlign;
-        sheet.getCell('G3').font = tahoma16Font; 
+    // Third Row
+    sheet.getCell('G3').value = Number(budget[catType].estimate);
+    sheet.getCell('G3').numFmt = '#,##0.00 $';
+    sheet.getCell('G3').alignment = centerAlign;
+    sheet.getCell('G3').font = tahoma16Font; 
 
-        sheet.getCell('H3').value = Number(budget[sheetInfo.catType].real);
-        sheet.getCell('H3').numFmt = '#,##0.00 $';
-        sheet.getCell('H3').alignment = centerAlign;
-        sheet.getCell('H3').font = tahoma16Font;
+    sheet.getCell('H3').value = Number(budget[catType].real);
+    sheet.getCell('H3').numFmt = '#,##0.00 $';
+    sheet.getCell('H3').alignment = centerAlign;
+    sheet.getCell('H3').font = tahoma16Font;
 
-        sheet.getCell('I3').value = Number(budget[sheetInfo.catType].estimate - budget[sheetInfo.catType].real);
-        sheet.getCell('I3').numFmt = '#,##0.00 $';
-        sheet.getCell('I3').alignment = centerAlign;
-        sheet.getCell('I3').font = tahoma16Font;
+    sheet.getCell('I3').value = Number(budget[catType].estimate - budget[catType].real);
+    sheet.getCell('I3').numFmt = '#,##0.00 $';
+    sheet.getCell('I3').alignment = centerAlign;
+    sheet.getCell('I3').font = tahoma16Font;
 
-        //Categories
-        let catRow = 5;
-        categories.forEach((c, i, arr) => {
-            if (sheetInfo.name === 'Dépense' && c.type == 'revenue' || sheetInfo.name === 'Revenu' && c.type == 'expense') { return; }
-            sheet.getCell('A' + catRow).value = c.orderNumber.toString().padStart(2, "0");
-            sheet.getCell('A' + catRow).alignment = centerAlign;
-            sheet.getCell('A' + catRow).fill = colorFill;
-            sheet.getCell('A' + catRow).font = tahoma12BoldFont;
+    //Categories
+    let catRow = 5;
+    categories.forEach((c, i, arr) => {
+        if (sheetName === 'Dépense' && c.type == 'revenue' || sheetName === 'Revenu' && c.type == 'expense') { return; }
+        sheet.getCell('A' + catRow).value = c.orderNumber.toString().padStart(2, "0");
+        sheet.getCell('A' + catRow).alignment = centerAlign;
+        sheet.getCell('A' + catRow).fill = colorFill;
+        sheet.getCell('A' + catRow).font = tahoma12BoldFont;
 
-            sheet.mergeCells('B'+catRow+':E'+catRow);
-            sheet.getCell('B' + catRow).value = c.name,
-            sheet.getCell('B' + catRow).alignment = leftAlign;
-            sheet.getCell('B' + catRow).fill = colorFill;
-            sheet.getCell('B' + catRow).font = tahoma12BoldFont;
+        sheet.mergeCells('B'+catRow+':E'+catRow);
+        sheet.getCell('B' + catRow).value = c.name,
+        sheet.getCell('B' + catRow).alignment = leftAlign;
+        sheet.getCell('B' + catRow).fill = colorFill;
+        sheet.getCell('B' + catRow).font = tahoma12BoldFont;
 
-            sheet.getCell('F' + catRow).value = 'Explication',
-            sheet.getCell('F' + catRow).alignment = centerAlign;
-            sheet.getCell('F' + catRow).fill = colorFill;
-            sheet.getCell('F' + catRow).font = tahoma12BoldFont;
+        sheet.getCell('F' + catRow).value = 'Explication',
+        sheet.getCell('F' + catRow).alignment = centerAlign;
+        sheet.getCell('F' + catRow).fill = colorFill;
+        sheet.getCell('F' + catRow).font = tahoma12BoldFont;
 
-            sheet.getCell('G' + catRow).value = 'Prévision';
-            sheet.getCell('G' + catRow).alignment = centerAlign;
-            sheet.getCell('G' + catRow).fill = colorFill;
-            sheet.getCell('G' + catRow).font = tahoma12BoldFont;
+        sheet.getCell('G' + catRow).value = 'Prévision';
+        sheet.getCell('G' + catRow).alignment = centerAlign;
+        sheet.getCell('G' + catRow).fill = colorFill;
+        sheet.getCell('G' + catRow).font = tahoma12BoldFont;
 
-            sheet.getCell('H' + catRow).value = 'Réel';
-            sheet.getCell('H' + catRow).alignment = centerAlign;
-            sheet.getCell('H' + catRow).fill = colorFill;
-            sheet.getCell('H' + catRow).font = tahoma12BoldFont;
+        sheet.getCell('H' + catRow).value = 'Réel';
+        sheet.getCell('H' + catRow).alignment = centerAlign;
+        sheet.getCell('H' + catRow).fill = colorFill;
+        sheet.getCell('H' + catRow).font = tahoma12BoldFont;
 
-            sheet.getCell('I' + catRow).value = 'Reste';
-            sheet.getCell('I' + catRow).alignment = centerAlign;
-            sheet.getCell('I' + catRow).fill = colorFill;
-            sheet.getCell('I' + catRow).font = tahoma12BoldFont;
+        sheet.getCell('I' + catRow).value = 'Reste';
+        sheet.getCell('I' + catRow).alignment = centerAlign;
+        sheet.getCell('I' + catRow).fill = colorFill;
+        sheet.getCell('I' + catRow).font = tahoma12BoldFont;
 
-            c.real = 0;
-            c.estimate = 0;
+        c.real = 0;
+        c.estimate = 0;
 
-            // Lines
-            c.Lines.forEach((l, ii, arrr) => {
-                catRow++
-                let real = Number(l.get('estimate'));
-                let estimate = Number(l.get('estimate'));
-                c.real += real;
-                c.estimate += estimate;
+        // Lines
+        c.Lines.forEach((l, ii, arrr) => {
+            catRow++
+            let real = Number(l.get('estimate'));
+            let estimate = Number(l.get('estimate'));
+            c.real += real;
+            c.estimate += estimate;
 
-                fillCatLine(sheet, catRow, l, real, estimate)
-            });
-
-            //Total line
-            catRow++;
-            let totalLine = {
-                orderNumber: 999,
-                name: 'Total',
-                description: '',
-                estimate: c.real,
-                real: c.estimate
-            };
-            fillCatLine(sheet, catRow, totalLine, totalLine.real, totalLine.estimate);
-            ['B', 'C', 'F', 'G', 'H', 'I'].forEach(col => {
-                sheet.getCell(col + catRow).fill = grayFill;
-            });
-
-            //Blank line
-            catRow+=2;
+            fillCatLine(sheet, catRow, l, real, estimate)
         });
+
+        //Total line
+        catRow++;
+        let totalLine = {
+            orderNumber: 999,
+            name: 'Total',
+            description: '',
+            estimate: c.real,
+            real: c.estimate
+        };
+        fillCatLine(sheet, catRow, totalLine, totalLine.real, totalLine.estimate);
+        ['B', 'C', 'F', 'G', 'H', 'I'].forEach(col => {
+            sheet.getCell(col + catRow).fill = grayFill;
+        });
+
+        //Blank line
+        catRow+=2;
     });
 
     return Promise.resolve();
