@@ -87,6 +87,34 @@ const BudgetDetails = () => {
         }
     }
 
+    const deleteBudget = () => {
+        const save = () => {
+            try {
+                budgetClient.delete(user.token, budget.id);
+                notification.open({
+                    message: "Succès",
+                    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+                    description:
+                      "Le budget a été supprimé avec succès",
+                    });
+                setCurrentUser({...user, hasMadeChanges: true});
+
+                setTimeout(null, 3000);
+                return history.push("/budget/summary");
+            }
+            catch (e) {
+                notification.open({
+                    message: "Erreur",
+                    icon: <CloseCircleTwoTone twoToneColor='#ff7773'/>,
+                    description:
+                      "Une erreur est survenue en supprimant le budget",
+                    });
+            }
+        };
+        
+        save();
+    }
+
     const onCreateAccess = (userId) => {
         const createAccess = async () => {
             try {
@@ -170,6 +198,13 @@ const BudgetDetails = () => {
                                 && !budget.edit}
                             onClick={submit}>
                                 Modifier
+                        </Button>
+                        <Button size="large"
+                            type="primary"
+                            className="budget-delete-button"
+                            disabled={!budget.edit}
+                            onClick={deleteBudget}>
+                                Supprimer
                         </Button>
                     </div>
                 </Card>

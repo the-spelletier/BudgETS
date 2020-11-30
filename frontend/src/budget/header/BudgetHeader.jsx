@@ -28,7 +28,7 @@ const BudgetHeader = () => {
         const listBudgets = async() => {
             try {
                 var response = await budgetClient.list(user.token);
-                setBudgets(response.data);
+                setBudgets(response.data.filter(b => !b.deleted));
             }
             catch (e) {
                 notification.open({
