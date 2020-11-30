@@ -149,6 +149,16 @@ h2 {
     display: none;
 }
 
+.ant-table-thead{
+    .ant-table-cell, .ant-table-column-sort{
+        background-color: $neutral-very-pale !important; 
+    }
+}
+
+.ant-table-tbody > tr:hover {
+    background-color: $neutral-very-pale !important; 
+}
+
 .right-text{
     text-align: right;
 }

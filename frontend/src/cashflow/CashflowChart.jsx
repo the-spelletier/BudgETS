@@ -99,7 +99,7 @@ const CashflowChart = ({type, isActive}) => {
                                 orientation="left"
                             />
                             <VerticalBarSeries data={formattedData[0]} color={Colors[0]}/>
-                            <VerticalBarSeries data={formattedData[1]} color={Colors[2]}/>
+                            <VerticalBarSeries data={formattedData[1]} color={Colors[1]}/>
                         </XYPlot>
                         <DiscreteColorLegend
                             height={100}
