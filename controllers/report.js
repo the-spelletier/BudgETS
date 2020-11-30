@@ -45,27 +45,23 @@ const grayFill = {
 function generateReport(req, res) {
     if (req.params.budgetId) {
         budgetService.getLastBudgetsFromDate(req.params.budgetId, 3).then(budgets => {
-            if (!budgets) { return res.status(404).send({ message: "Budget Not Found" }); }
-
-            const workbook = initWorkbook(res);
-            Promise.all([
+            if (!budgets) { return res.status(404).send({ message: "Budget Not Found" });}
+            return Promise.all([
                 getBudgetSummaries(budgets),
-                entryService.getEntries(budgets.currentBudget.id)
+                entryService.getEntries(budgets.currentBudget.id),
+                Promise.resolve(budgets)
             ]).then((responses) => {
-                initWorkbook(res);
+                let workbook = initWorkbook(res);
                 return Promise.all([
-                    generateSummarySheet(budgets, workbook),
-                    generateCategorySheets(budgets.currentBudget, responses[0], workbook),
-                    generateEntrySheet(budgets.currentBudget, responses[1], workbook)
+                    Promise.resolve(workbook),
+                    generateSummarySheet(responses[2], workbook),
+                    generateCategorySheets(responses[2].currentBudget, responses[0], workbook),
+                    generateEntrySheet(responses[2].currentBudget, responses[1], workbook)
                 ]);
-            }).then(() => {
-                workbook.xlsx.write(res).then(() => {
+            }).then((workbookResponses) => {
+                return workbookResponses[0].xlsx.write(res).then(() => {
                     res.end();
-                }).catch(err => {
-                     res.status(404).send({ message: 'Error writing report' });
                 });
-            }).catch(err => {
-                res.status(404).send({ message: 'Budget Not Found' });
             });
         }).catch(err => {
             res.status(500).send({ message: 'An unexpected error occurred' });
