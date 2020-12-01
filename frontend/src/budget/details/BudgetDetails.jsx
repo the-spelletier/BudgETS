@@ -150,6 +150,7 @@ const BudgetDetails = () => {
                             size="large" 
                             value={budget.name}
                             placeholder="Nom du budget"
+                            style={{ width: '100%' }}
                             onChange={(event) => setCurrentBudget({...budget, name: event.target.value}) }
                             disabled={!budget.edit}/>  
                     </div>
@@ -157,6 +158,7 @@ const BudgetDetails = () => {
                         <RangePicker className="form-input" 
                             size="large" 
                             placeholder={["Date de début", "Date de fin"]}
+                            style={{ width: '100%' }}
                             value={[moment(budget.startDate), moment(budget.endDate)]}
                             onChange={(dates) => setCurrentBudget({...budget, startDate: dates[0], endDate: dates[1]})}
                             disabled={!budget.edit}/>
@@ -168,6 +170,7 @@ const BudgetDetails = () => {
                                 && budget.startDate == initialBudget.startDate 
                                 && budget.name == initialBudget.name
                                 && !budget.edit}
+                            style={{ float: 'right' }}
                             onClick={submit}>
                                 Modifier
                         </Button>

@@ -16,7 +16,7 @@ const Cashflow = () => {
             <BudgetHeader />
             <h1 className="logo">Cashflow</h1>
             <Tabs activeKey={tab} onChange={(key) => setTab(key)}>
-                <TabPane tab="Graphes de cashflows" key="graph">
+                <TabPane tab="Diagramme de cashflows" key="graph">
                     <Card title={<h2>Prévisions</h2>}>
                         <CashflowChart type="estimate" isActive={tab==="graph"} />
                     </Card>
