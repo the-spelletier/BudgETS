@@ -8,7 +8,9 @@
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "start": "node server.js",
+    "start-prod": "NODE_ENV=production node server.js",
     "clean-dev": "cross-env NODE_ENV=development npm run db:reset",
+    "clean-prod": "cross-env NODE_ENV=production npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:migrate": "npx sequelize-cli db:migrate"
   },

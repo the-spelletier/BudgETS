@@ -62,6 +62,15 @@ module.exports = {
                 isAdmin: false
             });
         }
+        else if (process.env.NODE_ENV == 'production') {
+            //Only add one admin to start
+            users.push({
+                id: 1,
+                username: 'budgets_admin',
+                password: bcrypt.hashSync('admin_2020', config.saltRounds),
+                isAdmin: true
+            });
+        }
 
         if (users.length > 0) {
             return queryInterface.bulkInsert('Users', users, {});

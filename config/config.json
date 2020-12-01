@@ -28,6 +28,9 @@
     "database": "budgets",
     "port": "3306",
     "host": "mysql",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": {
+        "timestamps": false
+    }
   }
 }
