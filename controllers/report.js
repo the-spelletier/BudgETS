@@ -279,7 +279,7 @@ function generateCategorySheets(budget, categories, workbook, sheetName, catType
         // Lines
         c.Lines.forEach((l, ii, arrr) => {
             catRow++
-            let real = Number(l.get('estimate'));
+            let real = Number(l.get('real'));
             let estimate = Number(l.get('estimate'));
             c.real += real;
             c.estimate += estimate;
