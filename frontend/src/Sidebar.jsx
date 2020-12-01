@@ -20,8 +20,15 @@ const Sidebar = () => {
     const location = useLocation();
     const {pathname} = location;
     
+    //TODO: Hide Admin page if user is not admin
     return (
         <Menu className="menu" selectedKeys={[pathname]}>
+            {
+                user.token && 
+                <Menu.Item key="/admin">
+                    <Link to="/admin">Admin</Link>
+                </Menu.Item> 
+            }
             {
                 user.token && 
                 <Fragment>

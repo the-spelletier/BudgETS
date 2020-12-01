@@ -13,7 +13,7 @@ const getUser = user => {
 // Retourne tous les utilisateurs
 const getUsers = () => {
     return User.findAll({ 
-        attributes: ['id', 'username', /*'attemptFailed', 'isBlocked',*/ 'isAdmin']
+        attributes: ['id', 'username', /*'attemptFailed',*/ 'isBlocked', 'isAdmin']
     });
 };
 
@@ -32,7 +32,10 @@ const updateUser = user => {
         }
     }).then(u => {
         if (u) {
-            if (user.isAdmin) {
+            if (user.isBlocked || user.isBlocked === false) {
+                u.isBlocked = user.isBlocked;
+            }
+            if (user.isAdmin || user.isAdmin === false) {
                 u.isAdmin = user.isAdmin;
             }
             if (user.password) {

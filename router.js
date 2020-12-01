@@ -466,8 +466,18 @@ module.exports.set = app => {
     // USER ENDPOINTS
 
     // USER : GET
-    // Create user
-    // Params : { username, password, isAdmin }
+    // Gat a user from specified Id
+    // Params : { id }
+    // Returns : Code 200 if user added successfully
+    app.get(
+        '/api/user/:userId',
+        [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
+        userController.get
+    );
+
+    // USER : GET
+    // Get all users
+    // Params : {}
     // Returns : Code 200 if user added successfully
     app.get(
         '/api/users',
@@ -493,6 +503,16 @@ module.exports.set = app => {
         '/api/user/:userId',
         [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
         userController.update
+    );
+
+    // USER : DELETE
+    // Delete user
+    // Params : { id }
+    // Returns : Code 200 if user is authentified
+    app.delete(
+        '/api/user/:userId',
+        [authMiddleware.verifyAuth, authMiddleware.verifyAdmin],
+        userController.deleteOne
     );
 
     // ACCESS ENDPOINTS

@@ -3,7 +3,7 @@ const userService = require('../services/user');
 
 function get(req, res) {
     userService.getUser({
-        id: req.params.id
+        id: req.params.userId
     }).then(user => {
         sendUser(user, res);
     }).catch(err => {
@@ -21,7 +21,7 @@ function getAll(req, res) {
 }
 
 function create(req, res) {
-    if (req.body.username && req.body.password) {
+    if (req.body.username && req.body.password && req.body.isAdmin != null) {
         userService.addUser(req.body).then((u) => {
             sendUser(u, res);
         }).catch(err => {
@@ -35,8 +35,17 @@ function create(req, res) {
 function update(req, res) {
     if (req.params.userId && !req.body.username && !req.body.activeBudgetId) {
         let user = { id: req.params.userId };
+        if (req.body.isBlocked || req.body.isBlocked === false) {
+            user.isBlocked = req.body.isBlocked;
+        }
+        if (req.body.isAdmin || req.body.isAdmin === false) {
+            user.isAdmin = req.body.isAdmin;
+        }
         if (req.body.password) {
             user.password = req.body.password;
+        }
+        if (req.body.activeBudgetId) {
+            user.activeBudgetId = req.body.activeBudgetId;
         }
         userService.updateUser(user).then((u) => {
             sendUser(u, res);

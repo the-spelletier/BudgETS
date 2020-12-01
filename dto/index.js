@@ -5,8 +5,11 @@ const userDTO = (user, u = {}) => {
   if (typeof user.username != 'undefined') {
     u.username = user.username;
   }
+  if (typeof user.isBlocked != 'undefined') {
+    u.isBlocked = user.isBlocked;
+  }
   if (typeof user.isAdmin != 'undefined') {
-    u.isAdmin = user.isAdmin === true;
+    u.isAdmin = user.isAdmin;
   }
   if (typeof user.activeBudgetId != 'undefined') {
     u.activeBudgetId = user.activeBudgetId;

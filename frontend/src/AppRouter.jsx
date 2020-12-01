@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import Auth from "./auth/Auth";
+import Admin from "./admin/Admin";
 import BudgetContainer from "./budget/BudgetContainer";
 import BudgetCreate from "./budget/create/BudgetCreate";
 import BudgetDetails from "./budget/details/BudgetDetails";
@@ -21,6 +22,7 @@ const AppRouter = () => {
     return (
         <Switch>
             <ProtectedRoute exact path="/"><Redirect to="/budget/summary"/></ProtectedRoute>
+            <ProtectedRoute path="/admin"><Admin /></ProtectedRoute>
             <ProtectedRoute path="/budget/create"><BudgetCreate clone={ false } /></ProtectedRoute>
             <ProtectedRoute path="/budget">
                 <BudgetContainer>
