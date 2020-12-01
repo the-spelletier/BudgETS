@@ -4,7 +4,7 @@
     "password": "mysql",
     "database": "budgets_development",
     "port": "3306",
-    "host": "mysql",
+    "host": "127.0.0.1",
     "dialect": "mysql",
     "define": {
         "timestamps": false
@@ -15,7 +15,7 @@
     "password": "mysql",
     "database": "budgets_test",
     "port": "3306",
-    "host": "mysql",
+    "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false,
     "define": {
