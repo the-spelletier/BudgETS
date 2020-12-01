@@ -87,7 +87,7 @@ const CashflowChart = ({type, isActive}) => {
                 {
                     formattedData && formattedData.length === 2 &&
                     <div className="flex">
-                        <XYPlot height={500} width={700} xType="ordinal">
+                        <XYPlot margin={{left: 55}} height={500} width={700} xType="ordinal">
                             <XAxis
                                 attr="x"
                                 attrAxis="y"
