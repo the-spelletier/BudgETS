@@ -18,6 +18,7 @@ function getAll(req, res) {
     entryService.getEntries(req.params.budgetId).then(entries => {
         sendEntry(entries, res);
     }).catch(err => {
+        console.log(err);
         res.status(500).send({ message: 'An unexpected error occurred' });
     });
 }

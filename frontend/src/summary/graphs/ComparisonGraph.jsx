@@ -7,6 +7,8 @@ import { Colors } from "./colors";
 const ComparisonGraph = ({expenses, revenues, columnNames}) => {
     const [dataExpenses, setDataExpenses] = useState(null);
     const [dataRevenues, setDataRevenues] = useState(null);
+    const [min, setMin] = useState(null);
+    const [max, setMax] = useState(null);
 
     useEffect(() => {
         var dataExp = [];
@@ -27,12 +29,33 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
         }
     }, [columnNames, expenses, revenues]);
 
+    useEffect(() => {
+        if (dataExpenses && dataRevenues){
+            var sortedExpenses = dataExpenses.map((exp) => exp.y).sort((a,b) => a-b);
+            var sortedRevenues = dataRevenues.map((exp) => exp.y).sort((a,b) => a-b);
+            
+            var minExpense = sortedExpenses[0];
+            var minRevenue = sortedRevenues[0];
+            var maxExpense = sortedExpenses[sortedExpenses.length-1];
+            var maxRevenue = sortedRevenues[sortedRevenues.length-1];
+
+            if (minExpense < 0 || minRevenue < 0) {
+                setMin(minExpense < minRevenue ? minExpense : minRevenue);
+            }
+            else {
+                setMin(0);
+            }
+            setMax(maxExpense > maxRevenue ? maxExpense : maxRevenue);
+        }
+
+    }, [dataExpenses, dataRevenues]);
+
     return (
         <Fragment>
             {
-                dataExpenses && dataRevenues &&
+                dataExpenses && dataRevenues && min !== null && max !== null && 
                 <div className="flex">
-                    <XYPlot height={300} width={500} xType="ordinal">
+                    <XYPlot yDomain={[min, max]} height={400} width={500} xType="ordinal">
                         <XAxis
                             attr="x"
                             attrAxis="y"

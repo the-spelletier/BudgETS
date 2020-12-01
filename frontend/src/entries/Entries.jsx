@@ -143,7 +143,7 @@ const Entries = () => {
             <h1 className="logo">Entrées</h1>
             <CreateEntry entryId={currentEntryId} visible={createModalIsVisible} onCancelParent={onCreateOrEditEntryModalCancel} />
             <Card>
-                <Table columns={columns} dataSource={entries} className="no-paging"/>
+                <Table loading={entries === null} columns={columns} dataSource={entries} className="no-paging"/>
             </Card>
         </Fragment>
     );

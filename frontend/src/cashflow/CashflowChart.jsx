@@ -18,6 +18,8 @@ const CashflowChart = ({type, isActive}) => {
     const [cashflowsRevenues, setCashflowsRevenues] = useState(null);
     const [cashflowsExpenses, setCashflowsExpenses] = useState(null);
     const [formattedData, setFormattedData] = useState(null);
+    const [min, setMin] = useState(null);
+    const [max, setMax] = useState(null);
 
     useEffect(() => {
         setDates(dateRange(budget.startDate, budget.endDate));
@@ -81,23 +83,35 @@ const CashflowChart = ({type, isActive}) => {
         }
     }, [dates, cashflowsRevenues, cashflowsExpenses]);
 
+    useEffect(() => {
+        if (formattedData && formattedData.length == 2){
+            var sortedExpenses = formattedData[0].map((exp) => exp.y).sort((a,b) => a-b);
+            var sortedRevenues = formattedData[1].map((exp) => exp.y).sort((a,b) => a-b);
+
+            var minExpense = sortedExpenses[0];
+            var minRevenue = sortedRevenues[0];
+            var maxExpense = sortedExpenses[sortedExpenses.length-1];
+            var maxRevenue = sortedRevenues[sortedRevenues.length-1];
+
+            if (minExpense < 0 || minRevenue < 0) {
+                setMin(minExpense < minRevenue ? Number(minExpense) : Number(minRevenue));
+            }
+            else {
+                setMin(0);
+            }
+            setMax(maxExpense > maxRevenue ? Number(maxExpense) : Number(maxRevenue));
+        }
+    }, [formattedData]);
+
     return (
         <div>
             <h3>Revenus et dépenses</h3>
                 {
-                    formattedData && formattedData.length === 2 &&
+                    formattedData && formattedData.length === 2 && min !== null && max !== null && 
                     <div className="flex">
-                        <XYPlot height={500} width={700} xType="ordinal">
-                            <XAxis
-                                attr="x"
-                                attrAxis="y"
-                                orientation="bottom"
-                            />
-                            <YAxis
-                                attr="y"
-                                attrAxis="x"
-                                orientation="left"
-                            />
+                        <XYPlot height={500} width={700} yDomain={[min, max]} xType="ordinal">
+                            <XAxis />
+                            <YAxis />
                             <VerticalBarSeries data={formattedData[0]} color={Colors[0]}/>
                             <VerticalBarSeries data={formattedData[1]} color={Colors[2]}/>
                         </XYPlot>
