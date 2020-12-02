@@ -1,7 +1,6 @@
 #entypoint.sh
 
 npm install
-npm run clean-prod
 
 echo "startApi Server"
 
