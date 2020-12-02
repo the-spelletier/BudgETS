@@ -7,7 +7,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     let entryStatuses = []
 
-    if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test') {
+    if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test' || process.env.NODE_ENV == 'production') {
         // Add real entry statuses
         entryStatuses.push({
             id: 1,
