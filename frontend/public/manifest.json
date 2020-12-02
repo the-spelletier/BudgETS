@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "BudgETS",
+  "name": "BudgETS - L'outil de gestion de budget des clubs de l'ÉTS",
   "icons": [
     {
       "src": "favicon.ico",

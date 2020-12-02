@@ -5,6 +5,7 @@ import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import AppRouter from "./AppRouter";
 import Sidebar from "./Sidebar";
 import UserContextProvider from "./contexts/user/UserContextProvider";
+import logo from './styles/logo.png';
 
 import 'antd/dist/antd.css';
 import './App.scss';
@@ -19,7 +20,9 @@ const App = () => {
             <Router>
                 <Layout className="content">
                     <Sider className="sidebar">
-                    <div className="logo">BudgETS</div>
+                    <div className="logo">
+                        <img src={logo} alt="Logo" />
+                        BudgETS</div>
                         <Sidebar />
                     </Sider>
                     <Content style={{ margin: '24px 16px 0' }}>
