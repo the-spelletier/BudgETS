@@ -65,7 +65,7 @@ const CreateEntry = ({entryId, visible, onCancelParent}) => {
         };
 
         const fetchStatuses = async() => {
-            var response = await entryStatusClient.getAll(user.token, budget.userId);
+            var response = await entryStatusClient.getAll(user.token, budget.id);
             setStatuses(response.data
                 .sort(function(a, b){
                     return a.position > b.position;
