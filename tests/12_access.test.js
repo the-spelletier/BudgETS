@@ -78,7 +78,7 @@ describe('12.0 - Accès', () => {
             test("121003 - Obtenir les accès d'un utilisateur avec BD down", (done) => {
                 stubAuthAccesses('budgets_test001')
     
-                // Stub the addBudget service
+                // Stub the service
                 accessService.getAccesses.callsFake(budgId => {
                     return new Promise((resolve, reject) => {
                         reject('DB down');

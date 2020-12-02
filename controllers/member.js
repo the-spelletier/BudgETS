@@ -34,7 +34,7 @@ function create(req, res) {
 
 function update(req, res) {
     let member = memberDTO(req.body);
-    if (req.params.memberId) {
+    if (req.params.memberId && member.name && member.code && member.email) {
         member.id = req.params.memberId;
         member.userId = req.user.id;
         memberService.updateMember(member).then(m => {
