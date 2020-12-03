@@ -24,7 +24,8 @@ module.exports = {
         'deleted', 
         {
           type: Sequelize.BOOLEAN,
-          allowNull: true
+          allowNull: false,
+          defaultValue: false
         },
       ),
     ]);
