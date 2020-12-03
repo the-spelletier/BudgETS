@@ -38,7 +38,7 @@ const updateUser = user => {
             if (user.isAdmin || user.isAdmin === false) {
                 u.isAdmin = user.isAdmin;
             }
-            if (user.password) {
+            if (user.password && user.password.length > 0) {
                 u.password = bcrypt.hashSync(user.password, config.saltRounds);
             }
             if (user.activeBudgetId) {

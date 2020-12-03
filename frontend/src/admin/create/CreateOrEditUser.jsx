@@ -76,7 +76,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
             }
         };
 
-        if (selectedUser.password.match(/^\s*$/) !== null)
+        if (selectedUser.password && selectedUser.password.match(/^\s*$/) !== null)
         {
             selectedUser.password = null;
         }
@@ -106,7 +106,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
                     }
                     <div className={"form-section"}>
                         <div className="label">Mot de passe: </div>
-                        <Input size="large"
+                        <Input.Password size="large"
                             placeholder="Mot de passe"
                             value={selectedUser.password}
                             onChange={(event) => setSelectedUser({...selectedUser, password: event.target.value})} />
