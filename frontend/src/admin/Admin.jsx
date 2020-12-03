@@ -80,20 +80,25 @@ const Admin = () => {
                 onDeleteMessage="Voulez-vous vraiment supprimer cet utilisateur?"/>
         },
         {
-            title: "Nom",
+            title: "Nom d'utilisateur",
             render: (lineUser) => lineUser.username,
             defaultSortOrder: 'ascend',
             sorter: (a, b) => a.name - b.name
         },
         {
             title: "Bloqué",
-            render: (lineUser) => lineUser.isBlocked.toString(),
-            sorter: (a, b) => a.isBlocked.localeCompare(b.isBlocked)
+            width: 100,
+            render: (lineUser) => lineUser.isBlocked ? "Oui" : "Non"
         },
         {
             title: "Admin",
-            render: (lineUser) => lineUser.isAdmin.toString(),
-            sorter: (a, b) => a.isBlocked.localeCompare(b.isBlocked)
+            width: 100,
+            render: (lineUser) => lineUser.isAdmin ? "Oui" : "Non"
+        },
+        {
+            title: <Button icon={<PlusOutlined/>} onClick={() => {onCreateUser()}}/>,
+            width: 50,
+            render:() => ""
         }
     ]
 
@@ -104,9 +109,7 @@ const Admin = () => {
                 users &&
                 <Fragment>
                     <CreateOrEditUser userId={currentUserId} visible={createModalIsVisible} onCancelParent={onCreateOrEditUserModalCancel} />
-                    <Card extra={ <Button icon={<PlusOutlined/>} onClick={() => {onCreateUser()}}/> } >
-                        <Table columns={columns} dataSource={users} className="no-paging"/>
-                    </Card>
+                    <Table columns={columns} dataSource={users} className="no-paging"/>
                 </Fragment>
             }
         </Fragment>
