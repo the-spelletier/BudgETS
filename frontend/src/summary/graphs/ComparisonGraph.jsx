@@ -32,7 +32,7 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
             {
                 dataExpenses && dataRevenues &&
                 <div className="flex">
-                    <XYPlot height={300} width={500} xType="ordinal">
+                    <XYPlot margin={{left: 55}} height={300} width={500} xType="ordinal">
                         <XAxis
                             attr="x"
                             attrAxis="y"

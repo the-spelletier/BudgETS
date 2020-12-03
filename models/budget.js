@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
                 through: models.Access,
                 foreignKey: 'budgetId',
             });
+            Budget.hasMany(models.EntryStatus, {
+                foreignKey: 'budgetId',
+                onDelete: 'RESTRICT'
+            });
         }
     };
 

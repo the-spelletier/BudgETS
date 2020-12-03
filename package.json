@@ -8,8 +8,11 @@
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "start": "node server.js",
+    "start-prod": "NODE_ENV=production node server.js",
     "clean-dev": "cross-env NODE_ENV=development npm run db:reset",
-    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "clean-prod": "cross-env NODE_ENV=production npm run db:reset",
+    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "repository": {
     "type": "git",
@@ -76,9 +79,11 @@
   "dependencies": {
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
+    "exceljs": "^4.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.4.16",
     "sequelize": "^6.3.3"
   },
   "devDependencies": {

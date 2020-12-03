@@ -35,9 +35,9 @@ const AppRouter = () => {
                     <ProtectedRoute path="/budget/entries"><Entries /></ProtectedRoute>
                     <ProtectedRoute path="/budget/cashflows"><Cashflow /></ProtectedRoute>
                     <ProtectedRoute path="/budget/members"><Members /></ProtectedRoute>
+                    <ProtectedRoute path="/budget/statuses"><Statuses /></ProtectedRoute>
                 </BudgetContainer>
             </ProtectedRoute>
-            <ProtectedRoute path="/statuses"><Statuses /></ProtectedRoute>
             <Route path="/auth"><Auth /></Route>
             <Route path="/help"><Help /></Route>
             <Route path="/about"><About /></Route>

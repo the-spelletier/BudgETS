@@ -1,5 +1,10 @@
+const nodemailer = require("nodemailer");
+
+const settings = require('../config/emailConfig');
 const { entryDTO } = require('../dto');
 const entryService = require('../services/entry');
+const entryStatusService = require('../services/entryStatus');
+const memberService = require('../services/member');
 
 function get(req, res) {
     entryService.getEntry({ id: req.params.entryId }).then(entry => {
@@ -32,12 +37,35 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    let entry = entryDTO(req.body);
-    if (req.params.entryId && req.body.lineId && typeof req.body.amount !== 'undefined' && req.body.date && typeof entry.description !== 'undefined' && entry.entryStatusId) {
-        entry.id = req.params.entryId;
-        entry.memberId = req.body.memberId || null;
-        entryService.updateEntry(entry).then(e => {
+    let newEntry = entryDTO(req.body);
+    let notify = req.body.notify;
+    delete req.body.notify;
+
+    if (req.params.entryId && req.body.lineId && typeof req.body.amount !== 'undefined' && req.body.date && typeof newEntry.description !== 'undefined' && newEntry.entryStatusId) {
+        newEntry.id = req.params.entryId;
+        newEntry.memberId = req.body.memberId || null;
+        entryService.updateEntry(newEntry).then(e => {
+
+            if (notify){
+                entryStatusService
+                .getStatus(newEntry.entryStatusId)
+                .then(s => {
+                    memberService
+                    .getMember(newEntry.memberId)
+                    .then(m => {
+                        sendEmail(newEntry, s.name, m);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            }
+
             sendEntry(e, res);
+            
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
         });
@@ -79,6 +107,32 @@ function sendEntry(entry, res) {
     } else {
         res.status(404).send({ message: "Entry Not Found" });
     }
+}
+
+const sendEmail = async (entry, statusName, member) => {
+    let htmlMessage = "<h1>Bonjour</h1><p>Ceci est un message automatisé de BudgETS pour vous informer que votre demande à changé de status!</p>"
+        + "<p>Nom de la facture : " + entry.description + "</p><ol>"
+        + "<li>Montant : " + entry.amount + "</li>"
+        + "<li>État : " + statusName + "</li>"
+        + "<li>Pour le membre : " + member.name + "</li></ol>"
+        + "<p>Communiquez avec votre trésorier pour plus d'informationssur l'état de votre demande.</p>";
+
+    let testAccount = await nodemailer.createTestAccount();
+    let transporter = nodemailer.createTransport({
+        host: settings.host,
+        port: 465,
+        secure: true, // use SSL
+        auth: {
+            user: settings.address, // generated ethereal user
+            pass: settings.pass, // generated ethereal password
+        },
+    });
+    let info = await transporter.sendMail({
+        from: settings.address, // sender address
+        to: member.email, // list of receivers
+        subject: "Changement du statut de votre demande [" + entry.description + "]", 
+        html: htmlMessage
+    });
 }
 
 module.exports = {

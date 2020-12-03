@@ -35,10 +35,15 @@ const updateMember = member => {
 
 // Suppression d'un membre selon l'identificateur envoyé en paramètre
 const deleteMember = member => {
-    return Member.destroy({
+    return Member.findOne({
         where: {
-            id: member.id
+            id: member.id 
         }
+    }).then(m => {
+    	if (m) {
+            m.deleted = true;
+	        return m.save();
+    	}
     });
 }
 

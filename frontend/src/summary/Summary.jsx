@@ -1,7 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import BudgetHeader from "../budget/header/BudgetHeader";
-
 import UserContext from "../contexts/user/UserContext";
 import BudgetContext from "../contexts/budget/BudgetContext";
 import { BudgetClient } from "../clients/BudgetClient";
@@ -9,6 +8,8 @@ import { Table, Card } from "antd";
 import ComparisonGraph from "./graphs/ComparisonGraph";
 import PieChart from "./graphs/PieChart";
 import { Colors } from "./graphs/colors";
+
+const formatCurrency = require('format-currency')
 
 const Summary = () => {
     const budgetClient = new BudgetClient();
@@ -104,8 +105,8 @@ const Summary = () => {
                 formatted.columnsNames = [...formatted.columnsNames, budget.name + " réel"];
                 formatted.expenses = [...formatted.expenses, budget.expense.real]; 
                 formatted.revenues = [...formatted.revenues, budget.revenue.real];
-                formatted.totals = [...formatted.totals, Number(budget.revenue.estimate) - Number(budget.expense.estimate)];
-                formatted.percentOver = [...formatted.percentOver, ((Number(budget.revenue.estimate)/Number(budget.expense.estimate === 0? 1 : budget.expense.estimate)) - 1) * 100];
+                formatted.totals = [...formatted.totals, Number(budget.revenue.real) - Number(budget.expense.real)];
+                formatted.percentOver = [...formatted.percentOver, ((Number(budget.revenue.real)/Number(budget.expense.real === 0? 1 : budget.expense.real)) - 1) * 100];
             });         
             
             setFormattedSummary(formatted);
@@ -130,7 +131,7 @@ const Summary = () => {
             columns = [...columns,
                 {
                     title: column,
-                    render: (line) => line.values[key].toFixed(2)
+                    render: (line) => formatCurrency(line.values[key])
                 }
             ];
         });

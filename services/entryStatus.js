@@ -9,8 +9,10 @@ const getStatus = id => {
 };
 
 // Retourne tous les status
-const getStatuses = () => {
-    return EntryStatus.findAll();
+const getStatuses = (budgetId) => {
+    return EntryStatus.findAll({
+        where: {budgetId: budgetId}
+    });
 };
 
 // Ajout d'un statut
@@ -33,11 +35,16 @@ const updateStatus = status => {
 
 // Suppression d'un statut selon l'identificateur envoyé en paramètre
 const deleteStatus = status => {
-  return EntryStatus.destroy({
-      where: {
-          id: status.id
-      }
-  });
+  return EntryStatus.findOne({
+        where: {
+            id: status.id 
+        }
+    }).then(s => {
+    	if (s) {
+            s.deleted = true;
+	        return s.save();
+    	}
+    });
 }
 
 module.exports = {

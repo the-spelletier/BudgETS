@@ -1,9 +1,11 @@
-const { budgetDTO, categoryDTO, lineDTO } = require('../dto');
+const { budgetDTO, categoryDTO, lineDTO, entryStatusDTO } = require('../dto');
 const budgetService = require('../services/budget');
 const categoryService = require('../services/category');
 const lineService = require('../services/line');
 const userService = require('../services/user');
 const accessService = require('../services/access');
+const entryStatusService = require('../services/entryStatus');
+
 
 function getCurrent(req, res) {
     userService.getUserActiveBudget(req.user.id).then(user => {
@@ -59,17 +61,12 @@ function getSummary(req, res) {
     if (req.params.budgetId) {
         budgetService.getLastBudgetsFromDate(req.params.budgetId, count).then(budgets => {
             if (!budgets) { return budgetNotFoundResponse(res); }
-            let counter = 0;
-            budgets.previousBudgets.push(budgets.currentBudget);
-            budgets.previousBudgets.forEach((b, i, arr) => {
-                if (!b) { return budgetNotFoundResponse(res); }
-                categoryService.getCategories(b.id).then(categories => {
-                    budgetService.getBudgetSummary(b, categories);
-                    if (++counter === arr.length) {
-                        budgets.previousBudgets.pop();
-                        sendBudget(budgets, res);
-                    }
-                });
+
+            // Send budgets when ALL budgets have been processed
+            getBudgetSummaries(budgets).then(() => {
+                sendBudget(budgets, res);
+            }).catch(err => {
+                budgetNotFoundResponse(res);
             });
         }).catch(err => {
             res.status(403).send({ message: 'Validation error' });
@@ -77,6 +74,19 @@ function getSummary(req, res) {
     } else {
         res.status(400).send({ message: 'Invalid parameters' });
     }
+}
+
+function getBudgetSummaries(budgets) {
+    budgets.previousBudgets.push(budgets.currentBudget);
+    return Promise.all(budgets.previousBudgets.map((budget) => {
+        return categoryService.getCategories(budget.id).then(categories => {
+            budgetService.getBudgetSummary(budget, categories);
+            return categories;
+        });
+    })).then((res) => {
+        budgets.previousBudgets.pop();
+        return res[res.length - 1];
+    });
 }
 
 function create(req, res) {
@@ -127,9 +137,23 @@ function clone(req, res) {
                 // Create new budgets
                 budgetService.addBudget(budget).then(newB => {
 
+                    let message = '';
+
+                    let statusAdd;
+                    oldB.EntryStatuses.forEach(oldS => {
+                        statusAdd = entryStatusDTO(oldS);
+                        delete statusAdd.id;
+                        statusAdd.budgetId = newB.id;
+
+                        entryStatusService
+                        .addStatus(statusAdd)
+                        .catch(err => {
+                            message = message + 'Impossible d\'ajouter le statut ' + statusAdd.name + ' ';
+                        });
+                    });
+
                     // Adding each category
                     let categoryAdd;
-                    let message = '';
                     oldB.Categories.forEach(oldC => {
                         categoryAdd = categoryDTO(oldC);
                         delete categoryAdd.id;
@@ -211,6 +235,7 @@ module.exports = {
     get,
     getAll,
     getSummary,
+    getBudgetSummaries, // Move this somewhere else
     create,
     update,
     clone

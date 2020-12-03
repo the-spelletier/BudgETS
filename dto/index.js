@@ -194,6 +194,9 @@ const memberDTO = (member, m = {}) => {
   if (typeof member.notify != 'undefined') {
     m.notify = member.notify;
   }
+  if (typeof member.deleted != 'undefined') {
+    m.deleted = member.deleted;
+  }
   return m;
 };
 
@@ -206,6 +209,18 @@ const entryStatusDTO = (status, s = {}) => {
   }
   if (typeof status.position != 'undefined') {
     s.position = status.position;
+    if (typeof status.name != 'undefined') {
+      s.displayName = status.position + " - " + status.name;
+    }
+  }
+  if (typeof status.budgetId != 'undefined') {
+    s.budgetId = status.budgetId;
+  }
+  if (typeof status.deleted != 'undefined') {
+    s.deleted = status.deleted;
+  }
+  if (typeof status.notify != 'undefined') {
+    s.notify = status.notify;
   }
   return s;
 };

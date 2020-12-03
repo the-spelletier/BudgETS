@@ -9,6 +9,8 @@ import { EntryClient } from "../clients/EntryClient";
 import UserContext from "../contexts/user/UserContext";
 import BudgetContext from "../contexts/budget/BudgetContext";
 
+const formatCurrency = require('format-currency')
+
 const Entries = () => {
     const entryClient = new EntryClient();
     
@@ -72,13 +74,13 @@ const Entries = () => {
     const parseAmount = (entry) => {
         if (entry.type === "revenue"){
             if (entry.amount < 0){
-                return "(" + Number(Math.abs(entry.amount)).toFixed(2) + ")";
+                return "(" + formatCurrency(Math.abs(entry.amount)) + ")";
             }
-            return Number(entry.amount).toFixed(2);
+            return formatCurrency(entry.amount);
         } else if (entry.type === "expense" && entry.amount < 0){
-            return Number(Math.abs(entry.amount)).toFixed(2);
+            return formatCurrency(Math.abs(entry.amount));
         } 
-        return "(" + Number(entry.amount).toFixed(2) + ")";
+        return "(" + formatCurrency(entry.amount) + ")";
     }
 
     const columns = [

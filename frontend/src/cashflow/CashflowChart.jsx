@@ -87,7 +87,7 @@ const CashflowChart = ({type, isActive}) => {
                 {
                     formattedData && formattedData.length === 2 &&
                     <div className="flex">
-                        <XYPlot height={500} width={700} xType="ordinal">
+                        <XYPlot margin={{left: 55}} height={500} width={700} xType="ordinal">
                             <XAxis
                                 attr="x"
                                 attrAxis="y"
@@ -99,7 +99,7 @@ const CashflowChart = ({type, isActive}) => {
                                 orientation="left"
                             />
                             <VerticalBarSeries data={formattedData[0]} color={Colors[0]}/>
-                            <VerticalBarSeries data={formattedData[1]} color={Colors[2]}/>
+                            <VerticalBarSeries data={formattedData[1]} color={Colors[1]}/>
                         </XYPlot>
                         <DiscreteColorLegend
                             height={100}

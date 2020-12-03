@@ -52,9 +52,20 @@
 }
 
 .logo {
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: $primary;
     text-align: center;
+
+    img{
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+.ant-menu{
+    .anticon {
+        color: white !important;
+    }
 }
 
 .main-title {
@@ -113,7 +124,7 @@ h2 {
     }
 
     .input-tootip {
-        margin-left: 5px;
+        margin: 5px;
     };
 
     .check-box {
@@ -147,6 +158,16 @@ h2 {
 
 .ant-table-placeholder{
     display: none;
+}
+
+.ant-table-thead{
+    .ant-table-cell, .ant-table-column-sort{
+        background-color: $neutral-very-pale !important; 
+    }
+}
+
+.ant-table-tbody > tr:hover {
+    background-color: $neutral-very-pale !important; 
 }
 
 .right-text{

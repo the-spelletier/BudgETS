@@ -19,6 +19,39 @@ module.exports = {
                 });
             }
 
+            for (let i = 1; i <= 10; ++i) {
+                nbMembers++;
+                members.push({
+                    id: 99+i,
+                    name: 'member_test' + ('00' + i),
+                    code: '987654321' + nbMembers,
+                    email: i + 'member@test.com',
+                    userId: 1
+                });
+            }
+
+            for (let i = 1; i <= 10; ++i) {
+                nbMembers++;
+                members.push({
+                    id: 299+i,
+                    name: 'member_test' + ('00' + i),
+                    code: '987654321' + nbMembers,
+                    email: i + 'member@test.com',
+                    userId: 3
+                });
+            }
+
+            for (let i = 1; i <= 10; ++i) {
+                nbMembers++;
+                members.push({
+                    id: 399+i,
+                    name: 'member_test' + ('00' + i),
+                    code: '987654321' + nbMembers,
+                    email: i + 'member@test.com',
+                    userId: 4
+                });
+            }
+
         } else if (process.env.NODE_ENV == 'development') {
 
             members.push({
