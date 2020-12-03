@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import { Modal, notification, Input, InputNumber, Select, Checkbox  } from "antd";
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { Modal, notification, Input, InputNumber, Select, Checkbox, Tooltip  } from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone, WarningOutlined } from '@ant-design/icons';
 import UserContext from "../../contexts/user/UserContext";
 import { UserClient } from "../../clients/UserClient";
 
@@ -105,7 +105,14 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
                         </div>
                     }
                     <div className={"form-section"}>
-                        <div className="label">Mot de passe: </div>
+                        <div className="label">Mot de passe: 
+                        {
+                            selectedUser.id &&
+                            <Tooltip placement="topLeft" title="Remplir ce champ seulement pour changer le mot de passe.">
+                                <WarningOutlined className="input-tootip" />
+                            </Tooltip>
+                        }
+                        </div>
                         <Input.Password size="large"
                             placeholder="Mot de passe"
                             value={selectedUser.password}
