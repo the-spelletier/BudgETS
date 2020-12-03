@@ -20,7 +20,6 @@ const Sidebar = () => {
     const location = useLocation();
     const {pathname} = location;
     
-    //TODO: Hide Admin page if user is not admin
     return (
         <Menu className="menu" selectedKeys={[pathname]}>
             {
