@@ -32,7 +32,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await userClient.create(user.token, selectedUser.username, selectedUser.password, selectedUser.isAdmin);
+                await userClient.create(user.token, selectedUser.username, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -57,7 +57,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
     const editUser = () => {
         const save = async () => {
             try {
-                await userClient.update(user.token, selectedUser.id, selectedUser.password, selectedUser.isAdmin);
+                await userClient.update(user.token, selectedUser.id, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,

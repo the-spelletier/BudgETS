@@ -11,16 +11,16 @@ export class UserClient {
         return await apiClient.get(`/users`, token);
     }
 
-    create = async (token, username, password, isAdmin) => {
+    create = async (token, username, password, isAdmin, isBlocked) => {
         console.log(`tryCreate`);
         const apiClient = new ApiClient();
-        var params = { username, password, isAdmin };
+        var params = { username, password, isAdmin, isBlocked };
         return await apiClient.post('/user', params, token);
     }
 
-    update = async (token, id, password, isAdmin) => {
+    update = async (token, id, password, isAdmin, isBlocked) => {
         const apiClient = new ApiClient();
-        var params = { id, password, isAdmin };
+        var params = { id, password, isAdmin, isBlocked };
         return await apiClient.put(`/user/${id}`, params, token);
     }
 
