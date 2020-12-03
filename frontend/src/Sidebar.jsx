@@ -25,6 +25,7 @@ const Sidebar = () => {
         <Menu className="menu" selectedKeys={[pathname]}>
             {
                 user.token && 
+                user.isAdmin &&
                 <Menu.Item key="/admin">
                     <Link to="/admin">Admin</Link>
                 </Menu.Item> 

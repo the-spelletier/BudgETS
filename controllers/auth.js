@@ -6,11 +6,11 @@ function login(req, res) {
         .authenticate(req.body)
 
         // Valide la création du jeton de session jwt
-        .then(token => {
-            if (!token) {
+        .then(result => {
+            if (!result) {
                 res.status(401).send({ message: "Authentication failed" });
             } else {
-                res.send({ token });
+                res.send(result);
             }
         })
         .catch(err => {
