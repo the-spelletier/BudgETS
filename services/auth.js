@@ -17,6 +17,9 @@ const authenticate = params => {
         if (user.isBlocked){
             throw new Error('Account blocked');
         }
+        if (user.deleted){
+            throw new Error('Account deleted');
+        }
         // Validation du mot de passe via l'encryption
         if (!bcrypt.compareSync(params.password || '', user.password)) {
             throw new Error('Invalid credentials');

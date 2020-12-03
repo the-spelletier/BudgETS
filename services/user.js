@@ -13,7 +13,7 @@ const getUser = user => {
 // Retourne tous les utilisateurs
 const getUsers = () => {
     return User.findAll({ 
-        attributes: ['id', 'username', 'fullname', 'email', 'isBlocked', 'isAdmin']
+        attributes: ['id', 'username', 'fullname', 'email', 'isBlocked', 'isAdmin', 'deleted']
     });
 };
 
@@ -69,10 +69,16 @@ const updateUserAfterAccess = (userId, budgetId) => {
 
 // Suppression d'un utilisateur selon l'identificateur envoyé en paramètre
 const deleteUser = user => {
-    return User.destroy({ 
-        where: { 
-            id: user.id 
-        } 
+    return User.findOne({
+        where: {
+            id: user.id
+        }
+    }).then(u => {
+        if (u) {
+            u.deleted = true;
+            return u.save(); 
+        }
+        return u;
     });
 }
 

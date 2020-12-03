@@ -13,7 +13,7 @@ function get(req, res) {
 
 function getAll(req, res) {
     userService.getUsers().then(users => {
-        users = users.filter(u => u.id != req.user.id);
+        users = users.filter(u => u.id != req.user.id && !u.deleted);
         sendUser(users, res);
     }).catch(err => {
         res.status(500).send({ message: 'An unexpected error occurred' });
@@ -72,6 +72,7 @@ function deleteOne(req, res) {
                 res.status(404).send({ message: "User Not Found" });
             }
         }).catch(err => {
+            console.log(err);
             res.status(403).send({ message: 'Validation error' });
         });
     } else {
