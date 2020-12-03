@@ -34,6 +34,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
+        fullname : {
+            type: Sequelize.STRING
+        },
+        email : {
+            type: Sequelize.STRING
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false
@@ -53,6 +59,9 @@ module.exports = (sequelize, DataTypes) => {
         activeBudgetId : {
             type: DataTypes.UUID,
             allowNull: true
+        },
+        deleted : {
+            type: Sequelize.BOOLEAN
         }
     }, {
         sequelize,

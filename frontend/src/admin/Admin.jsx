@@ -83,7 +83,17 @@ const Admin = () => {
             title: "Nom d'utilisateur",
             render: (lineUser) => lineUser.username,
             defaultSortOrder: 'ascend',
-            sorter: (a, b) => a.name - b.name
+            sorter: (a, b) => a.username.localeCompare(b.username)
+        },
+        {
+            title: "Nom complet",
+            render: (lineUser) => lineUser.fullname, 
+            sorter: (a, b) => a.fullname && b.fullname && a.fullname.localeCompare(b.fullname)
+        },
+        {
+            title: "E-mail",
+            render: (lineUser) => lineUser.email, 
+            sorter: (a, b) => a.email && b.email && a.email.localeCompare(b.email)
         },
         {
             title: "Bloqué",

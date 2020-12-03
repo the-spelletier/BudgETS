@@ -5,6 +5,12 @@ const userDTO = (user, u = {}) => {
   if (typeof user.username != 'undefined') {
     u.username = user.username;
   }
+  if (typeof user.fullname != 'undefined') {
+    u.fullname = user.fullname;
+  }
+  if (typeof user.email != 'undefined') {
+    u.email = user.email;
+  }
   if (typeof user.isBlocked != 'undefined') {
     u.isBlocked = user.isBlocked;
   }
@@ -13,6 +19,9 @@ const userDTO = (user, u = {}) => {
   }
   if (typeof user.activeBudgetId != 'undefined') {
     u.activeBudgetId = user.activeBudgetId;
+  }
+  if (typeof user.deleted != 'undefined') {
+    u.deleted = user.deleted;
   }
   return u;
 };

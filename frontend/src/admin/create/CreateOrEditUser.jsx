@@ -32,7 +32,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
     const validateAndCreate = () => {
         const save = async () => {
             try {
-                await userClient.create(user.token, selectedUser.username, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked);
+                await userClient.create(user.token, selectedUser.username, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked, selectedUser.fullname, selectedUser.email);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -57,7 +57,7 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
     const editUser = () => {
         const save = async () => {
             try {
-                await userClient.update(user.token, selectedUser.id, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked);
+                await userClient.update(user.token, selectedUser.id, selectedUser.password, selectedUser.isAdmin, selectedUser.isBlocked, selectedUser.fullname, selectedUser.email);
                 notification.open({
                     message: "Succès",
                     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
@@ -92,17 +92,17 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
             { 
                 <Fragment>
                     {
-                    selectedUser.id == null?
-                    <div className={"form-section"}>
-                        <div className="label">Nom d'utilisateur: </div>
-                        <Input size="large"
-                            placeholder="Nom d'utilisateur"
-                            value={selectedUser.username}
-                            onChange={(event) => setSelectedUser({...selectedUser, username: event.target.value})} />
-                    </div>:
-                    <div className={"form-section"}>
-                        <div className="label">Nom d'utilisateur: {selectedUser.username}</div>
-                    </div>
+                        selectedUser.id == null ?
+                        <div className={"form-section"}>
+                            <div className="label">Nom d'utilisateur: </div>
+                            <Input size="large"
+                                placeholder="Nom d'utilisateur"
+                                value={selectedUser.username}
+                                onChange={(event) => setSelectedUser({...selectedUser, username: event.target.value})} />
+                        </div>:
+                        <div className={"form-section"}>
+                            <div className="label">Nom d'utilisateur: {selectedUser.username}</div>
+                        </div>
                     }
                     <div className={"form-section"}>
                         <div className="label">Mot de passe: </div>
@@ -110,6 +110,20 @@ const CreateOrEditUser = ({userId, visible, onCancelParent}) => {
                             placeholder="Mot de passe"
                             value={selectedUser.password}
                             onChange={(event) => setSelectedUser({...selectedUser, password: event.target.value})} />
+                    </div>
+                    <div className={"form-section"}>
+                        <div className="label">Nom complet: </div>
+                        <Input size="large"
+                            placeholder="Nom complet"
+                            value={selectedUser.fullname}
+                            onChange={(event) => setSelectedUser({...selectedUser, fullname: event.target.value})} />
+                    </div>
+                    <div className={"form-section"}>
+                        <div className="label">E-mail: </div>
+                        <Input size="large"
+                            placeholder="E-mail"
+                            value={selectedUser.email}
+                            onChange={(event) => setSelectedUser({...selectedUser, email: event.target.value})} />
                     </div>
                     <div className="form-section">
                         <Checkbox size="large"

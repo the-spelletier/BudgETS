@@ -34,7 +34,10 @@ function create(req, res) {
 
 function update(req, res) {
     if (req.params.userId && !req.body.username && !req.body.activeBudgetId) {
+
         let user = { id: req.params.userId };
+        user.fullname = req.body.fullname;
+        user.email = req.body.email;
         if (req.body.isBlocked || req.body.isBlocked === false) {
             user.isBlocked = req.body.isBlocked;
         }
@@ -47,6 +50,7 @@ function update(req, res) {
         if (req.body.activeBudgetId) {
             user.activeBudgetId = req.body.activeBudgetId;
         }
+        
         userService.updateUser(user).then((u) => {
             sendUser(u, res);
         }).catch(err => {
