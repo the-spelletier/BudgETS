@@ -29,7 +29,7 @@ const Sidebar = () => {
         <Menu className="menu" selectedKeys={[pathname]}>
             {
                 user.token && 
-                user.isAdmin &&
+                (user.isAdmin == true) &&
                 <Menu.Item key="/admin">
                     <ReconciliationOutlined />
                     <Link to="/admin">Admin</Link>
