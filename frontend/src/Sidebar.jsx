@@ -2,14 +2,17 @@ import React, { Fragment, useContext, useState } from "react";
 import { Menu } from 'antd';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserContext from "./contexts/user/UserContext";
-import { BarsOutlined, BarChartOutlined, SolutionOutlined, UserOutlined, FieldTimeOutlined, SettingOutlined, PieChartOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons';
+import { BarsOutlined, BarChartOutlined, SolutionOutlined, UserOutlined, FieldTimeOutlined, 
+        SettingOutlined, PieChartOutlined, FallOutlined, RiseOutlined, ReconciliationOutlined } from '@ant-design/icons';
 
 const Sidebar = () => {
     const history = useHistory();
     const storedJwt = localStorage.getItem('token');
+    const storedIsAdmin = localStorage.getItem('isAdmin');
 
     const {user, setCurrentUser} = useContext(UserContext);
     user.token = storedJwt || null;
+    user.isAdmin = storedIsAdmin || null;
 
     const logout = () => {
         //Call to logout
@@ -27,6 +30,7 @@ const Sidebar = () => {
                 user.token && 
                 user.isAdmin &&
                 <Menu.Item key="/admin">
+                    <ReconciliationOutlined />
                     <Link to="/admin">Admin</Link>
                 </Menu.Item> 
             }

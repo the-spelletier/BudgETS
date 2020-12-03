@@ -27,6 +27,7 @@ const Auth = () => {
                     throw loggedUser.data;
                 }
                 localStorage.setItem('token', loggedUser.data.token);
+                localStorage.setItem('isAdmin', loggedUser.data.isAdmin);
                 setCurrentUser({username: username, token: loggedUser.data.token, isAdmin: loggedUser.data.isAdmin});
                 return history.push("/budget/summary");
             }
