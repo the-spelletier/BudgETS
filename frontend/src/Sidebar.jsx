@@ -17,6 +17,7 @@ const Sidebar = () => {
     const logout = () => {
         //Call to logout
         localStorage.removeItem('token');
+        localStorage.removeItem('isAdmin');
         setCurrentUser({username: null, token: null});
         return history.push("/auth");
     };
