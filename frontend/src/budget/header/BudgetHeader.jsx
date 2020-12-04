@@ -117,6 +117,7 @@ const BudgetHeader = () => {
                         className="download-button"
                         size="large" 
                         type="primary" 
+                        disabled={typeof selectedBudgetId === "undefined"}
                         onClick={() => setDownloadModalVisible(true)}>
                             <DownloadOutlined />
                     </Button>
@@ -125,6 +126,7 @@ const BudgetHeader = () => {
             <Button className="new-budget-button"
                 size="large" 
                 type="primary" 
+                disabled={typeof selectedBudgetId === "undefined"}
                 onClick={() => {return null}}>
                     <Link to="/budget/clone"><CopyOutlined /> Clôner</Link>
             </Button>
