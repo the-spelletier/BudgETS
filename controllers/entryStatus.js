@@ -19,7 +19,7 @@ function getAll(req, res) {
 
 function create(req, res) {
     let status = entryStatusDTO(req.body);
-    if (status.name && status.position) { 
+    if (status.name && status.position && status.budgetId) { 
         entryStatusService.addStatus(status).then(s => {
             res.status(201);
             sendStatus(s, res);
@@ -33,7 +33,7 @@ function create(req, res) {
 
 function update(req, res) {
     let status = entryStatusDTO(req.body);
-    if (req.params.statusId && req.body.name && req.body.position) {
+    if (req.params.statusId && status.name && status.position) {
         status.id = req.params.statusId;
         entryStatusService.updateStatus(status).then(s => {
             sendStatus(s, res);
