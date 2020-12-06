@@ -60,6 +60,10 @@ function generateReport(req, res) {
                     generateEntrySheet(responses[2].currentBudget, responses[1], workbook)
                 ]);
             }).then((workbookResponses) => {
+                res.set({
+                    'Content-Type': "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    'Content-Disposition': `attachment; filename="BudgETS_Rapport.xlsx"`
+                });
                 return workbookResponses[0].xlsx.write(res).then(() => {
                     res.end();
                 });
@@ -279,7 +283,7 @@ function generateCategorySheets(budget, categories, workbook, sheetName, catType
         // Lines
         c.Lines.forEach((l, ii, arrr) => {
             catRow++
-            let real = Number(l.get('estimate'));
+            let real = Number(l.get('real'));
             let estimate = Number(l.get('estimate'));
             c.real += real;
             c.estimate += estimate;
