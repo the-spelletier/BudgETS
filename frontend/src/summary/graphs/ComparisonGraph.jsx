@@ -34,10 +34,10 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
             var sortedExpenses = dataExpenses.map((exp) => exp.y).sort((a,b) => a-b);
             var sortedRevenues = dataRevenues.map((exp) => exp.y).sort((a,b) => a-b);
             
-            var minExpense = sortedExpenses[0];
-            var minRevenue = sortedRevenues[0];
-            var maxExpense = sortedExpenses[sortedExpenses.length-1];
-            var maxRevenue = sortedRevenues[sortedRevenues.length-1];
+            var minExpense = Number(sortedExpenses[0]);
+            var minRevenue = Number(sortedRevenues[0]);
+            var maxExpense = Number(sortedExpenses[sortedExpenses.length-1]);
+            var maxRevenue = Number(sortedRevenues[sortedRevenues.length-1]);
 
             if (minExpense < 0 || minRevenue < 0) {
                 setMin(minExpense < minRevenue ? minExpense : minRevenue);
@@ -55,7 +55,7 @@ const ComparisonGraph = ({expenses, revenues, columnNames}) => {
             {
                 dataExpenses && dataRevenues && min !== null && max !== null && 
                 <div className="flex">
-                    <XYPlot yDomain={[min, max]} height={400} width={500} xType="ordinal">
+                    <XYPlot yDomain={[min, max]} height={400} width={window.innerWidth * 0.50} margin={{left: 100}} xType="ordinal">
                         <XAxis
                             attr="x"
                             attrAxis="y"
