@@ -297,8 +297,8 @@ function generateCategorySheets(budget, categories, workbook, sheetName, catType
             orderNumber: 999,
             name: 'Total',
             description: '',
-            estimate: c.real,
-            real: c.estimate
+            estimate: c.estimate,
+            real: c.real
         };
         fillCatLine(sheet, catRow, totalLine, totalLine.real, totalLine.estimate);
         ['B', 'C', 'F', 'G', 'H', 'I'].forEach(col => {
