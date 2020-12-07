@@ -60,6 +60,10 @@ function generateReport(req, res) {
                     generateEntrySheet(responses[2].currentBudget, responses[1], workbook)
                 ]);
             }).then((workbookResponses) => {
+                res.set({
+                    'Content-Type': "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    'Content-Disposition': `attachment; filename="BudgETS_Rapport.xlsx"`
+                });
                 return workbookResponses[0].xlsx.write(res).then(() => {
                     res.end();
                 });
@@ -293,8 +297,8 @@ function generateCategorySheets(budget, categories, workbook, sheetName, catType
             orderNumber: 999,
             name: 'Total',
             description: '',
-            estimate: c.real,
-            real: c.estimate
+            estimate: c.estimate,
+            real: c.real
         };
         fillCatLine(sheet, catRow, totalLine, totalLine.real, totalLine.estimate);
         ['B', 'C', 'F', 'G', 'H', 'I'].forEach(col => {

@@ -47,4 +47,9 @@ export class BudgetClient {
         else
             return await apiClient.post('/budget', params, token);
     }
+
+    generateReport = async (token, budgetId) => {
+        const apiClient = new ApiClient();
+        return await apiClient.download(`/budget/${budgetId}/report`, token);
+    }
 };
